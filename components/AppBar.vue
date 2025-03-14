@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar :height="xs ? 60 : 125" class="app-bar px-md-5">
+  <v-app-bar :height="xs ? 60 : 125" class="px-md-5" color="teal-lighten-5">
     <v-container fluid>
       <v-row>
         <v-col
@@ -119,9 +119,3 @@ const menuItems = [
   { title: "Blog", link: "/blog" },
 ];
 </script>
-
-<style scoped>
-.app-bar {
-  box-shadow: 0 0 30px 0 rgb(0 0 0 / 0.15) !important;
-}
-</style>
