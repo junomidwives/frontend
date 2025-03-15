@@ -1,3 +1,7 @@
-# Test
+---
+date: 2020-11-11
+---
 
-Here is some content.
+# Foo
+
+This is Foo blog post.

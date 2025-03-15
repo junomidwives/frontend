@@ -1,15 +1,16 @@
+<template>
+  <hero-image />
+  <ContentRenderer v-if="data" :value="data" />
+  <div v-else>Page not found</div>
+</template>
+
 <script setup lang="ts">
-const { data: home } = await useAsyncData(() =>
+const { data } = await useAsyncData(() =>
   queryCollection("content").path("/").first()
 );
 
 useSeoMeta({
-  title: home.value?.title,
-  description: home.value?.description,
+  title: data.value?.title,
+  description: data.value?.description,
 });
 </script>
-
-<template>
-  <ContentRenderer v-if="home" :value="home" />
-  <div v-else>Home not found</div>
-</template>
