@@ -2,7 +2,7 @@
   <hero-image />
 </template>
 
-<script setup lang="ts">
+<script setup>
 const { data } = await useAsyncData(() =>
   queryCollection("content").path("/").first()
 );
