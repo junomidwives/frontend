@@ -40,6 +40,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           version: ${{ matrix.node }}
+      
+      - uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
         run: bun install
