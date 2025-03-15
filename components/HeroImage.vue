@@ -16,3 +16,5 @@
     </v-sheet>
   </v-img>
 </template>
+
+<script setup lang="ts"></script>

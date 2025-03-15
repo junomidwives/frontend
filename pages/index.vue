@@ -1,7 +1,5 @@
 <template>
   <hero-image />
-  <ContentRenderer v-if="data" :value="data" />
-  <div v-else>Page not found</div>
 </template>
 
 <script setup lang="ts">

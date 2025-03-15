@@ -72,13 +72,13 @@
           <v-list-item
             v-for="subitem in item.subitems"
             :key="subitem.title"
-            :href="subitem.link"
+            :to="subitem.link"
           >
             <v-list-item-title>{{ subitem.title }}</v-list-item-title>
           </v-list-item>
         </v-list-group>
 
-        <v-list-item v-else :href="item.link">
+        <v-list-item v-else :to="item.link">
           <v-list-item-title>{{ item.title }}</v-list-item-title>
         </v-list-item>
       </template>

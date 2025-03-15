@@ -1,5 +1,5 @@
 <template>
-  <v-footer app color="teal-lighten-5">
+  <v-footer app color="teal-lighten-5" height="35">
     <div class="d-flex align-center justify-space-between w-100">
       <span class="text-caption"> © 2025 junomidwives.co.uk </span>
       <span class="text-center d-flex align-center ga-2">

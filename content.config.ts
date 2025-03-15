@@ -9,5 +9,12 @@ export default defineContentConfig({
         date: z.string(),
       }),
     }),
+    blog: defineCollection({
+      type: "page",
+      source: "blog/*.md",
+      schema: z.object({
+        date: z.string(),
+      }),
+    }),
   },
 });
