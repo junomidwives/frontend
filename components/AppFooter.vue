@@ -9,7 +9,7 @@
           variant="text"
           icon="mdi-instagram"
         ></v-btn>
-        <v-btn href="contact" variant="text" icon="mdi-email"></v-btn>
+        <v-btn variant="text" icon="mdi-email"></v-btn>
         <v-btn
           href="https://www.facebook.com/profile.php?id=100093169811850"
           target="_blank"
@@ -20,13 +20,11 @@
       <span class="text-right">
         <v-btn
           text="Privacy Policy"
-          href="privacy-policy"
           variant="plain"
           class="text-caption text-decoration-underline"
         />
         <v-btn
           text="Teams and Conditions"
-          href="terms-conditions"
           variant="plain"
           class="text-caption text-decoration-underline"
         />
