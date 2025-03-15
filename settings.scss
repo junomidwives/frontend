@@ -1,9 +1,0 @@
-$font: "DM Sans", sans-serif;
-
-@forward "vuetify/settings" with (
-  $body-font-family: $font
-);
-
-.hero-image img {
-  filter: brightness(0.85);
-}
