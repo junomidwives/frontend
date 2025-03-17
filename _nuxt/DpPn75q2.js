@@ -1,0 +1,1 @@
+import{_ as c,g as a,o as e,V as t}from"./DNsWJsz8.js";const o={};function s(n,r){return e(),a(t,{"max-width":"800",class:"mt-10"})}const d=c(o,[["render",s],["__scopeId","data-v-d9ca3c76"]]);export{d as default};
