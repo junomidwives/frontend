@@ -21,6 +21,7 @@ export default defineNuxtConfig({
       });
     },
     "@nuxtjs/google-fonts",
+    "@nuxtjs/sanity",
   ],
   vite: {
     vue: {
@@ -34,6 +35,10 @@ export default defineNuxtConfig({
       "DM+Sans": [200, 300, 400, 500, 600, 700],
       "Material+Icons": true,
     },
+  },
+  sanity: {
+    projectId: "s88cxh4b",
+    dataset: "production",
   },
   hooks: {
     "vite:extendConfig": (config) => {
