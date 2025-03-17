@@ -1,3 +1,0 @@
----
-heroText: Terms & Conditions
----

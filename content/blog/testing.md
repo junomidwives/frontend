@@ -1,3 +1,0 @@
-# Testing page
-
-hello world

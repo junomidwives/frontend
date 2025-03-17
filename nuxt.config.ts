@@ -10,11 +10,6 @@ export default defineNuxtConfig({
   build: {
     transpile: ["vuetify"],
   },
-  content: {
-    preview: {
-      api: "https://api.nuxt.studio",
-    },
-  },
   features: {
     inlineStyles: false,
   },

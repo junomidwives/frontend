@@ -1,3 +1,0 @@
----
-heroText: Contact Us
----
