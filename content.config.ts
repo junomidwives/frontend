@@ -7,6 +7,7 @@ export default defineContentConfig({
       source: "**/*.md",
       schema: z.object({
         date: z.string(),
+        heroText: z.string(),
       }),
     }),
     blog: defineCollection({

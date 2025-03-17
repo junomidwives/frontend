@@ -6,7 +6,11 @@
           sm="4"
           class="d-flex align-center justify-space-between text-grey-darken-4"
         >
-          <h1 class="text-h5 text-md-h4 font-weight-bold">juno midwives</h1>
+          <h1 class="text-h5 text-md-h4 font-weight-bold">
+            <nuxt-link to="/" class="text-decoration-none text-surface-variant">
+              juno midwives
+            </nuxt-link>
+          </h1>
           <v-btn
             icon="mdi-menu"
             @click="showMenu = !showMenu"
@@ -31,24 +35,24 @@
                 <v-list-item
                   v-for="subitem in item.subitems"
                   :key="subitem.title"
-                  :href="subitem.link"
                   density="compact"
                 >
-                  <v-list-item-title class="text-subtitle-1">{{
-                    subitem.title
-                  }}</v-list-item-title>
+                  <nuxt-link :to="subitem.link" class="text-decoration-none">
+                    <v-list-item-title class="text-subtitle-1">
+                      {{ subitem.title }}
+                    </v-list-item-title>
+                  </nuxt-link>
                 </v-list-item>
               </v-list>
             </v-menu>
 
-            <v-btn
+            <nuxt-link
               v-else
-              :href="item.link"
-              color="surface-variant"
+              :to="item.link"
               class="text-subtitle-1 px-2 px-md-3"
             >
               {{ item.title }}
-            </v-btn>
+            </nuxt-link>
           </template>
         </v-col>
       </v-row>
@@ -95,27 +99,27 @@ const showMenu = ref(false);
 
 const menuItems = [
   { title: "Home", link: "/" },
-  // {
-  //   title: "About",
-  //   subitems: [
-  //     { title: "About Us", link: "/about" },
-  //     { title: "Philosophy of care", link: "/philosophy-of-care" },
-  //   ],
-  // },
-  // {
-  //   title: "Services",
-  //   subitems: [
-  //     { title: "Care packages", link: "/care-packages" },
-  //     { title: "Tests in pregnancy", link: "/tests-in-pregnancy" },
-  //     { title: "Antenatal care", link: "/antenatal-care" },
-  //     { title: "Labour and birth care", link: "/labour-birth" },
-  //     { title: "Postnatal care", link: "/postnatal-care" },
-  //     { title: "Local services", link: "/local-services" },
-  //   ],
-  // },
-  // { title: "Birth Stories", link: "/birth-stories" },
-  // { title: "FAQs", link: "/faqs" },
-  // { title: "Contact Us", link: "/contact" },
+  {
+    title: "About",
+    subitems: [
+      { title: "About Us", link: "/about" },
+      { title: "Philosophy of care", link: "/philosophy-of-care" },
+    ],
+  },
+  {
+    title: "Services",
+    subitems: [
+      { title: "Care packages", link: "/care-packages" },
+      { title: "Tests in pregnancy", link: "/tests-in-pregnancy" },
+      { title: "Antenatal care", link: "/antenatal-care" },
+      { title: "Labour and birth care", link: "/labour-birth" },
+      { title: "Postnatal care", link: "/postnatal-care" },
+      { title: "Local services", link: "/local-services" },
+    ],
+  },
+  { title: "Birth Stories", link: "/birth-stories" },
+  { title: "FAQs", link: "/faqs" },
+  { title: "Contact Us", link: "/contact" },
   { title: "Blog", link: "/blog" },
 ];
 </script>
