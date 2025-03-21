@@ -64,10 +64,12 @@
     temporary
     location="bottom"
     class="rounded-t-xl"
+    xszseazdddb
   >
     <v-list>
-      <template v-for="item in menuItems" :key="item.title">
-        <v-list-group v-if="item.subitems" :value="item.title">
+      <!-- {{ menuItems }} -->
+      <!-- <template v-for="item in menuItems" :key="item.title"> -->
+      <!-- <v-list-group v-if="item.subitems" :value="item.title">
           <template #activator="{ props }">
             <v-list-item v-bind="props">
               <v-list-item-title>{{ item.title }}</v-list-item-title>
@@ -80,46 +82,18 @@
           >
             <v-list-item-title>{{ subitem.title }}</v-list-item-title>
           </v-list-item>
-        </v-list-group>
+        </v-list-group> -->
 
-        <v-list-item v-else :to="item.link">
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
-        </v-list-item>
-      </template>
+      <!-- <v-list-item :to="item.link" :title="item.title" />
+      </template> -->
     </v-list>
   </v-navigation-drawer>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { useDisplay } from "vuetify";
 
 const { xs } = useDisplay();
-
 const showMenu = ref(false);
-
-const menuItems = [
-  { title: "Home", link: "/" },
-  {
-    title: "About",
-    subitems: [
-      { title: "About Us", link: "/about" },
-      { title: "Philosophy of care", link: "/philosophy-of-care" },
-    ],
-  },
-  {
-    title: "Services",
-    subitems: [
-      { title: "Care packages", link: "/care-packages" },
-      { title: "Tests in pregnancy", link: "/tests-in-pregnancy" },
-      { title: "Antenatal care", link: "/antenatal-care" },
-      { title: "Labour and birth care", link: "/labour-birth" },
-      { title: "Postnatal care", link: "/postnatal-care" },
-      { title: "Local services", link: "/local-services" },
-    ],
-  },
-  { title: "Birth Stories", link: "/birth-stories" },
-  { title: "FAQs", link: "/faqs" },
-  { title: "Contact Us", link: "/contact" },
-  { title: "Blog", link: "/blog" },
-];
+const { menuItems } = useNavigation();
 </script>

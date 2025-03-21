@@ -6,13 +6,13 @@
       color="transparent"
       class="d-flex align-end pa-4 pa-md-16 text-h5 text-sm-h3 text-md-h2 text-white"
     >
-      <div v-if="page?.heroText" class="font-weight-bold">
-        {{ page?.heroText }}
+      <div v-if="heroText && heroText !== 'Home'">
+        <p class="font-weight-bold">{{ heroText }}</p>
       </div>
       <div v-else>
         <p class="font-weight-bold">Natasha & Sophie</p>
         <p class="font-weight-thin">
-          Independant midwives<br />
+          Independent midwives<br />
           in Kent
         </p>
       </div>
@@ -20,15 +20,6 @@
   </v-img>
 </template>
 
-<script setup>
-const route = useRoute();
-
-const { data: page } = await useAsyncData(
-  () => {
-    return queryCollection("content").path(route.path).first();
-  },
-  {
-    watch: [() => route.path],
-  }
-);
+<script setup lang="ts">
+const { heroText } = useHero();
 </script>

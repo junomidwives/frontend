@@ -4,6 +4,8 @@ import { createResolver } from "@nuxt/kit";
 
 const { resolve } = createResolver(import.meta.url);
 
+const sanityProjectId = "s88cxh4b";
+
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
@@ -22,6 +24,7 @@ export default defineNuxtConfig({
     },
     "@nuxtjs/google-fonts",
     "@nuxtjs/sanity",
+    "@nuxt/image",
   ],
   vite: {
     vue: {
@@ -37,7 +40,7 @@ export default defineNuxtConfig({
     },
   },
   sanity: {
-    projectId: "s88cxh4b",
+    projectId: sanityProjectId,
     dataset: "production",
   },
   hooks: {
