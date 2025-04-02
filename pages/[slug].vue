@@ -1,5 +1,5 @@
 <template>
-  <v-container max-width="1000" class="mx-auto">
+  <v-container class="content">
     <page-builder v-if="data" :blocks="data.content" />
   </v-container>
 </template>
@@ -10,7 +10,27 @@ import type { SanityDocument } from "@sanity/client";
 const route = useRoute();
 const { setHeroText } = useHero();
 
-const PAGE_QUERY = groq`*[_type == "page" && slug.current == '${route.params.slug}'][0]`;
+const PAGE_QUERY = groq`*[_type == "page" && slug.current == '${route.params.slug}'][0]{
+  ...,
+  content[]{
+    ...,
+    link{
+      ...,
+      internalLink->,
+    },
+    internalLink->,
+    body[]{
+      ...,
+      markDefs[]{
+        ...,
+        _type == "link" => {
+          ...,
+          internalLink->
+        }
+      }
+    }
+  },
+}`;
 const { data } = await useSanityQuery<SanityDocument>(PAGE_QUERY);
 
 setHeroText(data.value?.title);
