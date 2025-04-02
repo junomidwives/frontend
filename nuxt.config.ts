@@ -4,6 +4,8 @@ import { createResolver } from "@nuxt/kit";
 
 const { resolve } = createResolver(import.meta.url);
 
+const sanityProjectId = "s88cxh4b";
+
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
@@ -21,6 +23,8 @@ export default defineNuxtConfig({
       });
     },
     "@nuxtjs/google-fonts",
+    "@nuxtjs/sanity",
+    "@nuxt/image",
   ],
   vite: {
     vue: {
@@ -34,6 +38,10 @@ export default defineNuxtConfig({
       "DM+Sans": [200, 300, 400, 500, 600, 700],
       "Material+Icons": true,
     },
+  },
+  sanity: {
+    projectId: sanityProjectId,
+    dataset: "production",
   },
   hooks: {
     "vite:extendConfig": (config) => {

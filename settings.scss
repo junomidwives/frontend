@@ -7,3 +7,28 @@ $font: "DM Sans", sans-serif;
 .hero-image img {
   filter: brightness(0.85);
 }
+
+blockquote {
+  font-size: 1.5rem;
+  font-weight: 700;
+  max-width: 600px;
+  margin: 4rem auto;
+  padding: 2rem 0;
+  border-bottom: 1px solid #999;
+  border-top: 1px solid #999;
+  text-align: center;
+}
+
+.content p {
+  line-height: 2rem !important;
+  font-size: 1.1rem;
+}
+
+.content h1,
+.content h2,
+.content h3,
+.content h4,
+.content h5,
+.content h6 {
+  margin-bottom: 1rem;
+}
