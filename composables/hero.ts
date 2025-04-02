@@ -1,4 +1,5 @@
 const heroText = ref("");
+const showHero = ref(true);
 
 export function useHero() {
   function setHeroText(text: string) {
@@ -8,5 +9,6 @@ export function useHero() {
   return {
     setHeroText,
     heroText,
+    showHero,
   };
 }

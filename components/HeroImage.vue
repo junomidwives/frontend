@@ -1,5 +1,11 @@
 <template>
-  <v-img src="/img/splash.jpg" cover :max-height="400" class="hero-image">
+  <v-img
+    v-if="showHero"
+    src="/img/splash.jpg"
+    cover
+    :max-height="400"
+    class="hero-image"
+  >
     <v-sheet
       width="100%"
       height="100%"
@@ -21,5 +27,5 @@
 </template>
 
 <script setup lang="ts">
-const { heroText } = useHero();
+const { heroText, showHero } = useHero();
 </script>
