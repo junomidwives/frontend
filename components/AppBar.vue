@@ -36,23 +36,27 @@
                   v-for="subitem in item.subitems"
                   :key="subitem.title"
                   density="compact"
+                  nuxt
+                  :to="subitem.link"
                 >
-                  <nuxt-link :to="subitem.link" class="text-decoration-none">
-                    <v-list-item-title class="text-subtitle-1">
-                      {{ subitem.title }}
-                    </v-list-item-title>
-                  </nuxt-link>
+                  <v-list-item-title
+                    class="text-subtitle-1 text-surface-variant"
+                  >
+                    {{ subitem.title }}
+                  </v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
 
-            <nuxt-link
+            <v-btn
               v-else
+              nuxt
               :to="item.link"
+              color="surface-variant"
               class="text-subtitle-1 px-2 px-md-3"
             >
               {{ item.title }}
-            </nuxt-link>
+            </v-btn>
           </template>
         </v-col>
       </v-row>
