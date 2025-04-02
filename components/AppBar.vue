@@ -18,7 +18,7 @@
           />
         </v-col>
 
-        <v-col class="justify-end d-none d-sm-flex flex-wrap align-center">
+        <v-col class="justify-end d-none d-sm-flex flex-wrap align-center ga-1">
           <template v-for="item in menuItems" :key="item.title">
             <v-menu v-if="item.subitems" open-on-hover offset="6">
               <template #activator="{ props }">
