@@ -10,8 +10,6 @@ import type { SanityDocument } from "@sanity/client";
 const { setHeroText } = useHero();
 setHeroText("");
 
-const SITE_QUERY = groq`*[_id == "siteSettings"][0]{homePage->, mainNav[]->{slug, title, category}}`;
+const SITE_QUERY = groq`*[_id == "siteSettings"][0]{homePage->}`;
 const { data } = await useSanityQuery<SanityDocument>(SITE_QUERY);
-
-useNavigation().setMenuItems(data.value?.mainNav);
 </script>
