@@ -6,13 +6,18 @@
     </h3>
 
     <v-row>
-      <v-col cols="3" v-for="item in items" :key="item.id" class="d-flex">
+      <v-col
+        cols="3"
+        v-for="story in birthStories"
+        :key="story.id"
+        class="d-flex"
+      >
         <v-card flat class="d-flex">
           <v-card-text class="d-flex flex-column justify-space-between">
             <div>
-              <NuxtLink :to="item?.slug?.current">
+              <NuxtLink :to="getLink(story)">
                 <v-img
-                  :src="$urlFor(item?.image).url()"
+                  :src="$urlFor(story.image).url()"
                   cover
                   width="100%"
                   max-height="400"
@@ -23,18 +28,18 @@
               </NuxtLink>
 
               <NuxtLink
-                :to="item?.slug?.current"
+                :to="getLink(story)"
                 class="text-h6 line-height-1 font-weight-bold text-surface-variant text-decoration-none"
               >
-                {{ item?.title }}
+                {{ story.title }}
               </NuxtLink>
 
               <p class="mt-2">
-                {{ item?.content[0].children[0].text.split(".")[0] + "..." }}
+                {{ story.content[0].children[0].text.split(".")[0] + "..." }}
               </p>
             </div>
 
-            <NuxtLink :to="item?.slug?.current" class="text-body-1">
+            <NuxtLink :to="getLink(story)" class="text-body-1">
               Read more
             </NuxtLink>
           </v-card-text>
@@ -50,10 +55,12 @@ import type { SanityDocument } from "@sanity/client";
 const { setHeroText } = useHero();
 setHeroText("Birth Stories");
 
-const BIRTH_STORIES_QUERY = groq`*[_type == "birthStory"]  | order(publishedAt desc)`;
-const { data: items } = await useSanityQuery<SanityDocument>(
-  BIRTH_STORIES_QUERY
-);
+const { getBirthStories, birthStories } = useBirthStories();
+await getBirthStories();
+
+function getLink(item: SanityDocument) {
+  return `/birth-stories/${item.slug.current}`;
+}
 </script>
 
 <style scoped>
