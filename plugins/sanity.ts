@@ -1,4 +1,3 @@
-import { defineNuxtPlugin } from "#app";
 import imageUrlBuilder from "@sanity/image-url";
 
 export default defineNuxtPlugin(() => {
@@ -6,6 +5,7 @@ export default defineNuxtPlugin(() => {
     projectId: string;
     dataset: string;
   };
+
   const builder = imageUrlBuilder(sanityConfig);
 
   function urlFor(source: any) {
