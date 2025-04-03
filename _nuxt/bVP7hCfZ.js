@@ -1,1 +1,0 @@
-import{G as n}from"./Bf1k83Rv.js";const t=n(""),a=n(!0);function l(){function e(o){t.value=o}return{setHeroText:e,heroText:t,showHero:a}}const x=String.raw||((e,...o)=>{const r=e.length-1;return e.slice(0,r).reduce((u,c,s)=>u+c+o[s],"")+e[r]});export{x as g,l as u};
