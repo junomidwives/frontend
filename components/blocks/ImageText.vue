@@ -32,7 +32,7 @@
     <v-row v-if="link">
       <v-col cols="12" class="text-center">
         <v-btn
-          :to="link.url || link.internalLink.slug.current"
+          :to="url"
           color="secondary"
           rounded="xl"
           class="px-10"
@@ -49,7 +49,7 @@
 import { NuxtLink } from "#components";
 import type { PortableTextBlock } from "@portabletext/types";
 
-defineProps({
+const props = defineProps({
   image: {
     type: Object as () => any,
     required: true,
@@ -77,6 +77,15 @@ const serializers = {
     link: NuxtLink,
   },
 };
+
+const url = computed(() => {
+  if (props.link.type === "internal") {
+    let url = props.link.internalLink.slug.current;
+    if (props.link.anchor) to += `#${link.anchor}`;
+    return url;
+  }
+  return props.link.url;
+});
 </script>
 
 <style>

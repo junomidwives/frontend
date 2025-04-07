@@ -42,7 +42,7 @@ const serializers = {
 function renderLink(link: any, { slots }: any) {
   if (link.type === "internal") {
     let to = link.internalLink.slug.current;
-    if (link.anchor) to += `${link.anchor}`;
+    if (link.anchor) to += `#${link.anchor}`;
     return h(NuxtLink, { to }, slots.default?.());
   }
 
