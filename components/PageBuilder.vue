@@ -1,9 +1,6 @@
 <template>
   <template v-for="(block, index) in blocks" :key="block._id">
     <component :is="components[block._type]" v-bind="block" class="my-8" />
-    <!-- <pre>
-      {{ block }}
-    </pre> -->
     <v-divider
       v-if="false && index + 1 < (blocks?.length || 0)"
       length="200"
