@@ -31,6 +31,10 @@ export function useBlog() {
               ...,
               internalLink->
             }
+          },
+          _type == "pdf" => {
+            ...,
+            asset->
           }
         }
       }

@@ -1,16 +1,19 @@
 <template>
-  <v-container>
+  <v-container v-if="url">
     <v-row>
       <v-col cols="12" class="text-center">
         <v-btn
-          nuxt
-          :to="url"
+          v-bind="url"
           color="secondary"
           rounded="xl"
           class="px-10 mb-4"
           size="large"
         >
-          {{ text }}
+          {{
+            props.file
+              ? props.file.description
+              : props.link.text || props.link.internalLink.title
+          }}
         </v-btn>
       </v-col>
     </v-row>
@@ -21,18 +24,30 @@
 const props = defineProps({
   link: {
     type: Object,
-    required: true,
+    default: null,
+  },
+  file: {
+    type: Object,
+    default: null,
   },
 });
 
 const url = computed(() => {
-  if (props.link.type === "internal") {
-    let url = props.link.internalLink.slug.current;
-    if (props.link.anchor) url += `#${props.link.anchor}`;
-    return url;
-  }
-  return props.link.url;
+  if (props.link) return { nuxt: true, to: linkUrl(props.link) };
+  if (props.file) return { href: fileUrl(props.file) };
+  return {};
 });
 
-const text = computed(() => props.link.text || props.link.internalLink.title);
+function linkUrl(link: any) {
+  if (link.type === "internal") {
+    let url = "/" + link.internalLink.slug.current;
+    if (link.anchor) url += `#${link.anchor}`;
+    return url;
+  }
+  return link.url;
+}
+
+function fileUrl(file: any) {
+  return file.asset.url;
+}
 </script>

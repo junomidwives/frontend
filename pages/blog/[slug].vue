@@ -83,6 +83,7 @@ onBeforeRouteLeave(() => {
 const serializers = {
   types: {
     cta: ({ link }: { link: any }) => h(CTA, { link }),
+    pdf: (file: any) => h(CTA, { file }),
   },
 };
 </script>
