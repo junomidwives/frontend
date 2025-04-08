@@ -26,6 +26,7 @@ export default defineNuxtConfig({
     "@nuxtjs/sanity",
     "@nuxt/image",
     "@nuxthub/core",
+    "@pinia/nuxt",
   ],
   vite: {
     vue: {
