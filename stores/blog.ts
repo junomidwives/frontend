@@ -1,9 +1,10 @@
+import { defineStore } from "pinia";
 import type { SanityDocument } from "@sanity/client";
 
-const blogs: Ref<SanityDocument[]> = ref([]);
-const blog: Ref<SanityDocument | null> = ref(null);
+export const useBlogStore = defineStore("blog", () => {
+  const blogs: Ref<SanityDocument[]> = ref([]);
+  const blog: Ref<SanityDocument | null> = ref(null);
 
-export function useBlog() {
   async function getBlogs() {
     if (blogs.value?.length) return;
     const BLOGS_QUERY = groq`*[_type == "blog"]  | order(publishedAt desc)`;
@@ -44,7 +45,7 @@ export function useBlog() {
   }
 
   const previousBlog = computed(() => {
-    if (!blog.value) return;
+    if (!blogs.value) return;
     const index = blogs.value.findIndex(
       (story) => story.slug.current === blog.value?.slug.current
     );
@@ -53,7 +54,7 @@ export function useBlog() {
   });
 
   const nextBlog = computed(() => {
-    if (!blog.value) return;
+    if (!blogs.value) return;
     const index = blogs.value.findIndex(
       (story) => story.slug.current === blog.value?.slug.current
     );
@@ -69,4 +70,4 @@ export function useBlog() {
     getBlogs,
     getBlog,
   };
-}
+});
