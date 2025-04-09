@@ -41,7 +41,7 @@ const url = computed(() => {
 function linkUrl(link: any) {
   if (link.type === "internal") {
     let url = "/" + link.internalLink.slug.current;
-    if (link.anchor) url += `#${link.anchor}`;
+    if (link.anchor) url += link.anchor;
     return url;
   }
   return link.url;
