@@ -60,15 +60,14 @@
 </template>
 
 <script setup lang="ts">
+import { useBirthStoriesStore } from "~/stores/birthStories";
 const route = useRoute();
 const { showHero } = useHero();
-const {
-  getBirthStory,
-  getBirthStories,
-  birthStory,
-  prevousBirthStory,
-  nextBirthStory,
-} = useBirthStories();
+
+const { getBirthStory, getBirthStories } = useBirthStoriesStore();
+const { prevousBirthStory, nextBirthStory, birthStory } = storeToRefs(
+  useBirthStoriesStore()
+);
 
 await getBirthStories();
 await getBirthStory(route.params.slug as string);

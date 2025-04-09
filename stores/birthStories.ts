@@ -1,9 +1,9 @@
 import type { SanityDocument } from "@sanity/client";
 
-const birthStories: Ref<SanityDocument[]> = ref([]);
-const birthStory: Ref<SanityDocument | null> = ref(null);
+export const useBirthStoriesStore = defineStore("birthStories", () => {
+  const birthStories: Ref<SanityDocument[]> = ref([]);
+  const birthStory: Ref<SanityDocument | null> = ref(null);
 
-export function useBirthStories() {
   async function getBirthStories() {
     if (birthStories.value.length > 0) return;
     const BIRTH_STORIES_QUERY = groq`*[_type == "birthStory"]  | order(publishedAt desc)`;
@@ -43,4 +43,4 @@ export function useBirthStories() {
     getBirthStories,
     getBirthStory,
   };
-}
+});
