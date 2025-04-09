@@ -1,4 +1,3 @@
-import { defineStore } from "pinia";
 import type { SanityDocument } from "@sanity/client";
 
 export const useBlogStore = defineStore("blog", () => {

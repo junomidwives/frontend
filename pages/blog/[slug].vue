@@ -62,7 +62,9 @@
 </template>
 
 <script setup lang="ts">
+import { NuxtLink } from "#components";
 import CTA from "@/components/blocks/CTA.vue";
+import Image from "~/components/blocks/Image.vue";
 
 const route = useRoute();
 const { showHero } = useHero();
@@ -89,6 +91,18 @@ const serializers = {
   types: {
     cta: ({ link }: { link: any }) => h(CTA, { link }),
     pdf: (file: any) => h(CTA, { file }),
+    link: renderLink,
+    imageBlock: Image,
   },
 };
+
+function renderLink(link: any, { slots }: any) {
+  if (link.type === "internal") {
+    let to = link.internalLink.slug.current;
+    if (link.anchor) to += `#${link.anchor}`;
+    return h(NuxtLink, { to }, slots.default?.());
+  }
+
+  return h(NuxtLink, { href: link.url, external: true }, slots.default?.());
+}
 </script>
