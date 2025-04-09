@@ -25,7 +25,7 @@ const props = defineProps({
   },
   objectFit: {
     type: String,
-    required: true,
+    default: "cover",
   },
   altText: {
     type: String,
