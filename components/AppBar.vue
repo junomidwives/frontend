@@ -25,6 +25,14 @@
           <v-col
             class="justify-end d-none d-sm-flex flex-wrap align-center ga-1"
           >
+            <v-btn
+              nuxt
+              to="/"
+              color="surface-variant"
+              class="text-subtitle-1 px-2 px-md-3"
+            >
+              Home
+            </v-btn>
             <template v-for="item in menuItems" :key="item.title">
               <v-menu v-if="item.subitems" open-on-hover offset="6">
                 <template #activator="{ props }">
