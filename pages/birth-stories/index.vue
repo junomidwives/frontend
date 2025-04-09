@@ -50,12 +50,14 @@
 </template>
 
 <script setup lang="ts">
+import { useBirthStoriesStore } from "~/stores/birthStories";
 import type { SanityDocument } from "@sanity/client";
 
 const { setHeroText } = useHero();
 setHeroText("Birth Stories");
 
-const { getBirthStories, birthStories } = useBirthStories();
+const { getBirthStories } = useBirthStoriesStore();
+const { birthStories } = storeToRefs(useBirthStoriesStore());
 await getBirthStories();
 
 function getLink(item: SanityDocument) {

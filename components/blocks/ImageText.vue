@@ -4,7 +4,7 @@
     <v-row>
       <v-col
         class="d-flex flex-column align-center"
-        :class="{ 'offset-md-4': !body }"
+        :class="{ 'offset-md-4': !body.length }"
         cols="12"
         md="4"
         :order-md="orientation === 'imageLeft' ? 1 : 2"
@@ -21,7 +21,7 @@
       </v-col>
 
       <v-col
-        v-if="body"
+        v-if="body.length"
         :order-md="orientation === 'imageLeft' ? 2 : 1"
         :class="orientation === 'imageLeft' ? 'pl-md-8' : 'pr-md-8'"
       >
@@ -56,11 +56,11 @@ const props = defineProps({
   },
   body: {
     type: Array as () => PortableTextBlock[],
-    required: true,
+    default: [],
   },
   orientation: {
     type: String,
-    required: true,
+    default: "imageLeft",
   },
   link: {
     type: Object as () => any,

@@ -15,7 +15,10 @@
       <p class="text-body-2 mb-8">{{ formattedDate }}</p>
 
       <div class="text-body-1">
-        <SanityContent :blocks="blog.content.body" :serializers="serializers" />
+        <SanityContent
+          :blocks="blog.content?.body"
+          :serializers="serializers"
+        />
       </div>
 
       <v-divider class="mt-16 mb-4" />
@@ -98,11 +101,13 @@ const serializers = {
 
 function renderLink(link: any, { slots }: any) {
   if (link.type === "internal") {
-    let to = link.internalLink.slug.current;
+    let to = link.internalLink?.slug?.current;
     if (link.anchor) to += `#${link.anchor}`;
-    return h(NuxtLink, { to }, slots.default?.());
+    return h(NuxtLink, { to }, () => slots.default?.());
   }
 
-  return h(NuxtLink, { href: link.url, external: true }, slots.default?.());
+  return h(NuxtLink, { href: link.url, external: true }, () =>
+    slots.default?.()
+  );
 }
 </script>

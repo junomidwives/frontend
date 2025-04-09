@@ -43,10 +43,12 @@ function renderLink(link: any, { slots }: any) {
   if (link.type === "internal") {
     let to = link.internalLink.slug.current;
     if (link.anchor) to += `#${link.anchor}`;
-    return h(NuxtLink, { to }, slots.default?.());
+    return h(NuxtLink, { to }, () => slots.default?.());
   }
 
-  return h(NuxtLink, { href: link.url, external: true }, slots.default?.());
+  return h(NuxtLink, { href: link.url, external: true }, () =>
+    slots.default?.()
+  );
 }
 </script>
 
