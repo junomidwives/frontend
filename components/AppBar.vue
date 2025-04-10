@@ -116,6 +116,6 @@ const showMenu = ref(false);
 
 const { getItems } = useNavigationStore();
 const { menuItems } = storeToRefs(useNavigationStore());
-console.log(menuItems);
 await getItems();
+console.log(menuItems.value);
 </script>
