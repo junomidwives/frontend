@@ -43,7 +43,6 @@
                 <v-list-item
                   v-for="subitem in item.subitems"
                   :key="subitem.title"
-                  density="compact"
                   nuxt
                   :to="subitem.link"
                 >
@@ -62,6 +61,7 @@
               :to="item.link"
               color="surface-variant"
               class="text-subtitle-1 px-2 px-md-3"
+              :density="mdAndUp ? 'default' : 'compact'"
             >
               {{ item.title }}
             </v-btn>
@@ -110,7 +110,7 @@ type MenuItem = {
   subitems?: MenuItem[];
 };
 
-const { xs } = useDisplay();
+const { xs, mdAndUp } = useDisplay();
 const showMenu = ref(false);
 
 const { items } = storeToRefs(useNavigationStore());
@@ -141,7 +141,7 @@ const menuItems = computed(() => {
     }
 
     menuItems.push({
-      title: item.title,
+      title: item.title === "Frequently Asked Questions" ? "FAQs" : item.title,
       link: `/${item.slug.current}`,
     });
   }
