@@ -104,8 +104,48 @@
 <script setup lang="ts">
 import { useDisplay } from "vuetify";
 
+type MenuItem = {
+  title: string;
+  link?: string;
+  subitems?: MenuItem[];
+};
+
 const { xs } = useDisplay();
 const showMenu = ref(false);
 
-const { menuItems } = storeToRefs(useNavigationStore());
+const { items } = storeToRefs(useNavigationStore());
+
+const menuItems = computed(() => {
+  const menuItems: MenuItem[] = [];
+
+  for (const item of items.value) {
+    if (item.category) {
+      const category = menuItems.find((i) => i.title === item.category);
+      if (category) {
+        category.subitems?.push({
+          title: item.title,
+          link: `/${item.slug.current}`,
+        });
+      } else {
+        menuItems.push({
+          title: item.category,
+          subitems: [
+            {
+              title: item.title,
+              link: `/${item.slug.current}`,
+            },
+          ],
+        });
+      }
+      continue;
+    }
+
+    menuItems.push({
+      title: item.title,
+      link: `/${item.slug.current}`,
+    });
+  }
+
+  return menuItems;
+});
 </script>
