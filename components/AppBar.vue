@@ -115,6 +115,7 @@ const { xs } = useDisplay();
 const showMenu = ref(false);
 
 const { getItems } = useNavigationStore();
-await getItems();
 const { menuItems } = storeToRefs(useNavigationStore());
+console.log(menuItems);
+await getItems();
 </script>
