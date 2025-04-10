@@ -65,12 +65,26 @@ const route = useRoute();
 const { showHero } = useHero();
 
 const { getBirthStory, getBirthStories } = useBirthStoriesStore();
-const { prevousBirthStory, nextBirthStory, birthStory } = storeToRefs(
-  useBirthStoriesStore()
-);
+const { birthStory, birthStories } = storeToRefs(useBirthStoriesStore());
 
 await getBirthStories();
 await getBirthStory(route.params.slug as string);
+
+const prevousBirthStory = computed(() => {
+  const index = birthStories.value.findIndex(
+    (story) => story.slug.current === birthStory.value?.slug.current
+  );
+  if (index === 0) return null;
+  return birthStories.value[index - 1];
+});
+
+const nextBirthStory = computed(() => {
+  const index = birthStories.value.findIndex(
+    (story) => story.slug.current === birthStory.value?.slug.current
+  );
+  if (index === birthStories.value.length - 1) return null;
+  return birthStories.value[index + 1];
+});
 
 const formattedDate = computed(() => {
   return Intl.DateTimeFormat("en-US", {

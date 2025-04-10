@@ -60,7 +60,6 @@
 </template>
 
 <script setup lang="ts">
-import { NuxtLink } from "#components";
 import CTA from "@/components/blocks/CTA.vue";
 import Image from "~/components/blocks/Image.vue";
 
@@ -68,10 +67,28 @@ const route = useRoute();
 const { showHero } = useHero();
 
 const { getBlog, getBlogs } = useBlogStore();
-const { blog, previousBlog, nextBlog } = storeToRefs(useBlogStore());
+const { blog, blogs } = storeToRefs(useBlogStore());
 
 await getBlogs();
 await getBlog(route.params.slug as string);
+
+const previousBlog = computed(() => {
+  if (!blogs.value) return;
+  const index = blogs.value.findIndex(
+    (story) => story.slug.current === blog.value?.slug.current
+  );
+  if (index === 0) return null;
+  return blogs.value[index - 1];
+});
+
+const nextBlog = computed(() => {
+  if (!blogs.value) return;
+  const index = blogs.value.findIndex(
+    (story) => story.slug.current === blog.value?.slug.current
+  );
+  if (index === blogs.value.length - 1) return null;
+  return blogs.value[index + 1];
+});
 
 const formattedDate = computed(() => {
   return Intl.DateTimeFormat("en-US", {
@@ -85,24 +102,14 @@ onBeforeRouteLeave(() => {
   showHero.value = true;
 });
 
+const { $renderLink } = useNuxtApp();
+
 const serializers = {
   types: {
     cta: ({ link }: { link: any }) => h(CTA, { link }),
     pdf: (file: any) => h(CTA, { file }),
-    link: renderLink,
+    link: $renderLink,
     imageBlock: Image,
   },
 };
-
-function renderLink(link: any, { slots }: any) {
-  if (link.type === "internal") {
-    let to = link.internalLink?.slug?.current;
-    if (link.anchor) to += `#${link.anchor}`;
-    return h(NuxtLink, { to }, () => slots.default?.());
-  }
-
-  return h(NuxtLink, { href: link.url, external: true }, () =>
-    slots.default?.()
-  );
-}
 </script>

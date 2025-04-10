@@ -19,27 +19,9 @@ export const useBirthStoriesStore = defineStore("birthStories", () => {
     if (data) birthStory.value = data.value as SanityDocument;
   }
 
-  const prevousBirthStory = computed(() => {
-    const index = birthStories.value.findIndex(
-      (story) => story.slug.current === birthStory.value?.slug.current
-    );
-    if (index === 0) return null;
-    return birthStories.value[index - 1];
-  });
-
-  const nextBirthStory = computed(() => {
-    const index = birthStories.value.findIndex(
-      (story) => story.slug.current === birthStory.value?.slug.current
-    );
-    if (index === birthStories.value.length - 1) return null;
-    return birthStories.value[index + 1];
-  });
-
   return {
     birthStories,
     birthStory,
-    prevousBirthStory,
-    nextBirthStory,
     getBirthStories,
     getBirthStory,
   };

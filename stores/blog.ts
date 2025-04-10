@@ -8,8 +8,6 @@ export const useBlogStore = defineStore("blog", () => {
     if (blogs.value?.length) return;
     const BLOGS_QUERY = groq`*[_type == "blog"]  | order(publishedAt desc)`;
     const { data } = await useSanityQuery<SanityDocument[]>(BLOGS_QUERY);
-    console.log(data);
-    console.log(data.value);
     if (data) blogs.value = data.value as SanityDocument[];
   }
 
@@ -45,29 +43,9 @@ export const useBlogStore = defineStore("blog", () => {
     if (data) blog.value = data.value as SanityDocument;
   }
 
-  const previousBlog = computed(() => {
-    if (!blogs.value) return;
-    const index = blogs.value.findIndex(
-      (story) => story.slug.current === blog.value?.slug.current
-    );
-    if (index === 0) return null;
-    return blogs.value[index - 1];
-  });
-
-  const nextBlog = computed(() => {
-    if (!blogs.value) return;
-    const index = blogs.value.findIndex(
-      (story) => story.slug.current === blog.value?.slug.current
-    );
-    if (index === blogs.value.length - 1) return null;
-    return blogs.value[index + 1];
-  });
-
   return {
     blogs,
     blog,
-    previousBlog,
-    nextBlog,
     getBlogs,
     getBlog,
   };
