@@ -8,6 +8,8 @@ export const useBlogStore = defineStore("blog", () => {
     if (blogs.value?.length) return;
     const BLOGS_QUERY = groq`*[_type == "blog"]  | order(publishedAt desc)`;
     const { data } = await useSanityQuery<SanityDocument[]>(BLOGS_QUERY);
+    console.log(data);
+    console.log(data.value);
     if (data) blogs.value = data.value as SanityDocument[];
   }
 

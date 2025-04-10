@@ -23,7 +23,7 @@ export const useNavigationStore = defineStore("navigation", () => {
     const { data } = await useSanityQuery<SanityDocument>(SITE_QUERY);
     console.log(data);
     console.log(data.value);
-    if (data.value) items.value = data.value.mainNav;
+    if (data) items.value = data.value?.mainNav as Item[];
   }
 
   const menuItems = computed(() => {
