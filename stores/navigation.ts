@@ -21,8 +21,9 @@ export const useNavigationStore = defineStore("navigation", () => {
   async function getItems() {
     const SITE_QUERY = groq`*[_id == "siteSettings"][0]{mainNav[]->{slug, title, category}}`;
     const { data } = await useSanityQuery<SanityDocument>(SITE_QUERY);
-    if (data.value) items.value = data.value.mainNav;
+    console.log(data);
     console.log(data.value);
+    if (data.value) items.value = data.value.mainNav;
   }
 
   const menuItems = computed(() => {

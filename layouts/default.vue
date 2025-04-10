@@ -8,3 +8,8 @@
     <app-footer />
   </v-app>
 </template>
+
+<script setup lang="ts">
+const { getItems } = useNavigationStore();
+await getItems();
+</script>

@@ -114,8 +114,5 @@ import { useDisplay } from "vuetify";
 const { xs } = useDisplay();
 const showMenu = ref(false);
 
-const { getItems } = useNavigationStore();
 const { menuItems } = storeToRefs(useNavigationStore());
-await getItems();
-console.log(menuItems.value);
 </script>
