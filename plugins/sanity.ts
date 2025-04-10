@@ -15,7 +15,8 @@ export default defineNuxtPlugin(() => {
 
   function renderLink(link: any, { slots }: any) {
     if (link.type === "internal") {
-      let to = link.internalLink?.slug?.current;
+      const prefix = getPrefix(link.internalLink?._type);
+      let to = `${prefix}${link.internalLink?.slug?.current}`;
       if (link.anchor) to += `#${link.anchor}`;
       return h(NuxtLink, { to }, () => slots.default?.());
     }
@@ -23,6 +24,17 @@ export default defineNuxtPlugin(() => {
     return h(NuxtLink, { href: link.url, external: true }, () =>
       slots.default?.()
     );
+  }
+
+  function getPrefix(pageType: string) {
+    switch (pageType) {
+      case "blog":
+        return "/blog/";
+      case "birthStory":
+        return "/birth-stories/";
+      default:
+        return "/";
+    }
   }
 
   return {

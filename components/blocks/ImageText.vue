@@ -72,9 +72,10 @@ const props = defineProps({
   },
 });
 
+const { $renderLink } = useNuxtApp();
 const serializers = {
   types: {
-    link: NuxtLink,
+    link: $renderLink,
   },
 };
 
