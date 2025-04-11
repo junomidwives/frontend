@@ -27,6 +27,22 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxthub/core",
     "@pinia/nuxt",
+    [
+      "nuxt-mail",
+      {
+        message: {
+          to: "hello@stuartsewell.dev",
+        },
+        smtp: {
+          host: "mail@junomidwives.co.uk",
+          port: 465,
+          auth: {
+            user: "temp@junomidwives.co.uk",
+            pass: "{1[1py1`q51%",
+          },
+        },
+      },
+    ],
   ],
   vite: {
     vue: {
