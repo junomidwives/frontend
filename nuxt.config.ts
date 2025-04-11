@@ -25,7 +25,6 @@ export default defineNuxtConfig({
     "@nuxtjs/google-fonts",
     "@nuxtjs/sanity",
     "@nuxt/image",
-    "@nuxthub/core",
     "@pinia/nuxt",
   ],
   vite: {
