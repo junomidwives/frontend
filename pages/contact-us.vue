@@ -23,6 +23,7 @@
         </v-alert>
       </v-col>
     </v-row>
+
     <v-row>
       <v-col>
         <v-form
@@ -30,6 +31,7 @@
           @submit.prevent="submit"
           ref="form"
           class="d-flex flex-column ga-4"
+          data-netlify="true"
         >
           <v-text-field
             v-model="name"
@@ -117,7 +119,7 @@ async function submit() {
 }
 
 async function post() {
-  return await fetch("/.netlify/functions/contact", {
+  return await fetch("/", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
