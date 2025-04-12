@@ -20,15 +20,9 @@ export default async (req: Request) => {
       subject: "Website enquiry",
       text: `Name: ${name} \nEmail: ${email} \nMessage: ${message}`,
     },
-    (error) => {
-      if (error) {
-        return new Response(JSON.stringify({ error: error.message }), {
-          status: 500,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      }
+    (error, info) => {
+      if (!error) console.log(error);
+      else console.log(info);
     }
   );
 };
