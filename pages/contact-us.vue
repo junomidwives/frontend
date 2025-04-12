@@ -31,7 +31,7 @@
           ref="form"
           class="d-flex flex-column ga-4"
           data-netlify="true"
-          method="post"
+          @submit.prevent="submit"
         >
           <input type="hidden" name="form-name" value="contact" />
 
@@ -43,6 +43,7 @@
             variant="outlined"
             :rules="[(v: any) => !!v || 'Name is required']"
             hide-details="auto"
+            v-model="name"
           />
           <v-text-field
             label="Email"
@@ -55,6 +56,7 @@
               (v: any) => v.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) || 'Invalid email address'
             ]"
             hide-details="auto"
+            v-model="email"
           />
 
           <v-textarea
@@ -65,6 +67,7 @@
             variant="outlined"
             :rules="[(v: any) => !!v || 'Message is required']"
             hide-details="auto"
+            v-model="message"
           />
           <v-btn block type="submit" color="primary" :loading="loading">
             Send
@@ -96,6 +99,12 @@ const loading = ref(false);
 const success = ref(false);
 const error = ref(null);
 
+function encode(data: Record<string, string>) {
+  return Object.keys(data)
+    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
+    .join("&");
+}
+
 async function submit() {
   loading.value = true;
 
@@ -121,9 +130,10 @@ async function post() {
   return await fetch("/", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: JSON.stringify({
+    body: encode({
+      "form-name": "contact",
       name: name.value,
       email: email.value,
       message: message.value,
