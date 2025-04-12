@@ -26,7 +26,6 @@
     "sass": "^1.85.1",
     "sass-loader": "^16.0.5",
     "vite-plugin-vuetify": "^2.1.0",
-    "vuetify": "^3.7.15",
-    "wrangler": "^4.10.0"
+    "vuetify": "^3.7.15"
   }
 }
