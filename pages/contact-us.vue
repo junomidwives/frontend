@@ -28,13 +28,14 @@
       <v-col>
         <v-form
           name="contact"
-          @submit.prevent="submit"
           ref="form"
           class="d-flex flex-column ga-4"
           data-netlify="true"
+          method="post"
         >
+          <input type="hidden" name="form-name" value="contact" />
+
           <v-text-field
-            v-model="name"
             label="Name"
             name="name"
             type="text"
@@ -44,7 +45,6 @@
             hide-details="auto"
           />
           <v-text-field
-            v-model="email"
             label="Email"
             name="email"
             type="email"
@@ -58,7 +58,6 @@
           />
 
           <v-textarea
-            v-model="message"
             label="Message"
             name="message"
             type="text"
