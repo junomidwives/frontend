@@ -31,6 +31,7 @@
           ref="form"
           class="d-flex flex-column ga-4"
           data-netlify="true"
+          data-netlify-honeypot="bot-field"
           @submit.prevent="submit"
         >
           <input type="hidden" name="form-name" value="contact" />
@@ -44,6 +45,7 @@
             :rules="[(v: any) => !!v || 'Name is required']"
             hide-details="auto"
             v-model="name"
+            rounded="lg"
           />
           <v-text-field
             label="Email"
@@ -57,6 +59,7 @@
             ]"
             hide-details="auto"
             v-model="email"
+            rounded="lg"
           />
 
           <v-textarea
@@ -68,8 +71,16 @@
             :rules="[(v: any) => !!v || 'Message is required']"
             hide-details="auto"
             v-model="message"
+            rounded="lg"
           />
-          <v-btn block type="submit" color="primary" :loading="loading">
+          <v-btn
+            block
+            type="submit"
+            color="secondary"
+            :loading="loading"
+            rounded="pill"
+            size="large"
+          >
             Send
           </v-btn>
         </v-form>
