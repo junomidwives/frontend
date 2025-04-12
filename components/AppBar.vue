@@ -75,7 +75,7 @@
     v-model="showMenu"
     temporary
     location="bottom"
-    class="rounded-t-xl"
+    class="rounded-t-xl d-block d-sm-none"
   >
     <v-list>
       <template v-for="item in menuItems" :key="item.title">
