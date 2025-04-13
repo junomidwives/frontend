@@ -4,8 +4,6 @@ import { createResolver } from "@nuxt/kit";
 
 const { resolve } = createResolver(import.meta.url);
 
-const sanityProjectId = "s88cxh4b";
-
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
@@ -41,7 +39,7 @@ export default defineNuxtConfig({
     },
   },
   sanity: {
-    projectId: sanityProjectId,
+    projectId: process.env.SANITY_PROJECT_ID,
     dataset: "production",
   },
   hooks: {
