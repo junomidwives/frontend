@@ -7,7 +7,9 @@
 
     <v-row>
       <v-col
-        cols="3"
+        cols="12"
+        sm="6"
+        md="3"
         v-for="story in birthStories"
         :key="story.id"
         class="d-flex"
@@ -20,7 +22,7 @@
                   :src="$urlFor(story.image).url()"
                   cover
                   width="100%"
-                  max-height="400"
+                  :max-height="smAndUp ? 400 : 200"
                   aspect-ratio="1"
                   rounded="lg"
                   class="mb-2"
@@ -52,9 +54,12 @@
 <script setup lang="ts">
 import { useBirthStoriesStore } from "~/stores/birthStories";
 import type { SanityDocument } from "@sanity/client";
+import { useDisplay } from "vuetify";
 
 const { setHeroText } = useHero();
 setHeroText("Birth Stories");
+
+const { smAndUp } = useDisplay();
 
 const { getBirthStories } = useBirthStoriesStore();
 const { birthStories } = storeToRefs(useBirthStoriesStore());

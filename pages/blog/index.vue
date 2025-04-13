@@ -7,7 +7,14 @@
 
     <v-row>
       <client-only>
-        <v-col cols="3" v-for="blog in blogs" :key="blog.id" class="d-flex">
+        <v-col
+          cols="12"
+          sm="6"
+          md="3"
+          v-for="blog in blogs"
+          :key="blog.id"
+          class="d-flex"
+        >
           <v-card flat class="d-flex w-100">
             <v-card-text class="d-flex flex-column justify-space-between">
               <div>
@@ -16,7 +23,7 @@
                     :src="$urlFor(blog.image).url()"
                     cover
                     width="100%"
-                    max-height="400"
+                    :max-height="smAndUp ? 400 : 200"
                     aspect-ratio="1"
                     rounded="lg"
                     class="mb-2"
@@ -29,10 +36,6 @@
                 >
                   {{ blog.title }}
                 </NuxtLink>
-
-                <!-- <p class="mt-2">
-                {{ blog.content[0].children[0].text.split(".")[0] + "..." }}
-              </p> -->
               </div>
 
               <NuxtLink :to="getLink(blog)" class="text-body-1">
@@ -48,9 +51,12 @@
 
 <script setup lang="ts">
 import type { SanityDocument } from "@sanity/client";
+import { useDisplay } from "vuetify";
 
 const { setHeroText } = useHero();
 setHeroText("Blog");
+
+const { smAndUp } = useDisplay();
 
 const { getBlogs } = useBlogStore();
 const { blogs } = storeToRefs(useBlogStore());
