@@ -1,7 +1,5 @@
 <template>
-  <v-container>
-    <SanityContent :blocks="body" :serializers="serializers" />
-  </v-container>
+  <SanityContent :blocks="body" :serializers="serializers" />
 </template>
 
 <script setup lang="ts">
