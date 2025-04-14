@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="content">
     <page-builder v-if="data" :blocks="data.homePage?.content" />
   </v-container>
 </template>
