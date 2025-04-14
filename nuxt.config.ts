@@ -36,6 +36,7 @@ export default defineNuxtConfig({
     families: {
       "DM+Sans": [200, 300, 400, 500, 600, 700],
       "Material+Icons": true,
+      "Abril+Fatface": [400],
     },
   },
   sanity: {

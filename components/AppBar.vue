@@ -6,8 +6,11 @@
           sm="4"
           class="d-flex align-center justify-space-between text-grey-darken-4"
         >
-          <h1 class="text-h5 text-md-h4 font-weight-bold">
-            <nuxt-link to="/" class="text-decoration-none text-surface-variant">
+          <h1 class="text-h5 text-md-h4">
+            <nuxt-link
+              to="/"
+              class="text-decoration-none text-surface-variant logo-text"
+            >
               juno midwives
             </nuxt-link>
           </h1>
@@ -149,3 +152,9 @@ const menuItems = computed(() => {
   return menuItems;
 });
 </script>
+
+<style>
+.logo-text {
+  font-family: "Abril Fatface", serif;
+}
+</style>
