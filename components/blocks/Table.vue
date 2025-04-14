@@ -1,5 +1,5 @@
 <template>
-  <v-table>
+  <v-table class="text-body-2 text-sm-body-1">
     <thead>
       <tr class="bg-grey-lighten-3">
         <th v-for="header in headers" :key="header">
