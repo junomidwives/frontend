@@ -29,7 +29,7 @@
       </v-col>
     </v-row>
 
-    <v-row v-if="link.url || link.internalLink">
+    <v-row v-if="link?.url || link?.internalLink">
       <v-col cols="12" class="text-center">
         <v-btn
           :to="url"
@@ -80,7 +80,6 @@ const serializers = {
 };
 
 const url = computed(() => {
-  console.log(props.link);
   if (props.link.type === "internal") {
     let url = props.link.internalLink.slug.current;
     if (props.link.anchor) url += `#${props.link.anchor}`;
