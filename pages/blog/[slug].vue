@@ -1,15 +1,5 @@
 <template>
   <v-container v-if="blog" max-width="1000" class="mx-auto">
-    <v-img
-      :src="$urlFor(blog.image).size(800, 500).url()"
-      cover
-      width="100%"
-      max-height="500"
-      aspect-ratio="1"
-      rounded="xl"
-      class="mt-10"
-    />
-
     <h2 class="text-h4 font-weight-bold mt-8 mb-2">{{ blog.title }}</h2>
     <p class="text-body-2 mb-8">{{ formattedDate }}</p>
 
