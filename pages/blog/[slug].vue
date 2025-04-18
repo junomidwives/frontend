@@ -1,7 +1,8 @@
 <template>
   <v-container v-if="blog" max-width="1000" class="mx-auto">
-    <h2 class="text-h4 font-weight-bold mt-8 mb-2">{{ blog.title }}</h2>
-    <p class="text-body-2 mb-8">{{ formattedDate }}</p>
+    <p class="text-body-2 mt-10 mb-8 text-end font-weight-bold">
+      {{ formattedDate }}
+    </p>
 
     <div class="text-body-1">
       <SanityContent :blocks="blog.content?.body" :serializers="serializers" />
@@ -55,7 +56,7 @@
       </v-col>
     </v-row>
 
-    <v-divider />
+    <v-divider class="mb-10" />
   </v-container>
 </template>
 
@@ -64,13 +65,15 @@ import CTA from "@/components/blocks/CTA.vue";
 import Image from "~/components/blocks/Image.vue";
 
 const route = useRoute();
-const { showHero } = useHero();
+const { setHeroText } = useHero();
 
 const { getBlog, getBlogs } = useBlogStore();
 const { blog, blogs } = storeToRefs(useBlogStore());
 
 await getBlogs();
 await getBlog(route.params.slug as string);
+
+setHeroText(blog.value?.title);
 
 const previousBlog = computed(() => {
   if (!blogs.value) return;
@@ -92,14 +95,10 @@ const nextBlog = computed(() => {
 
 const formattedDate = computed(() => {
   return Intl.DateTimeFormat("en-US", {
+    day: "numeric",
     month: "long",
     year: "numeric",
   }).format(new Date(blog.value?.publishedAt));
-});
-showHero.value = false;
-
-onBeforeRouteLeave(() => {
-  showHero.value = true;
 });
 
 const { $renderLink } = useNuxtApp();

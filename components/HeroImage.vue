@@ -11,9 +11,29 @@
         width="100%"
         height="100%"
         color="transparent"
-        class="d-flex align-end pa-4 pa-md-16 text-h5 text-sm-h3 text-md-h2 text-white"
+        class="text-h5 text-sm-h3 text-md-h2 text-white"
       >
-        <div v-if="heroText && heroText !== 'Home'">
+        <v-container fluid class="h-100 ps-4 ps-md-12 pb-0">
+          <v-row class="h-100">
+            <v-col
+              v-if="heroText && heroText !== 'Home'"
+              class="d-flex flex-column justify-end pb-0 pb-md-4"
+              cols="12"
+              md="10"
+            >
+              <p class="font-weight-bold">{{ heroText }}</p>
+            </v-col>
+
+            <v-col v-else class="d-flex flex-column justify-end pb-0 pb-md-4">
+              <p class="font-weight-bold">Natasha & Sophie</p>
+              <p class="font-weight-thin">
+                Independent midwives<br />
+                in Kent
+              </p>
+            </v-col>
+          </v-row>
+        </v-container>
+        <!-- <div v-if="heroText && heroText !== 'Home'">
           <p class="font-weight-bold">{{ heroText }}</p>
         </div>
         <div v-else>
@@ -22,7 +42,7 @@
             Independent midwives<br />
             in Kent
           </p>
-        </div>
+        </div> -->
       </v-sheet>
     </v-img>
   </client-only>
