@@ -98,9 +98,10 @@
 const { setHeroText } = useHero();
 setHeroText("Juno Journal");
 
+const { subscribe } = useNewsletterStore();
+const { name, email } = storeToRefs(useNewsletterStore());
+
 const form = ref<HTMLFormElement>();
-const name = ref("");
-const email = ref("");
 const loading = ref(false);
 const success = ref(false);
 const error = ref(null);
@@ -119,27 +120,6 @@ async function submit() {
     error.value = e;
   } finally {
     loading.value = false;
-  }
-}
-
-async function subscribe() {
-  try {
-    await fetch("https://connect.mailerlite.com/api/subscribers", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + import.meta.env.VITE_MAILERLITE_TOKEN,
-      },
-      body: JSON.stringify({
-        email: email.value,
-        fields: {
-          name: name.value,
-        },
-        groups: [import.meta.env.VITE_MAILERLITE_GROUP],
-      }),
-    });
-  } catch (e: any) {
-    throw e;
   }
 }
 
