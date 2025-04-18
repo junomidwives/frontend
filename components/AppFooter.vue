@@ -1,5 +1,5 @@
 <template>
-  <v-footer color="teal-lighten-5">
+  <v-footer color="cyan-lighten-5">
     <v-container fluid>
       <v-row>
         <v-col

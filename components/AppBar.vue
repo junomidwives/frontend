@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar :height="xs ? 60 : 100" class="px-md-5" color="teal-lighten-5">
+  <v-app-bar :height="xs ? 60 : 100" class="px-md-5" color="cyan-lighten-5">
     <v-container fluid>
       <v-row>
         <v-col
