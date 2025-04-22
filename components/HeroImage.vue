@@ -27,7 +27,7 @@
             <v-col v-else class="d-flex flex-column justify-end pb-0 pb-md-4">
               <p class="font-weight-bold">Natasha & Sophie</p>
               <p class="font-weight-thin">
-                Independent midwives<br />
+                Independent Midwives<br />
                 in Kent
               </p>
             </v-col>
