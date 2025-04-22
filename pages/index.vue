@@ -2,11 +2,11 @@
   <v-container class="content" fluid>
     <page-builder v-if="data" :blocks="data.homePage?.content" />
 
-    <v-row class="bg-grey-lighten-5 mb-4 py-6">
+    <v-divider></v-divider>
+    <v-row class="py-6">
       <v-col cols="12" sm="10" offset-sm="1" md="6" offset-md="3">
         <p class="text-body-1 text-center">
-          Sign up here for our monthly newsletter full of information and
-          resources
+          Sign up here for our newsletter full of information and resources
         </p>
         <v-form name="newsletter" ref="homeForm" @submit.prevent="submit">
           <v-text-field

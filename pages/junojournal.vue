@@ -38,8 +38,7 @@
 
       <v-col v-else>
         <p class="text-body-1 text-center">
-          Sign up here for our monthly newsletter full of information and
-          resources
+          Sign up here for our newsletter full of information and resources
         </p>
       </v-col>
     </v-row>
