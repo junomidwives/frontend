@@ -5,9 +5,10 @@
         <v-btn
           v-bind="url"
           color="secondary"
-          rounded="xl"
+          rounded="pill"
           class="px-10 mb-4"
           size="large"
+          :stacked="xs"
         >
           {{
             props.file
@@ -21,6 +22,10 @@
 </template>
 
 <script setup lang="ts">
+import { useDisplay } from "vuetify";
+
+const { xs } = useDisplay();
+
 const props = defineProps({
   link: {
     type: Object,
@@ -51,3 +56,19 @@ function fileUrl(file: any) {
   return file.asset.url;
 }
 </script>
+
+<style scoped>
+.materialDesignButton {
+  color: #fff;
+  border-radius: 5px;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-size: 1.04em;
+  letter-spacing: 0.05em;
+  width: auto;
+  transition: 0.3s;
+}
+
+.materialDesignButton:hover {
+  opacity: 0.7;
+}
+</style>
