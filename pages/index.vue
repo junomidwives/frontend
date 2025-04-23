@@ -55,6 +55,11 @@ const SITE_QUERY = groq`*[_id == "siteSettings"][0]{
     ...,
     content[]{
       ...,
+      link{
+        ...,
+        internalLink->,
+      },
+      internalLink->,
       body[]{
         ...,
         markDefs[]{
