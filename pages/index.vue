@@ -2,9 +2,39 @@
   <v-container class="content" fluid>
     <page-builder v-if="data" :blocks="data.homePage?.content" />
 
-    <v-divider></v-divider>
-    <v-row class="py-6">
-      <v-col cols="12" sm="10" offset-sm="1" md="6" offset-md="3">
+    <v-divider class="py-6" />
+
+    <v-row>
+      <v-col v-if="success || error">
+        <v-alert
+          v-if="success"
+          color="success"
+          icon="mdi-email-newsletter"
+          variant="tonal"
+          max-width="500"
+          class="mx-auto"
+        >
+          <h3 class="text-h6 font-weight-bold mt-n1">
+            Thank you for subscribing!
+          </h3>
+        </v-alert>
+
+        <v-alert
+          v-if="error"
+          color="error"
+          icon="mdi-alert-circle"
+          variant="tonal"
+          max-width="500"
+          class="mx-auto"
+        >
+          <h3 class="text-h6 font-weight-bold">Something went wrong</h3>
+          <p class="text-body-1">{{ error }}</p>
+        </v-alert>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12" sm="10" offset-sm="1" md="6" offset-md="3" class="mb-6">
         <p class="text-body-1 text-center">
           Sign up here for our newsletter full of information and resources
         </p>
@@ -38,6 +68,7 @@
             ]"
             ref="emailInput"
           />
+          <v-btn v-show="false" type="submit" :disabled="loading" />
         </v-form>
       </v-col>
     </v-row>
@@ -82,10 +113,11 @@ const homeForm = ref<HTMLFormElement>();
 const emailInput = ref<HTMLInputElement>();
 const loading = ref(false);
 const success = ref(false);
-const error = ref(null);
+const error = ref("");
 
 async function submit() {
   loading.value = true;
+  error.value = "";
 
   try {
     const { valid } = await homeForm.value?.validate();
@@ -102,7 +134,7 @@ async function submit() {
 }
 
 function reset() {
-  error.value = null;
+  error.value = "";
   homeForm.value?.reset();
   emailInput.value?.blur();
 }
