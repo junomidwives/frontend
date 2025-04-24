@@ -38,7 +38,7 @@ const props = defineProps({
 });
 
 const url = computed(() => {
-  if (props.link) return { nuxt: true, to: linkUrl(props.link) };
+  if (props.link) return { nuxt: true, ...linkUrl(props.link) };
   if (props.file) return { href: fileUrl(props.file) };
   return {};
 });
@@ -47,9 +47,9 @@ function linkUrl(link: any) {
   if (link.type === "internal") {
     let url = "/" + link.internalLink.slug.current;
     if (link.anchor) url += link.anchor;
-    return url;
+    return { to: url };
   }
-  return link.url;
+  return { href: link.url };
 }
 
 function fileUrl(file: any) {
