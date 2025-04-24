@@ -19,6 +19,13 @@ const PAGE_QUERY = groq`*[_type == "page" && slug.current == '${route.params.slu
       internalLink->,
     },
     internalLink->,
+    cta{
+      ...,
+      link{
+        ...,
+        internalLink->,
+      }
+    },
     body[]{
       ...,
       markDefs[]{
@@ -26,12 +33,18 @@ const PAGE_QUERY = groq`*[_type == "page" && slug.current == '${route.params.slu
         _type == "link" => {
           ...,
           internalLink->
+        },
+      },
+      _type == "cta" => {
+        ...,
+        link{
+          ...,
+          internalLink->,
         }
-      }
+      },
     }
   },
 }`;
 const { data } = await useSanityQuery<SanityDocument>(PAGE_QUERY);
-
 setHeroText(data.value?.title);
 </script>
