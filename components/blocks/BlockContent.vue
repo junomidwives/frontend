@@ -9,9 +9,10 @@
 </template>
 
 <script setup lang="ts">
-import { NuxtLink } from "#components";
 import type { PortableTextBlock } from "@portabletext/types";
 import { VImg } from "vuetify/components";
+import CTA from "@/components/blocks/CTA.vue";
+import Image from "~/components/blocks/Image.vue";
 
 defineProps({
   body: {
@@ -35,7 +36,10 @@ const serializers = {
         class: "mx-auto my-8",
       });
     },
+    cta: ({ link }: { link: any }) => h(CTA, { link }),
+    pdf: (file: any) => h(CTA, { file }),
     link: $renderLink,
+    imageBlock: Image,
   },
   marks: {
     center: (_: any, { slots }: any) =>
