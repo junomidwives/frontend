@@ -24,6 +24,7 @@ export default defineNuxtConfig({
     "@nuxtjs/sanity",
     "@nuxt/image",
     "@pinia/nuxt",
+    "@nuxtjs/robots",
   ],
   vite: {
     vue: {
@@ -76,5 +77,8 @@ export default defineNuxtConfig({
         },
       ],
     },
+  },
+  site: {
+    indexable: process.env.NUXT_SITE_ENV === "production",
   },
 });
