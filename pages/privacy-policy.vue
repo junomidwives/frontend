@@ -12,6 +12,10 @@ import type { SanityDocument } from "@sanity/client";
 const { setHeroText } = useHero();
 setHeroText("Privacy Policy");
 
+useSeoMeta({
+  title: "Privacy Policy | Juno Midwives",
+});
+
 const PAGE_QUERY = groq`*[_type == "pdfPage" && slug.current == 'privacy-policy'][0]{
   ...,
   pdf{

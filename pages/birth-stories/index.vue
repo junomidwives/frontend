@@ -59,6 +59,10 @@ import { useDisplay } from "vuetify";
 const { setHeroText } = useHero();
 setHeroText("Birth Stories");
 
+useSeoMeta({
+  title: "Birth Stories | Juno Midwives",
+});
+
 const { smAndUp } = useDisplay();
 
 const { getBirthStories } = useBirthStoriesStore();

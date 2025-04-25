@@ -97,6 +97,10 @@
 const { setHeroText } = useHero();
 setHeroText("Juno Journal");
 
+useSeoMeta({
+  title: "Juno Journal | Juno Midwives",
+});
+
 const { subscribe } = useNewsletterStore();
 const { name, email } = storeToRefs(useNewsletterStore());
 

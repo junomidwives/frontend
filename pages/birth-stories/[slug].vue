@@ -70,6 +70,10 @@ const { birthStory, birthStories } = storeToRefs(useBirthStoriesStore());
 await getBirthStories();
 await getBirthStory(route.params.slug as string);
 
+useSeoMeta({
+  title: () => `${birthStory.value?.title} | Juno Midwives` || "Juno Midwives",
+});
+
 const prevousBirthStory = computed(() => {
   const index = birthStories.value.findIndex(
     (story) => story.slug.current === birthStory.value?.slug.current

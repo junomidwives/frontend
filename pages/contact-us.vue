@@ -102,6 +102,10 @@
 const { setHeroText } = useHero();
 setHeroText("Contact Us");
 
+useSeoMeta({
+  title: "Contact Us | Juno Midwives",
+});
+
 const form = ref<HTMLFormElement>();
 const name = ref("");
 const email = ref("");

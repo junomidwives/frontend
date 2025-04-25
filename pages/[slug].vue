@@ -47,4 +47,8 @@ const PAGE_QUERY = groq`*[_type == "page" && slug.current == '${route.params.slu
 }`;
 const { data } = await useSanityQuery<SanityDocument>(PAGE_QUERY);
 setHeroText(data.value?.title);
+
+useSeoMeta({
+  title: () => `${data.value?.title} | Juno Midwives` || "Juno Midwives",
+});
 </script>

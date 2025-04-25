@@ -12,6 +12,10 @@ import type { SanityDocument } from "@sanity/client";
 const { setHeroText } = useHero();
 setHeroText("Terms and Conditions");
 
+useSeoMeta({
+  title: "Terms and Conditions | Juno Midwives",
+});
+
 const PAGE_QUERY = groq`*[_type == "pdfPage" && slug.current == 'terms-conditions'][0]{
   ...,
   pdf{

@@ -66,6 +66,10 @@ import { useDisplay } from "vuetify";
 const { setHeroText } = useHero();
 setHeroText("Blog");
 
+useSeoMeta({
+  title: "Blog | Juno Midwives",
+});
+
 const { smAndUp } = useDisplay();
 
 const { getBlogs } = useBlogStore();

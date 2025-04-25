@@ -70,6 +70,10 @@ const { setHeroText } = useHero();
 const { getBlog, getBlogs } = useBlogStore();
 const { blog, blogs } = storeToRefs(useBlogStore());
 
+useSeoMeta({
+  title: () => `${blog.value?.title} | Juno Midwives` || "Juno Midwives",
+});
+
 await getBlogs();
 await getBlog(route.params.slug as string);
 
