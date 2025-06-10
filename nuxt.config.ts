@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import { createResolver } from "@nuxt/kit";
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 
 const { resolve } = createResolver(import.meta.url);
 
@@ -32,6 +33,13 @@ export default defineNuxtConfig({
         transformAssetUrls,
       },
     },
+    plugins: [
+      sentryVitePlugin({
+        authToken: process.env.SENTRY_AUTH_TOKEN || "",
+        org: "juno-midwives",
+        project: "frontend",
+      }),
+    ],
   },
   googleFonts: {
     families: {
@@ -81,4 +89,16 @@ export default defineNuxtConfig({
   site: {
     indexable: process.env.NUXT_SITE_ENV === "production",
   },
+  runtimeConfig: {
+    public: {
+      SENTRY_DSN_PUBLIC: process.env.SENTRY_DSN_PUBLIC || "",
+      SENTRY_TRACES_SAMPLE_RATE:
+        process.env.NODE_ENV === "production" ? 1 : 0.1,
+      SENTRY_REPLAY_SAMPLE_RATE:
+        process.env.NODE_ENV === "production" ? 0.1 : 0,
+      SENTRY_ERROR_REPLAY_SAMPLE_RATE:
+        process.env.NODE_ENV === "production" ? 0.1 : 0,
+    },
+  },
+  sourcemap: true,
 });
