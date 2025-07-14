@@ -10,6 +10,11 @@ export default defineNuxtPlugin(() => {
   const builder = imageUrlBuilder(sanityConfig);
 
   function urlFor(source: any) {
+    if (!source?.asset)
+      return {
+        url: () => undefined,
+      };
+
     return builder.image(source).auto("format");
   }
 

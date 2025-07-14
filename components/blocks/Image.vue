@@ -1,9 +1,9 @@
 <template>
-  <v-container>
+  <v-container v-if="src">
     <v-row>
       <v-col cols="12" md="4" offset-md="4">
         <v-img
-          :src="$urlFor(image).url()"
+          :src="src"
           :cover="cover"
           width="100%"
           max-height="400"
@@ -40,6 +40,9 @@ const props = defineProps({
 const cover = computed(() => {
   return props.objectFit === "cover";
 });
+
+const { $urlFor } = useNuxtApp();
+const src = computed(() => $urlFor(props.image).url());
 </script>
 
 <style>
