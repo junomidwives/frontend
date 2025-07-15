@@ -85,9 +85,6 @@ export default defineNuxtConfig({
       ],
     },
   },
-  site: {
-    indexable: process.env.NUXT_SITE_ENV === "production",
-  },
   runtimeConfig: {
     public: {
       SENTRY_DSN_PUBLIC: process.env.SENTRY_DSN_PUBLIC || "",
