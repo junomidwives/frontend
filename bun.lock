@@ -11,6 +11,7 @@
         "@nuxtjs/sanity": "1.13.3",
         "@pinia/nuxt": "0.10.1",
         "@portabletext/types": "^2.0.13",
+        "@portabletext/vue": "^1.0.12",
         "@sanity/image-url": "^1.1.0",
         "@sentry/vite-plugin": "^3.5.0",
         "@sentry/vue": "^9.27.0",
@@ -309,7 +310,11 @@
 
     "@poppinss/exception": ["@poppinss/exception@1.2.1", "", {}, "sha512-aQypoot0HPSJa6gDPEPTntc1GT6QINrSbgRlRhadGW2WaYqUK3tK4Bw9SBMZXhmxd3GeAlZjVcODHgiu+THY7A=="],
 
+    "@portabletext/toolkit": ["@portabletext/toolkit@2.0.17", "", { "dependencies": { "@portabletext/types": "^2.0.13" } }, "sha512-5wj+oUaCmHm9Ay1cytPmT1Yc0SrR1twwUIc0qNQ3MtaXaNMPw99Gjt1NcA34yfyKmEf/TAB2NiiT72jFxdddIQ=="],
+
     "@portabletext/types": ["@portabletext/types@2.0.13", "", {}, "sha512-5xk5MSyQU9CrDho3Rsguj38jhijhD36Mk8S6mZo3huv6PM+t4M/5kJN2KFIxgvt4ONpvOEs1pVIZAV0cL0Vi+Q=="],
+
+    "@portabletext/vue": ["@portabletext/vue@1.0.12", "", { "dependencies": { "@portabletext/toolkit": "^2.0.17", "@portabletext/types": "^2.0.13" }, "peerDependencies": { "vue": "^3.3.4" } }, "sha512-RUmdORBquYHpf5rkPgppZEqFYA/SOjR2udUIUcg+HfStc+r48CyaQGUy9Iq4cfFPu7VlVwH9F5Dfr2BT0T3Ayw=="],
 
     "@rollup/plugin-alias": ["@rollup/plugin-alias@5.1.1", "", { "peerDependencies": { "rollup": "^1.20.0||^2.0.0||^3.0.0||^4.0.0" }, "optionalPeers": ["rollup"] }, "sha512-PR9zDb+rOzkRb2VD+EuKB7UC41vU5DIwZ5qqCpk0KJudcWAyi8rvYOhS7+L5aZCspw1stTViLgN5v6FF1p5cgQ=="],
 
