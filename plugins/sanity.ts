@@ -17,7 +17,6 @@ export default defineNuxtPlugin(() => {
 
     return builder.image(source).auto("format");
   }
-
   function renderLink(link: any, { slots }: any) {
     if (link.type === "internal") {
       const prefix = getPrefix(link.internalLink?._type);
@@ -29,6 +28,17 @@ export default defineNuxtPlugin(() => {
     return h(NuxtLink, { href: link.url, external: true }, () =>
       slots.default?.()
     );
+  }
+
+  function renderLink2({ value, text }: any) {
+    if (value?.type === "internal") {
+      const prefix = getPrefix(value.internalLink?._type);
+      let to = `${prefix}${value.internalLink?.slug?.current}`;
+      if (value.anchor) to += `#${value.anchor}`;
+      return h(NuxtLink, { to }, () => text);
+    }
+
+    return h(NuxtLink, { href: value?.url, external: true }, () => text);
   }
 
   function getPrefix(pageType: string) {
@@ -43,6 +53,6 @@ export default defineNuxtPlugin(() => {
   }
 
   return {
-    provide: { urlFor, renderLink },
+    provide: { urlFor, renderLink, renderLink2 },
   };
 });

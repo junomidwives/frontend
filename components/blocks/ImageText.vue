@@ -93,8 +93,4 @@ const url = computed(() => {
 P {
   margin-bottom: 1rem;
 }
-
-.content h3 {
-  font-size: 1.8rem;
-}
 </style>

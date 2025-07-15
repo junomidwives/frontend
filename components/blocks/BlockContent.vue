@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col>
-        <SanityContent :blocks="body" :serializers="serializers" />
+        <PortableText :value="body" :components="components" />
       </v-col>
     </v-row>
   </v-container>
@@ -13,6 +13,10 @@ import type { PortableTextBlock } from "@portabletext/types";
 import { VImg } from "vuetify/components";
 import CTA from "@/components/blocks/CTA.vue";
 import Image from "~/components/blocks/Image.vue";
+import {
+  PortableText,
+  type PortableTextVueComponents,
+} from "@portabletext/vue";
 
 defineProps({
   body: {
@@ -21,11 +25,12 @@ defineProps({
   },
 });
 
-const { $urlFor, $renderLink } = useNuxtApp();
+const { $urlFor, $renderLink2 } = useNuxtApp();
 
-const serializers = {
+const components: Partial<PortableTextVueComponents> = {
   types: {
-    image: ({ asset }: { asset: any }) => {
+    image: (props) => {
+      const asset = props.value.asset;
       return h(VImg, {
         src: $urlFor(asset).url(),
         cover: true,
@@ -36,14 +41,17 @@ const serializers = {
         class: "mx-auto my-8",
       });
     },
-    cta: ({ link }: { link: any }) => h(CTA, { link }),
+    cta: (props) => h(CTA, { link: props.value.link }),
     pdf: (file: any) => h(CTA, { file }),
-    link: $renderLink,
-    imageBlock: Image,
+    imageBlock: (props) => h(Image, { ...props.value }),
   },
   marks: {
-    center: (_: any, { slots }: any) =>
-      h("div", { class: "text-center" }, slots.default?.()),
+    link: $renderLink2,
+  },
+  block: {
+    center: (_: any, { slots }: any) => {
+      return h("p", { class: "text-center" }, slots.default());
+    },
   },
 };
 </script>
