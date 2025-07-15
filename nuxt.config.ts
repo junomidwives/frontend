@@ -25,7 +25,6 @@ export default defineNuxtConfig({
     "@nuxtjs/sanity",
     "@nuxt/image",
     "@pinia/nuxt",
-    "@nuxtjs/robots",
   ],
   vite: {
     vue: {
