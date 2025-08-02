@@ -1,8 +1,12 @@
 <template>
   <v-container>
-    <client-only>
-      <PDFViewer :pdf="data?.pdf?.asset?.url" />
-    </client-only>
+    <v-row>
+      <v-col class="text-center">
+        <client-only>
+          <PDFViewer :pdf="data?.pdf?.asset?.url" />
+        </client-only>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
