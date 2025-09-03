@@ -6,14 +6,13 @@
           sm="4"
           class="d-flex align-center justify-space-between text-grey-darken-4"
         >
-          <h1 class="text-h5 text-md-h4">
-            <nuxt-link
-              to="/"
-              class="text-decoration-none text-surface-variant logo-text"
-            >
-              juno midwives
-            </nuxt-link>
-          </h1>
+          <nuxt-link to="/">
+            <nuxt-img
+              src="/img/logo-text.svg"
+              :height="logoHeight"
+              class="ml-n1"
+            />
+          </nuxt-link>
           <v-btn
             icon="mdi-menu"
             @click="showMenu = !showMenu"
@@ -150,6 +149,11 @@ const menuItems = computed(() => {
   }
 
   return menuItems;
+});
+
+const logoHeight = computed(() => {
+  if (xs.value) return 60;
+  return mdAndUp.value ? 100 : 80;
 });
 </script>
 
