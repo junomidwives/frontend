@@ -70,7 +70,7 @@
             required
             variant="outlined"
             hide-details="auto"
-            v-model="email"
+            v-model="phone"
             rounded="lg"
           />
 
@@ -121,6 +121,7 @@ useSeoMeta({
 const form = ref<HTMLFormElement>();
 const name = ref("");
 const email = ref("");
+const phone = ref("");
 const message = ref("");
 const loading = ref(false);
 const success = ref(false);
@@ -163,6 +164,7 @@ async function post() {
       "form-name": "contact",
       name: name.value,
       email: email.value,
+      phone: phone.value,
       message: message.value,
     }),
   });
