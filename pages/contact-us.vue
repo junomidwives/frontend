@@ -47,6 +47,7 @@
             v-model="name"
             rounded="lg"
           />
+
           <v-text-field
             label="Email"
             name="email"
@@ -57,6 +58,17 @@
               (v: any) => !!v || 'Email is required', 
               (v: any) => v.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) || 'Invalid email address'
             ]"
+            hide-details="auto"
+            v-model="email"
+            rounded="lg"
+          />
+
+          <v-text-field
+            label="Phone number (optional)"
+            name="phone"
+            type="tel"
+            required
+            variant="outlined"
             hide-details="auto"
             v-model="email"
             rounded="lg"
