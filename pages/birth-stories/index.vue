@@ -1,10 +1,5 @@
 <template>
   <v-container>
-    <h3 class="text-h5 font-weight-bold my-12">
-      Birth stories shared by the families we've cared for, written in their own
-      words
-    </h3>
-
     <v-row>
       <v-col
         cols="12"
