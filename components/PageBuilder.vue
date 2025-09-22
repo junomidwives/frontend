@@ -20,6 +20,7 @@ import Table from "./blocks/Table.vue";
 import CTA from "./blocks/CTA.vue";
 import Image from "./blocks/Image.vue";
 import Recommendation from "./blocks/Recommendation.vue";
+import Calendly from "./blocks/Calendly.vue";
 
 defineProps({
   blocks: {
@@ -36,5 +37,6 @@ const components: Record<string, Component> = {
   cta: CTA,
   centeredImage: Image,
   recommendation: Recommendation,
+  calendly: Calendly,
 };
 </script>

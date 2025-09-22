@@ -61,9 +61,16 @@ export default defineNuxtConfig({
       );
     },
   },
+
   app: {
     head: {
       link: [{ rel: "icon", type: "image/svg+xml", href: "/img/logo.svg" }],
+      script: [
+        {
+          src: "https://assets.calendly.com/assets/external/widget.js",
+          defer: true,
+        },
+      ],
     },
   },
   runtimeConfig: {
