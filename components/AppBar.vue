@@ -83,7 +83,7 @@
     v-model="showMenu"
     temporary
     location="bottom"
-    class="rounded-t-xl d-block d-sm-none"
+    class="rounded-t-xl d-block d-md-none"
   >
     <v-list>
       <template v-for="item in menuItems" :key="item.title">
