@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="calendly-inline-widget"
-    :data-url="url"
-    style="min-width: 320px; height: 700px"
-  ></div>
+  <CalendlyInlineWidget v-bind="{ url }" />
 </template>
 
 <script setup lang="ts">
@@ -12,11 +8,5 @@ defineProps({
     type: String,
     required: true,
   },
-});
-
-const calendly = useCalendly();
-
-onMounted(() => {
-  calendly.initInlineWidget();
 });
 </script>
