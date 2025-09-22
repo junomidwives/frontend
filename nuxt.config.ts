@@ -25,6 +25,7 @@ export default defineNuxtConfig({
     "@nuxtjs/sanity",
     "@nuxt/image",
     "@pinia/nuxt",
+    "nuxt-calendly",
   ],
   vite: {
     vue: {
@@ -65,12 +66,6 @@ export default defineNuxtConfig({
   app: {
     head: {
       link: [{ rel: "icon", type: "image/svg+xml", href: "/img/logo.svg" }],
-      script: [
-        {
-          src: "https://assets.calendly.com/assets/external/widget.js",
-          async: true,
-        },
-      ],
     },
   },
   runtimeConfig: {

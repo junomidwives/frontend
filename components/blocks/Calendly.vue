@@ -13,4 +13,10 @@ defineProps({
     required: true,
   },
 });
+
+const calendly = useCalendly();
+
+onMounted(() => {
+  calendly.initInlineWidget();
+});
 </script>
