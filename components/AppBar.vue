@@ -1,9 +1,13 @@
 <template>
-  <v-app-bar :height="xs ? 60 : 100" class="px-md-5" color="cyan-lighten-5">
+  <v-app-bar
+    :height="smAndDown ? 60 : 100"
+    class="px-md-5"
+    color="cyan-lighten-5"
+  >
     <v-container fluid>
       <v-row>
         <v-col
-          sm="4"
+          md="4"
           class="d-flex align-center justify-space-between text-grey-darken-4"
         >
           <nuxt-link to="/">
@@ -16,11 +20,13 @@
           <v-btn
             icon="mdi-menu"
             @click="showMenu = !showMenu"
-            class="d-sm-none"
+            class="d-md-none"
           />
         </v-col>
 
-        <v-col class="justify-end d-none d-sm-flex flex-wrap align-center ga-1">
+        <v-col
+          class="justify-end d-none d-md-flex flex-wrap align-center ga-1 py-8"
+        >
           <v-btn
             nuxt
             to="/"
@@ -112,7 +118,7 @@ type MenuItem = {
   subitems?: MenuItem[];
 };
 
-const { xs, mdAndUp } = useDisplay();
+const { smAndDown, mdAndUp } = useDisplay();
 const showMenu = ref(false);
 
 const { items } = storeToRefs(useNavigationStore());
@@ -152,7 +158,7 @@ const menuItems = computed(() => {
 });
 
 const logoHeight = computed(() => {
-  if (xs.value) return 60;
+  if (smAndDown.value) return 60;
   return mdAndUp.value ? 100 : 80;
 });
 </script>

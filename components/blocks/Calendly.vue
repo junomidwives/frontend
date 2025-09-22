@@ -1,5 +1,5 @@
 <template>
-  <CalendlyInlineWidget v-bind="{ url }" />
+  <CalendlyInlineWidget v-bind="{ url }" style="min-height: 800px" />
 </template>
 
 <script setup lang="ts">
