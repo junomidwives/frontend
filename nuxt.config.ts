@@ -68,7 +68,7 @@ export default defineNuxtConfig({
       script: [
         {
           src: "https://assets.calendly.com/assets/external/widget.js",
-          defer: true,
+          async: true,
         },
       ],
     },
