@@ -85,6 +85,7 @@
             v-model="message"
             rounded="lg"
           />
+
           <v-btn
             block
             type="submit"
@@ -101,7 +102,7 @@
 
     <v-row>
       <v-col>
-        <p>
+        <p class="text-center">
           Alternatively, send us an email at hello@junomidwives.co.uk
           <br />We aim to respond to messages within 72 hours
         </p>
