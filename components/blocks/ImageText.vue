@@ -32,14 +32,24 @@
     <v-row v-if="link?.url || link?.internalLink">
       <v-col cols="12" class="text-center">
         <v-btn
+          v-if="link.url"
+          :href="url"
+          color="secondary"
+          rounded="xl"
+          class="px-10"
+          size="large"
+          :text="link.text"
+        />
+
+        <v-btn
+          v-else-if="link.internalLink"
           :to="url"
           color="secondary"
           rounded="xl"
           class="px-10"
           size="large"
-        >
-          {{ link.text || link.internalLink.title }}
-        </v-btn>
+          :text="link.internalLink.title"
+        />
       </v-col>
     </v-row>
   </v-container>
