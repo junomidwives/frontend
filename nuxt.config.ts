@@ -26,6 +26,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@pinia/nuxt",
     "nuxt-calendly",
+    "nuxt-gtag",
   ],
   vite: {
     vue: {
@@ -58,7 +59,7 @@ export default defineNuxtConfig({
       config.plugins.push(
         vuetify({
           styles: { configFile: resolve("./settings.scss") },
-        })
+        }),
       );
     },
   },
@@ -78,6 +79,9 @@ export default defineNuxtConfig({
       SENTRY_ERROR_REPLAY_SAMPLE_RATE:
         process.env.NODE_ENV === "production" ? 0.1 : 0,
     },
+  },
+  gtag: {
+    id: process.env.VITE_GOOGLE_ANALYTICS_ID || "",
   },
   sourcemap: true,
 });
