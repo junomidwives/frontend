@@ -6,9 +6,9 @@
       </v-col>
     </v-row>
 
-    <v-container :max-width="xs ? '100%' : '50%'">
+    <v-container>
       <v-row>
-        <v-col cols="6" v-for="logo in logos">
+        <v-col cols="6" md="4" lg="3" v-for="logo in logos">
           <nuxt-link :href="logo.url" target="_blank">
             <v-img
               :src="$urlFor(logo.image).url()"
