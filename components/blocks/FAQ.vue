@@ -1,6 +1,6 @@
 <template>
   <div :class="centered ? 'text-center' : ''">
-    <h1 class="text-h5 font-weight-bold mb-4">{{ title }}</h1>
+    <h2 class="text-h5 font-weight-bold mb-4">{{ title }}</h2>
     <SanityContent :blocks="body" :serializers="serializers" />
   </div>
 </template>
