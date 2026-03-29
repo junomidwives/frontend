@@ -9,7 +9,14 @@
     <v-container :max-width="xs ? '100%' : '50%'">
       <v-row>
         <v-col cols="6" v-for="logo in logos">
-          <v-img :src="$urlFor(logo.image).url()" height="100" width="240" />
+          <nuxt-link :href="logo.url" target="_blank">
+            <v-img
+              :src="$urlFor(logo.image).url()"
+              height="100"
+              width="240"
+              :alt="logo.alt"
+            />
+          </nuxt-link>
         </v-col>
       </v-row>
     </v-container>
