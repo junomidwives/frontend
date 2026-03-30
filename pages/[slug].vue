@@ -47,7 +47,7 @@ const PAGE_QUERY = groq`*[_type == "page" && slug.current == '${route.params.slu
 }`;
 const { data } = await useSanityQuery<SanityDocument>(PAGE_QUERY);
 
-if (!data.value) {
+if (!data.value?._id) {
   throw createError({ statusCode: 404, fatal: true });
 }
 
