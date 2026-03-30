@@ -51,8 +51,14 @@
 <script setup lang="ts">
 import type { SanityDocument } from "@sanity/client";
 
-const { getItems } = useNavigationStore();
-await getItems();
+defineProps<{ error: any }>();
+
+try {
+  const { getItems } = useNavigationStore();
+  await getItems();
+} catch {
+  // navigation failing shouldn't prevent the error page rendering
+}
 
 const BIO_LINKS_QUERY = groq`*[_id == "bioLinks"][0]{
   links[active == true]{
@@ -63,7 +69,9 @@ const BIO_LINKS_QUERY = groq`*[_id == "bioLinks"][0]{
   }
 }`;
 
-const { data } = await useSanityQuery<SanityDocument>(BIO_LINKS_QUERY);
+const { data } = useAsyncData("bioLinks", () =>
+  useSanity().fetch<SanityDocument>(BIO_LINKS_QUERY)
+);
 
 const activeLinks = computed(() => data.value?.links ?? []);
 
