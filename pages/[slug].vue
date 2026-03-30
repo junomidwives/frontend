@@ -28,9 +28,13 @@ const PAGE_QUERY = groq`*[_type == "page" && slug.current == '${route.params.slu
     },
     _type == "recentPosts" => {
       ...,
-      posts[]->
+      posts[]->,
+      birthStoryPosts[]->
     },
-    "fallbackPosts": select(_type == "recentPosts" => *[_type == "blog"] | order(publishedAt desc) [0..2]),
+    "fallbackPosts": select(
+      _type == "recentPosts" && postType == "birthStory" => *[_type == "birthStory"] | order(publishedAt desc) [0..2],
+      _type == "recentPosts" => *[_type == "blog"] | order(publishedAt desc) [0..2]
+    ),
     body[]{
       ...,
       markDefs[]{

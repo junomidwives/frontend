@@ -13,7 +13,7 @@
         <v-card flat class="d-flex w-100">
           <v-card-text class="d-flex flex-column justify-space-between">
             <div>
-              <NuxtLink v-if="post.image" :to="`/blog/${post.slug?.current}`">
+              <NuxtLink v-if="post.image" :to="`${postBasePath}/${post.slug?.current}`">
                 <v-img
                   :src="$urlFor(post.image).url()"
                   cover
@@ -26,7 +26,7 @@
               </NuxtLink>
 
               <NuxtLink
-                :to="`/blog/${post.slug?.current}`"
+                :to="`${postBasePath}/${post.slug?.current}`"
                 class="text-h6 line-height-1 font-weight-bold text-surface-variant text-decoration-none"
               >
                 {{ post.title }}
@@ -34,7 +34,7 @@
             </div>
 
             <NuxtLink
-              :to="`/blog/${post.slug?.current}`"
+              :to="`${postBasePath}/${post.slug?.current}`"
               class="text-body-1 mt-2"
             >
               Read more
@@ -54,7 +54,15 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  postType: {
+    type: String,
+    default: "blog",
+  },
   posts: {
+    type: Array as () => SanityDocument[],
+    default: () => [],
+  },
+  birthStoryPosts: {
     type: Array as () => SanityDocument[],
     default: () => [],
   },
@@ -64,8 +72,16 @@ const props = defineProps({
   },
 });
 
+const postBasePath = computed(() =>
+  props.postType === "birthStory" ? "/birth-stories" : "/blog",
+);
+
+const selectedPosts = computed(() =>
+  props.postType === "birthStory" ? props.birthStoryPosts : props.posts,
+);
+
 const displayPosts = computed(() =>
-  props.posts?.length ? props.posts : props.fallbackPosts,
+  selectedPosts.value?.length ? selectedPosts.value : props.fallbackPosts,
 );
 </script>
 
