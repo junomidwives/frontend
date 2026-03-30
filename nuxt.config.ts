@@ -83,5 +83,10 @@ export default defineNuxtConfig({
   gtag: {
     id: process.env.VITE_GOOGLE_ANALYTICS_ID || "",
   },
+  nitro: {
+    prerender: {
+      failOnError: false,
+    },
+  },
   sourcemap: true,
 });
