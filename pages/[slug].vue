@@ -26,6 +26,11 @@ const PAGE_QUERY = groq`*[_type == "page" && slug.current == '${route.params.slu
         internalLink->,
       }
     },
+    _type == "recentPosts" => {
+      ...,
+      posts[]->
+    },
+    "fallbackPosts": select(_type == "recentPosts" => *[_type == "blog"] | order(publishedAt desc) [0..2]),
     body[]{
       ...,
       markDefs[]{
