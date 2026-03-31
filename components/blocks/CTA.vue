@@ -43,10 +43,22 @@ const url = computed(() => {
   return {};
 });
 
+function getPrefix(pageType: string) {
+  switch (pageType) {
+    case "blog":
+      return "/blog/";
+    case "birthStory":
+      return "/birth-stories/";
+    default:
+      return "/";
+  }
+}
+
 function linkUrl(link: any) {
   if (link.type === "internal") {
-    let url = "/" + link.internalLink?.slug?.current;
-    if (link.anchor) url += link.anchor;
+    const prefix = getPrefix(link.internalLink?._type);
+    let url = `${prefix}${link.internalLink?.slug?.current}`;
+    if (link.anchor) url += `#${link.anchor}`;
     return { to: url };
   }
   return { href: link.url };
