@@ -63,8 +63,10 @@
             max-width="500"
             @click:append-inner="submit"
             :rules="[
-              (v: any) => !!v || 'Email is required', 
-              (v: any) => v.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) || 'Invalid email address'
+              (v: any) => !!v || 'Email is required',
+              (v: any) =>
+                v.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) ||
+                'Invalid email address',
             ]"
             ref="emailInput"
           />
@@ -76,6 +78,7 @@
 </template>
 
 <script setup lang="ts">
+import TravelRadiusMap from "../components/blocks/TravelRadiusMap.vue";
 import type { SanityDocument } from "@sanity/client";
 
 const { setHeroText } = useHero();

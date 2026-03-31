@@ -68,6 +68,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
+      GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY || "",
       SENTRY_DSN_PUBLIC: process.env.SENTRY_DSN_PUBLIC || "",
       SENTRY_TRACES_SAMPLE_RATE:
         process.env.NODE_ENV === "production" ? 1 : 0.1,
