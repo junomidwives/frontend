@@ -26,6 +26,15 @@ const PAGE_QUERY = groq`*[_type == "page" && slug.current == '${route.params.slu
         internalLink->,
       }
     },
+    _type == "recentPosts" => {
+      ...,
+      posts[]->,
+      birthStoryPosts[]->
+    },
+    "fallbackPosts": select(
+      _type == "recentPosts" && postType == "birthStory" => *[_type == "birthStory"] | order(publishedAt desc) [0..2],
+      _type == "recentPosts" => *[_type == "blog"] | order(publishedAt desc) [0..2]
+    ),
     body[]{
       ...,
       markDefs[]{
@@ -46,6 +55,11 @@ const PAGE_QUERY = groq`*[_type == "page" && slug.current == '${route.params.slu
   },
 }`;
 const { data } = await useSanityQuery<SanityDocument>(PAGE_QUERY);
+
+if (!data.value?._id) {
+  throw createError({ statusCode: 404, fatal: true });
+}
+
 setHeroText(data.value?.title);
 
 useSeoMeta({

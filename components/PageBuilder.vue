@@ -21,6 +21,7 @@ import CTA from "./blocks/CTA.vue";
 import Image from "./blocks/Image.vue";
 import Recommendation from "./blocks/Recommendation.vue";
 import Calendly from "./blocks/Calendly.vue";
+import RecentPosts from "./blocks/RecentPosts.vue";
 import TravelRadiusMap from "./blocks/TravelRadiusMap.vue";
 
 defineProps({
@@ -39,6 +40,7 @@ const components: Record<string, Component> = {
   centeredImage: Image,
   recommendation: Recommendation,
   calendly: Calendly,
+  recentPosts: RecentPosts,
   travelRadiusMap: TravelRadiusMap,
 };
 </script>

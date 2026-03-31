@@ -15,12 +15,6 @@ export default defineNuxtConfig({
     inlineStyles: false,
   },
   modules: [
-    (_options, nuxt) => {
-      nuxt.hooks.hook("vite:extendConfig", (config) => {
-        // @ts-expect-error
-        config.plugins.push(vuetify({ autoImport: true }));
-      });
-    },
     "@nuxtjs/google-fonts",
     "@nuxtjs/sanity",
     "@nuxt/image",
@@ -35,11 +29,13 @@ export default defineNuxtConfig({
       },
     },
     plugins: [
-      sentryVitePlugin({
-        authToken: process.env.SENTRY_AUTH_TOKEN || "",
-        org: "juno-midwives",
-        project: "frontend",
-      }),
+      process.env.NODE_ENV === "production" &&
+        sentryVitePlugin({
+          authToken: process.env.SENTRY_AUTH_TOKEN || "",
+          org: "juno-midwives",
+          project: "frontend",
+          telemetry: false,
+        }),
     ],
   },
   googleFonts: {
@@ -58,6 +54,7 @@ export default defineNuxtConfig({
       // @ts-expect-error
       config.plugins.push(
         vuetify({
+          autoImport: true,
           styles: { configFile: resolve("./settings.scss") },
         }),
       );
@@ -83,6 +80,11 @@ export default defineNuxtConfig({
   },
   gtag: {
     id: process.env.VITE_GOOGLE_ANALYTICS_ID || "",
+  },
+  nitro: {
+    prerender: {
+      failOnError: false,
+    },
   },
   sourcemap: true,
 });

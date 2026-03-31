@@ -2,7 +2,7 @@
   <v-container>
     <v-row v-if="title">
       <v-col>
-        <h1 class="text-h4 font-weight-bold">{{ title }}</h1>
+        <h2 class="text-h4 font-weight-bold">{{ title }}</h2>
       </v-col>
     </v-row>
 
