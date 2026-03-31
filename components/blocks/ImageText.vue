@@ -89,9 +89,21 @@ const serializers = {
   },
 };
 
+function getPrefix(pageType: string) {
+  switch (pageType) {
+    case "blog":
+      return "/blog/";
+    case "birthStory":
+      return "/birth-stories/";
+    default:
+      return "/";
+  }
+}
+
 const url = computed(() => {
   if (props.link.type === "internal") {
-    let url = props.link.internalLink.slug.current;
+    const prefix = getPrefix(props.link.internalLink?._type);
+    let url = `${prefix}${props.link.internalLink.slug.current}`;
     if (props.link.anchor) url += `#${props.link.anchor}`;
     return url;
   }
