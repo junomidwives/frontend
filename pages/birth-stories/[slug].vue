@@ -70,8 +70,16 @@ const { birthStory, birthStories } = storeToRefs(useBirthStoriesStore());
 await getBirthStories();
 await getBirthStory(route.params.slug as string);
 
+const nuxtApp = useNuxtApp();
 useSeoMeta({
-  title: () => `${birthStory.value?.title} | Juno Midwives` || "Juno Midwives",
+  title: () => `${birthStory.value?.seo?.metaTitle || birthStory.value?.title} | Juno Midwives`,
+  description: () => birthStory.value?.seo?.metaDescription,
+  ogTitle: () => birthStory.value?.seo?.metaTitle || birthStory.value?.title,
+  ogDescription: () => birthStory.value?.seo?.metaDescription,
+  ogImage: () => {
+    const img = birthStory.value?.seo?.ogImage;
+    return img ? (nuxtApp as any).$urlFor(img).width(1200).height(630).url() : undefined;
+  },
 });
 
 const prevousBirthStory = computed(() => {

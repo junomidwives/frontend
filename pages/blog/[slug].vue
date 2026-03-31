@@ -70,8 +70,16 @@ const { setHeroText } = useHero();
 const { getBlog, getBlogs } = useBlogStore();
 const { blog, blogs } = storeToRefs(useBlogStore());
 
+const nuxtApp = useNuxtApp();
 useSeoMeta({
-  title: () => `${blog.value?.title} | Juno Midwives` || "Juno Midwives",
+  title: () => `${blog.value?.seo?.metaTitle || blog.value?.title} | Juno Midwives`,
+  description: () => blog.value?.seo?.metaDescription,
+  ogTitle: () => blog.value?.seo?.metaTitle || blog.value?.title,
+  ogDescription: () => blog.value?.seo?.metaDescription,
+  ogImage: () => {
+    const img = blog.value?.seo?.ogImage;
+    return img ? (nuxtApp as any).$urlFor(img).width(1200).height(630).url() : undefined;
+  },
 });
 
 await getBlogs();

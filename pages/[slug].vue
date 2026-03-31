@@ -62,7 +62,15 @@ if (!data.value?._id) {
 
 setHeroText(data.value?.title);
 
+const nuxtApp = useNuxtApp();
 useSeoMeta({
-  title: () => `${data.value?.title} | Juno Midwives` || "Juno Midwives",
+  title: () => `${data.value?.seo?.metaTitle || data.value?.title} | Juno Midwives`,
+  description: () => data.value?.seo?.metaDescription,
+  ogTitle: () => data.value?.seo?.metaTitle || data.value?.title,
+  ogDescription: () => data.value?.seo?.metaDescription,
+  ogImage: () => {
+    const img = data.value?.seo?.ogImage;
+    return img ? (nuxtApp as any).$urlFor(img).width(1200).height(630).url() : undefined;
+  },
 });
 </script>

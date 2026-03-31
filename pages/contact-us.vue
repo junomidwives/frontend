@@ -112,11 +112,24 @@
 </template>
 
 <script setup lang="ts">
+import type { SanityDocument } from "@sanity/client";
+
 const { setHeroText } = useHero();
 setHeroText("Contact Us");
 
+const SEO_QUERY = groq`*[_id == "staticPageSeo"][0].contact`;
+const { data: seo } = await useSanityQuery<SanityDocument>(SEO_QUERY);
+
+const nuxtApp = useNuxtApp();
 useSeoMeta({
-  title: "Contact Us | Juno Midwives",
+  title: () => `${seo.value?.metaTitle || "Contact Us"} | Juno Midwives`,
+  description: () => seo.value?.metaDescription,
+  ogTitle: () => seo.value?.metaTitle || "Contact Us",
+  ogDescription: () => seo.value?.metaDescription,
+  ogImage: () => {
+    const img = seo.value?.ogImage;
+    return img ? (nuxtApp as any).$urlFor(img).width(1200).height(630).url() : undefined;
+  },
 });
 
 const form = ref<HTMLFormElement>();
