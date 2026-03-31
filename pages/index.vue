@@ -118,6 +118,18 @@ const SITE_QUERY = groq`*[_id == "siteSettings"][0]{
 }`;
 const { data } = await useSanityQuery<SanityDocument>(SITE_QUERY);
 
+const nuxtApp = useNuxtApp();
+useSeoMeta({
+  title: () => data.value?.homePage?.seo?.metaTitle || "Juno Midwives",
+  description: () => data.value?.homePage?.seo?.metaDescription,
+  ogTitle: () => data.value?.homePage?.seo?.metaTitle || "Juno Midwives",
+  ogDescription: () => data.value?.homePage?.seo?.metaDescription,
+  ogImage: () => {
+    const img = data.value?.homePage?.seo?.ogImage;
+    return img ? (nuxtApp as any).$urlFor(img).width(1200).height(630).url() : undefined;
+  },
+});
+
 const { subscribe } = useNewsletterStore();
 const { name, email } = storeToRefs(useNewsletterStore());
 
