@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  release-branch:
+    name: Release (branch)
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.merged == true &&
+      startsWith(github.head_ref, 'release/v')
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create release
+        run: |
+          VERSION="${{ github.head_ref }}"
+          VERSION="${VERSION#release/}"
+          gh release create "$VERSION" \
+            --title "$VERSION" \
+            --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  patch-release:
+    name: Release (patch)
+    runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'push' &&
+      !contains(github.event.head_commit.message, 'release/v')
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Bump patch and create release
+        run: |
+          git fetch --tags
+          LATEST=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n1)
+          if [ -z "$LATEST" ]; then
+            VERSION="v0.0.1"
+          else
+            IFS='.' read -r MAJOR MINOR PATCH <<< "${LATEST#v}"
+            VERSION="v${MAJOR}.${MINOR}.$((PATCH + 1))"
+          fi
+          gh release create "$VERSION" \
+            --title "$VERSION" \
+            --generate-notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
