@@ -7,8 +7,13 @@
     </v-row>
 
     <v-container>
-      <v-row>
-        <v-col cols="6" md="4" lg="3" v-for="logo in logos">
+      <v-row justify="center">
+        <v-col
+          cols="6"
+          :md="mdColWidth"
+          v-for="logo in logos"
+          class="d-flex justify-center"
+        >
           <nuxt-link :href="logo.url" target="_blank">
             <v-img
               :src="$urlFor(logo.image).url()"
@@ -24,10 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from "vuetify";
-const { xs } = useDisplay();
-
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     default: "",
@@ -36,5 +38,13 @@ defineProps({
     type: Array as () => any[],
     default: () => [],
   },
+});
+
+const mdColWidth = computed(() => {
+  const n = props.logos.length;
+  for (const perRow of [3, 4, 2, 6]) {
+    if (n % perRow === 0) return 12 / perRow;
+  }
+  return 4;
 });
 </script>
