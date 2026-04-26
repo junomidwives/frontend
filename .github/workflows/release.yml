@@ -48,9 +48,7 @@ jobs:
             local items
             items=$(echo "$PRS" | jq -r --arg p "$prefix" \
               '.[] | select(.title | test("^" + $p + "\\b"; "i")) | "- \(.title) (#\(.number))"')
-            if [ -n "$items" ]; then
-              printf "## %s\n%s\n\n" "$heading" "$items"
-            fi
+            [ -n "$items" ] && printf "## %s\n%s\n\n" "$heading" "$items"
           }
 
           NOTES_FILE=$(mktemp)
@@ -69,9 +67,7 @@ jobs:
             KNOWN="feat|fix|chore|docs|refactor|perf|style|test|ci|build"
             OTHERS=$(echo "$PRS" | jq -r --arg p "$KNOWN" \
               '.[] | select(.title | test("^(" + $p + ")\\b"; "i") | not) | "- \(.title) (#\(.number))"')
-            if [ -n "$OTHERS" ]; then
-              printf "## Other Changes\n%s\n" "$OTHERS"
-            fi
+            [ -n "$OTHERS" ] && printf "## Other Changes\n%s\n" "$OTHERS"
           } > "$NOTES_FILE"
 
           gh release create "$VERSION" \
@@ -118,9 +114,7 @@ jobs:
             local items
             items=$(echo "$PRS" | jq -r --arg p "$prefix" \
               '.[] | select(.title | test("^" + $p + "\\b"; "i")) | "- \(.title) (#\(.number))"')
-            if [ -n "$items" ]; then
-              printf "## %s\n%s\n\n" "$heading" "$items"
-            fi
+            [ -n "$items" ] && printf "## %s\n%s\n\n" "$heading" "$items"
           }
 
           NOTES_FILE=$(mktemp)
@@ -139,9 +133,7 @@ jobs:
             KNOWN="feat|fix|chore|docs|refactor|perf|style|test|ci|build"
             OTHERS=$(echo "$PRS" | jq -r --arg p "$KNOWN" \
               '.[] | select(.title | test("^(" + $p + ")\\b"; "i") | not) | "- \(.title) (#\(.number))"')
-            if [ -n "$OTHERS" ]; then
-              printf "## Other Changes\n%s\n" "$OTHERS"
-            fi
+            [ -n "$OTHERS" ] && printf "## Other Changes\n%s\n" "$OTHERS"
           } > "$NOTES_FILE"
 
           gh release create "$VERSION" \
