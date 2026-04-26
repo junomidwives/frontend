@@ -16,21 +16,21 @@
               cols="12"
               md="10"
             >
-              <h1
+              <p
                 class="text-h5 text-sm-h3 text-md-h2 text-white font-weight-bold"
               >
                 {{ heroText }}
-              </h1>
+              </p>
             </v-col>
 
             <v-col v-else class="d-flex flex-column justify-end pb-0 pb-md-4">
-              <h1 class="text-h5 text-sm-h3 text-md-h2 text-white">
+              <div class="text-h5 text-sm-h3 text-md-h2 text-white">
                 <p class="font-weight-bold">Natasha & Sophie</p>
                 <p class="font-weight-thin">
                   Independent Midwives<br />
                   in Kent
                 </p>
-              </h1>
+              </div>
             </v-col>
           </v-row>
         </v-container>
