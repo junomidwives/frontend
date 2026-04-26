@@ -8,6 +8,11 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag to resend release notes for (e.g. v1.0.0)'
+        required: true
 
 permissions:
   contents: write
@@ -187,6 +192,34 @@ jobs:
           username: ${{ secrets.MAIL_USERNAME }}
           password: ${{ secrets.MAIL_PASSWORD }}
           subject: "Juno ${{ steps.version.outputs.version }} released"
+          to: ${{ vars.RELEASE_RECIPIENTS }}
+          from: Juno <${{ secrets.MAIL_USERNAME }}>
+          body: ${{ steps.notes.outputs.body }}
+
+  notify-manual:
+    name: Email release notes (manual)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Fetch release notes
+        id: notes
+        run: |
+          BODY=$(gh api repos/${{ github.repository }}/releases/tags/${{ inputs.version }} --jq '.body')
+          echo "body<<EOF" >> $GITHUB_OUTPUT
+          echo "$BODY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Send email
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: "Juno ${{ inputs.version }} released"
           to: ${{ vars.RELEASE_RECIPIENTS }}
           from: Juno <${{ secrets.MAIL_USERNAME }}>
           body: ${{ steps.notes.outputs.body }}
