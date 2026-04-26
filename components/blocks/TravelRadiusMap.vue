@@ -1,9 +1,16 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" class="py-8" style="height: 600px">
-        <h2 v-if="title" class="text-h5 font-weight-bold mb-4">{{ title }}</h2>
-        <div ref="mapContainer" style="width: 100%; height: 500px"></div>
+      <v-col cols="12" md="6" class="py-8" style="height: 600px">
+        <div
+          ref="mapContainer"
+          class="rounded-lg"
+          style="width: 100%; height: 400px"
+        ></div>
+      </v-col>
+      <v-col>
+        <h2 v-if="title" class="text-h4 font-weight-bold mb-4">{{ title }}</h2>
+        <SanityContent :blocks="body" :serializers="serializers" />
       </v-col>
     </v-row>
   </v-container>
@@ -11,15 +18,24 @@
 
 <script setup lang="ts">
 import { setOptions, importLibrary } from "@googlemaps/js-api-loader";
+import type { PortableTextBlock } from "@portabletext/types";
 
 const props = defineProps<{
   title?: string;
   center: { lat: number; lng: number };
   radius: number;
+  body?: PortableTextBlock[];
 }>();
 
 const mapContainer = ref<HTMLElement | null>(null);
 const config = useRuntimeConfig();
+
+const { $renderLink } = useNuxtApp();
+const serializers = {
+  types: {
+    link: $renderLink,
+  },
+};
 
 onMounted(async () => {
   setOptions({
