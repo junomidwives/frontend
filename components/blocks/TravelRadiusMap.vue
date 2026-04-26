@@ -1,14 +1,14 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="6" class="py-8" style="height: 600px">
+      <v-col cols="12" md="6">
         <div
           ref="mapContainer"
           class="rounded-lg"
           style="width: 100%; height: 400px"
         ></div>
       </v-col>
-      <v-col>
+      <v-col v-if="body?.length">
         <h2 v-if="title" class="text-h4 font-weight-bold mb-4">{{ title }}</h2>
         <SanityContent :blocks="body" :serializers="serializers" />
       </v-col>
