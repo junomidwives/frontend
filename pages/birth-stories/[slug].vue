@@ -14,7 +14,7 @@
     <p class="text-body-2 mb-8">{{ formattedDate }}</p>
 
     <div class="text-body-1">
-      <SanityContent :blocks="birthStory.content" />
+      <SanityContent :blocks="birthStory.content?.body" :serializers="serializers" />
     </div>
 
     <v-divider class="mt-16 mb-4" />
@@ -61,6 +61,9 @@
 
 <script setup lang="ts">
 import { useBirthStoriesStore } from "~/stores/birthStories";
+import CTA from "@/components/blocks/CTA.vue";
+import Image from "~/components/blocks/Image.vue";
+
 const route = useRoute();
 const { showHero } = useHero();
 
@@ -109,4 +112,15 @@ showHero.value = false;
 onBeforeRouteLeave(() => {
   showHero.value = true;
 });
+
+const { $renderLink } = useNuxtApp();
+
+const serializers = {
+  types: {
+    cta: ({ link }: { link: any }) => h(CTA, { link }),
+    pdf: (file: any) => h(CTA, { file }),
+    link: $renderLink,
+    imageBlock: Image,
+  },
+};
 </script>
