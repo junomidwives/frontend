@@ -5,6 +5,41 @@ import { sentryVitePlugin } from "@sentry/vite-plugin";
 
 const { resolve } = createResolver(import.meta.url);
 
+// Fetches editor-managed 301/302 redirects (e.g. for renamed page slugs) from
+// Sanity and turns them into Nitro routeRules, so Nitro's Netlify preset can
+// bake them into the static site's `_redirects` file at build time.
+async function fetchRedirectRouteRules() {
+  const projectId = process.env.SANITY_PROJECT_ID;
+  if (!projectId) return {};
+
+  const query = encodeURIComponent(
+    `*[_type == "redirect" && defined(source) && defined(destination)]{source, destination, permanent}`,
+  );
+
+  try {
+    const response = await fetch(
+      `https://${projectId}.apicdn.sanity.io/v1/data/query/production?query=${query}`,
+    );
+    if (!response.ok) {
+      throw new Error(`Sanity responded with ${response.status}`);
+    }
+
+    const { result } = (await response.json()) as {
+      result: { source: string; destination: string; permanent?: boolean }[];
+    };
+
+    return Object.fromEntries(
+      result.map(({ source, destination, permanent }) => [
+        source,
+        { redirect: { to: destination, statusCode: permanent === false ? 302 : 301 } },
+      ]),
+    );
+  } catch (error) {
+    console.warn("[redirects] Could not fetch redirects from Sanity, continuing without them:", error);
+    return {};
+  }
+}
+
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
@@ -58,6 +93,12 @@ export default defineNuxtConfig({
           styles: { configFile: resolve("./settings.scss") },
         }),
       );
+    },
+    async "nitro:config"(nitroConfig) {
+      nitroConfig.routeRules = {
+        ...nitroConfig.routeRules,
+        ...(await fetchRedirectRouteRules()),
+      };
     },
   },
 
