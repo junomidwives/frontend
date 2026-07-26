@@ -31,8 +31,8 @@
                 {{ story.title }}
               </NuxtLink>
 
-              <p class="mt-2">
-                {{ story.content[0].children[0].text.split(".")[0] + "..." }}
+              <p v-if="story.excerpt" class="mt-2">
+                {{ story.excerpt }}
               </p>
             </div>
 
