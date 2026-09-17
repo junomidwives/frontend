@@ -21,6 +21,7 @@ import CTA from "./blocks/CTA.vue";
 import Image from "./blocks/Image.vue";
 import Recommendation from "./blocks/Recommendation.vue";
 import Calendly from "./blocks/Calendly.vue";
+import VideoEmbed from "./blocks/VideoEmbed.vue";
 import RecentPosts from "./blocks/RecentPosts.vue";
 import TravelRadiusMap from "./blocks/TravelRadiusMap.vue";
 
@@ -40,6 +41,7 @@ const components: Record<string, Component> = {
   centeredImage: Image,
   recommendation: Recommendation,
   calendly: Calendly,
+  videoEmbed: VideoEmbed,
   recentPosts: RecentPosts,
   travelRadiusMap: TravelRadiusMap,
 };
