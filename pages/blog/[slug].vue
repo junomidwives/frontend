@@ -63,6 +63,7 @@
 <script setup lang="ts">
 import CTA from "@/components/blocks/CTA.vue";
 import Image from "~/components/blocks/Image.vue";
+import VideoEmbed from "~/components/blocks/VideoEmbed.vue";
 
 const route = useRoute();
 const { setHeroText } = useHero();
@@ -121,6 +122,7 @@ const serializers = {
     pdf: (file: any) => h(CTA, { file }),
     link: $renderLink,
     imageBlock: Image,
+    videoEmbed: VideoEmbed,
   },
 };
 </script>

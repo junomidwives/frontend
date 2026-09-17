@@ -57,6 +57,12 @@
           >
             Terms and Conditions
           </nuxt-link>
+          <nuxt-link
+            to="/cookie-policy"
+            class="text-caption text-surface-variant"
+          >
+            Cookie Policy
+          </nuxt-link>
         </v-col>
       </v-row>
     </v-container>
