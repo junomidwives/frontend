@@ -1,16 +1,10 @@
 <template>
   <v-container class="content" fluid>
     <page-builder v-if="data" :blocks="data.homePage?.content" />
-
-    <template v-if="!hasNewsletterBlock">
-      <v-divider class="py-6" />
-      <newsletter-signup />
-    </template>
   </v-container>
 </template>
 
 <script setup lang="ts">
-import NewsletterSignup from "../components/blocks/NewsletterSignup.vue";
 import type { SanityDocument } from "@sanity/client";
 
 const { setHeroText } = useHero();
@@ -61,12 +55,4 @@ useSeoMeta({
     return img ? (nuxtApp as any).$urlFor(img).width(1200).height(630).url() : undefined;
   },
 });
-
-// Editors can place a Newsletter Signup block anywhere on the homepage;
-// only fall back to the default form at the bottom if they haven't.
-const hasNewsletterBlock = computed(() =>
-  data.value?.homePage?.content?.some(
-    (block: any) => block._type === "newsletterSignup",
-  ),
-);
 </script>
