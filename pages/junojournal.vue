@@ -38,7 +38,8 @@
 
       <v-col v-else>
         <p class="text-body-1 text-center">
-          Sign up here for our newsletter full of information and resources
+          Join our mailing list and stay connected. We’ll only email when there’s
+          something worth sharing, like a new blog post or an upcoming event.
         </p>
       </v-col>
     </v-row>

@@ -24,6 +24,7 @@ import Calendly from "./blocks/Calendly.vue";
 import VideoEmbed from "./blocks/VideoEmbed.vue";
 import RecentPosts from "./blocks/RecentPosts.vue";
 import TravelRadiusMap from "./blocks/TravelRadiusMap.vue";
+import NewsletterSignup from "./blocks/NewsletterSignup.vue";
 
 defineProps({
   blocks: {
@@ -44,5 +45,6 @@ const components: Record<string, Component> = {
   videoEmbed: VideoEmbed,
   recentPosts: RecentPosts,
   travelRadiusMap: TravelRadiusMap,
+  newsletterSignup: NewsletterSignup,
 };
 </script>
