@@ -87,6 +87,7 @@ const serializers = {
   types: {
     link: $renderLink,
   },
+  styles: largeTextSerializerStyles,
 };
 
 function getPrefix(pageType: string) {
