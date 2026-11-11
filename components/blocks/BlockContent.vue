@@ -58,6 +58,7 @@ const components: Partial<PortableTextVueComponents> = {
     center: (_: any, { slots }: any) => {
       return h("p", { class: "text-center" }, slots.default());
     },
+    ...largeTextPortableTextBlocks,
   },
 };
 </script>
