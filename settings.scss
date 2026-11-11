@@ -50,3 +50,20 @@ blockquote {
   margin-top: 0.75rem;
   background: rgb(var(--v-theme-secondary));
 }
+
+// Free Content "Background" band (blockContent.background). Tighter spacing
+// inside, so a short quote doesn't float in white space.
+.content-band {
+  padding: 2rem 0;
+  border-radius: 24px; // matches the rounded-xl images
+}
+
+.content-band blockquote {
+  margin: 0 auto 1rem;
+  padding: 0;
+  border: none;
+}
+
+.content-band p:last-child {
+  margin-bottom: 0;
+}
