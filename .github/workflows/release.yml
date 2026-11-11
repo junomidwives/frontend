@@ -38,46 +38,8 @@ jobs:
           VERSION="${{ github.head_ref }}"
           VERSION="${VERSION#release/}"
 
-          git fetch --tags
-          LATEST=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n1)
-
-          if [ -n "$LATEST" ]; then
-            TAG_DATE=$(git log -1 --format=%cI "refs/tags/${LATEST}")
-            PRS=$(gh pr list --state merged --base main --search "merged:>${TAG_DATE}" --json number,title --limit 100)
-          else
-            PRS=$(gh pr list --state merged --base main --json number,title --limit 100)
-          fi
-
-          generate_section() {
-            local prefix="$1" heading="$2"
-            local items
-            items=$(echo "$PRS" | jq -r --arg p "$prefix" \
-              '.[] | select(.title | test("^" + $p + "\\b"; "i")) | "- \(.title) (#\(.number))"')
-            if [ -n "$items" ]; then
-              printf "## %s\n%s\n\n" "$heading" "$items"
-            fi
-          }
-
           NOTES_FILE=$(mktemp)
-          {
-            generate_section "feat"     "Features"
-            generate_section "fix"      "Bug Fixes"
-            generate_section "chore"    "Maintenance"
-            generate_section "docs"     "Documentation"
-            generate_section "refactor" "Refactoring"
-            generate_section "perf"     "Performance"
-            generate_section "style"    "Styling"
-            generate_section "test"     "Tests"
-            generate_section "ci"       "CI"
-            generate_section "build"    "Build"
-
-            KNOWN="feat|fix|chore|docs|refactor|perf|style|test|ci|build"
-            OTHERS=$(echo "$PRS" | jq -r --arg p "$KNOWN" \
-              '.[] | select(.title | test("^(" + $p + ")\\b"; "i") | not) | "- \(.title) (#\(.number))"')
-            if [ -n "$OTHERS" ]; then
-              printf "## Other Changes\n%s\n" "$OTHERS"
-            fi
-          } > "$NOTES_FILE"
+          RELEASE_BRANCH="${{ github.head_ref }}" .github/scripts/release-notes.sh > "$NOTES_FILE"
 
           gh release create "$VERSION" \
             --title "$VERSION" \
@@ -111,43 +73,8 @@ jobs:
             VERSION="v${MAJOR}.${MINOR}.$((PATCH + 1))"
           fi
 
-          if [ -n "$LATEST" ]; then
-            TAG_DATE=$(git log -1 --format=%cI "refs/tags/${LATEST}")
-            PRS=$(gh pr list --state merged --base main --search "merged:>${TAG_DATE}" --json number,title --limit 100)
-          else
-            PRS=$(gh pr list --state merged --base main --json number,title --limit 100)
-          fi
-
-          generate_section() {
-            local prefix="$1" heading="$2"
-            local items
-            items=$(echo "$PRS" | jq -r --arg p "$prefix" \
-              '.[] | select(.title | test("^" + $p + "\\b"; "i")) | "- \(.title) (#\(.number))"')
-            if [ -n "$items" ]; then
-              printf "## %s\n%s\n\n" "$heading" "$items"
-            fi
-          }
-
           NOTES_FILE=$(mktemp)
-          {
-            generate_section "feat"     "Features"
-            generate_section "fix"      "Bug Fixes"
-            generate_section "chore"    "Maintenance"
-            generate_section "docs"     "Documentation"
-            generate_section "refactor" "Refactoring"
-            generate_section "perf"     "Performance"
-            generate_section "style"    "Styling"
-            generate_section "test"     "Tests"
-            generate_section "ci"       "CI"
-            generate_section "build"    "Build"
-
-            KNOWN="feat|fix|chore|docs|refactor|perf|style|test|ci|build"
-            OTHERS=$(echo "$PRS" | jq -r --arg p "$KNOWN" \
-              '.[] | select(.title | test("^(" + $p + ")\\b"; "i") | not) | "- \(.title) (#\(.number))"')
-            if [ -n "$OTHERS" ]; then
-              printf "## Other Changes\n%s\n" "$OTHERS"
-            fi
-          } > "$NOTES_FILE"
+          .github/scripts/release-notes.sh > "$NOTES_FILE"
 
           gh release create "$VERSION" \
             --title "$VERSION" \
@@ -176,10 +103,18 @@ jobs:
       - name: Fetch release notes
         id: notes
         run: |
-          BODY=$(gh api repos/${{ github.repository }}/releases/tags/${{ steps.version.outputs.version }} --jq '.body')
-          echo "body<<EOF" >> $GITHUB_OUTPUT
-          echo "$BODY" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          VERSION="${{ steps.version.outputs.version }}"
+          NOTES=$(gh api repos/${{ github.repository }}/releases/tags/$VERSION --jq '.body')
+          URL="https://github.com/${{ github.repository }}/releases/tag/$VERSION"
+          {
+            echo "body<<EOF"
+            echo "Juno $VERSION has been released to https://junomidwives.co.uk and will be live within a few minutes."
+            echo
+            echo "$NOTES"
+            echo
+            echo "Full release notes: $URL"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -195,6 +130,8 @@ jobs:
           to: ${{ vars.RELEASE_RECIPIENTS }}
           from: Juno <${{ secrets.MAIL_USERNAME }}>
           body: ${{ steps.notes.outputs.body }}
+          html_body: ${{ steps.notes.outputs.body }}
+          convert_markdown: true
 
   notify-manual:
     name: Email release notes (manual)
@@ -204,10 +141,18 @@ jobs:
       - name: Fetch release notes
         id: notes
         run: |
-          BODY=$(gh api repos/${{ github.repository }}/releases/tags/${{ inputs.version }} --jq '.body')
-          echo "body<<EOF" >> $GITHUB_OUTPUT
-          echo "$BODY" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          VERSION="${{ inputs.version }}"
+          NOTES=$(gh api repos/${{ github.repository }}/releases/tags/$VERSION --jq '.body')
+          URL="https://github.com/${{ github.repository }}/releases/tag/$VERSION"
+          {
+            echo "body<<EOF"
+            echo "Juno $VERSION has been released to https://junomidwives.co.uk and will be live within a few minutes."
+            echo
+            echo "$NOTES"
+            echo
+            echo "Full release notes: $URL"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -223,3 +168,5 @@ jobs:
           to: ${{ vars.RELEASE_RECIPIENTS }}
           from: Juno <${{ secrets.MAIL_USERNAME }}>
           body: ${{ steps.notes.outputs.body }}
+          html_body: ${{ steps.notes.outputs.body }}
+          convert_markdown: true
