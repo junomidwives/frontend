@@ -1,6 +1,21 @@
 <template>
   <v-footer color="cyan-lighten-5">
     <v-container fluid>
+      <v-row v-if="footerItems.length">
+        <v-col
+          cols="12"
+          class="d-flex flex-wrap align-center justify-center ga-4 ga-md-8 pt-4 pb-2"
+        >
+          <nuxt-link
+            v-for="item in footerItems"
+            :key="item.slug"
+            :to="`/${item.slug}`"
+            class="text-body-2 text-surface-variant"
+          >
+            {{ item.title }}
+          </nuxt-link>
+        </v-col>
+      </v-row>
       <v-row>
         <v-col
           cols="12"
@@ -68,3 +83,7 @@
     </v-container>
   </v-footer>
 </template>
+
+<script setup lang="ts">
+const { footerItems } = storeToRefs(useNavigationStore());
+</script>
