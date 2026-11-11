@@ -1,14 +1,18 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" md="6">
+      <v-col cols="12" md="6" :order-md="orientation === 'mapRight' ? 2 : 1">
         <div
           ref="mapContainer"
           class="rounded-lg"
           style="width: 100%; height: 400px"
         ></div>
       </v-col>
-      <v-col v-if="body?.length">
+      <v-col
+        v-if="body?.length"
+        :order-md="orientation === 'mapRight' ? 1 : 2"
+        :class="orientation === 'mapRight' ? 'pr-md-8' : 'pl-md-8'"
+      >
         <h2 v-if="title" class="text-h4 font-weight-bold mb-4">{{ title }}</h2>
         <SanityContent :blocks="body" :serializers="serializers" />
       </v-col>
@@ -25,6 +29,7 @@ const props = defineProps<{
   center: { lat: number; lng: number };
   radius: number;
   body?: PortableTextBlock[];
+  orientation?: "mapLeft" | "mapRight";
 }>();
 
 const mapContainer = ref<HTMLElement | null>(null);
