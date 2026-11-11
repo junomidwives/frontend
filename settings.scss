@@ -32,3 +32,21 @@ blockquote {
 .content h6 {
   margin-bottom: 1rem;
 }
+
+// "Large text" block styles: Heading 1 size without being an H1 (see utils/textStyles.ts).
+.content p.text-large {
+  font-size: 2em;
+  font-weight: 700;
+  line-height: 1.25 !important;
+  margin-bottom: 1rem;
+}
+
+.content p.text-large--divider::after {
+  content: "";
+  display: block;
+  width: 4rem;
+  height: 5px;
+  border-radius: 3px;
+  margin-top: 0.75rem;
+  background: rgb(var(--v-theme-secondary));
+}
