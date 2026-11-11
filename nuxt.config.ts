@@ -48,9 +48,18 @@ const isPreview = process.env.SANITY_PREVIEW === "true";
 
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
-  routeRules: isPreview
-    ? { "/**": { headers: { "X-Robots-Tag": "noindex, nofollow" } } }
-    : {},
+  routeRules: {
+    ...(isPreview && {
+      "/**": { headers: { "X-Robots-Tag": "noindex, nofollow" } },
+    }),
+    // Read by the Studio (a different origin) for the "Waiting to go live" panel.
+    "/build-info.json": {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Cache-Control": "no-cache",
+      },
+    },
+  },
   devtools: { enabled: true },
   build: {
     transpile: ["vuetify"],
@@ -129,6 +138,8 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
+    // Set once when the config loads, i.e. when the build starts.
+    buildTime: new Date().toISOString(),
     public: {
       GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY || "",
       SENTRY_DSN_PUBLIC: process.env.SENTRY_DSN_PUBLIC || "",
@@ -146,6 +157,7 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       failOnError: false,
+      routes: ["/build-info.json"],
     },
   },
   sourcemap: true,
