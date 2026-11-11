@@ -1,9 +1,15 @@
 <template>
-  <div :class="{ 'content-band bg-cyan-lighten-5': background === 'brand' }">
+  <div :class="{ 'quote-band': band }">
     <v-container>
       <v-row>
         <v-col>
-          <PortableText :value="body" :components="components" />
+          <div v-if="band" class="quote-band__inner">
+            <span class="quote-band__mark" aria-hidden="true">“</span>
+            <div class="quote-band__body">
+              <PortableText :value="body" :components="components" />
+            </div>
+          </div>
+          <PortableText v-else :value="body" :components="components" />
         </v-col>
       </v-row>
     </v-container>
@@ -20,16 +26,22 @@ import {
   type PortableTextVueComponents,
 } from "@portabletext/vue";
 
-defineProps({
+const props = defineProps({
   body: {
     type: Array as () => PortableTextBlock[],
     required: true,
   },
   background: {
-    type: String as () => "none" | "brand",
+    type: String as () => "none" | "deep" | "brand",
     default: "none",
   },
 });
+
+// "deep" = dark teal quote band. "brand" was the earlier light blue option and
+// is treated the same, so any leftover content still gets a band.
+const band = computed(
+  () => props.background === "deep" || props.background === "brand",
+);
 
 const { $urlFor, $renderLink2 } = useNuxtApp();
 
