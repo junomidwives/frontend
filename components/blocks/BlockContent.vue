@@ -1,11 +1,13 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col>
-        <PortableText :value="body" :components="components" />
-      </v-col>
-    </v-row>
-  </v-container>
+  <div :class="{ 'content-band bg-cyan-lighten-5': background === 'brand' }">
+    <v-container>
+      <v-row>
+        <v-col>
+          <PortableText :value="body" :components="components" />
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -22,6 +24,10 @@ defineProps({
   body: {
     type: Array as () => PortableTextBlock[],
     required: true,
+  },
+  background: {
+    type: String as () => "none" | "brand",
+    default: "none",
   },
 });
 
