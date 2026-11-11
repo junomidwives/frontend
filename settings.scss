@@ -51,19 +51,74 @@ blockquote {
   background: rgb(var(--v-theme-secondary));
 }
 
-// Free Content "Background" band (blockContent.background). Tighter spacing
-// inside, so a short quote doesn't float in white space.
-.content-band {
-  padding: 2rem 0;
-  border-radius: 24px; // matches the rounded-xl images
+// Free Content "Dark teal band" (blockContent.background = deep), for testimonials.
+// The dark teal and accents come from the client's comparison / "How it works"
+// graphics. The band paints edge to edge with a border-image outset, which
+// (unlike 100vw widths) doesn't make the page scroll sideways. The content
+// stays in the normal container.
+.quote-band {
+  background: #22495a;
+  border-image: linear-gradient(#22495a 0 0) fill 0 / / 0 100vw;
+  color: #fff;
+  padding-block: 3rem;
 }
 
-.content-band blockquote {
-  margin: 0 auto 1rem;
+.quote-band__inner {
+  display: grid;
+  grid-template-columns: 4rem minmax(0, 1fr);
+  gap: 1.25rem;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.quote-band__mark {
+  font-family: "Abril Fatface", Georgia, serif;
+  font-size: 7.5rem;
+  line-height: 0.75;
+  color: #f7b9b9;
+}
+
+.quote-band__body {
+  min-width: 0;
+}
+
+.quote-band blockquote {
+  margin: 0;
   padding: 0;
   border: none;
+  max-width: none;
+  text-align: left;
+  font-size: 1.6rem;
+  line-height: 1.4;
+  font-weight: 500;
+  color: #fff;
 }
 
-.content-band p:last-child {
-  margin-bottom: 0;
+// Left-align everything in the band, including the "Centered" name line
+// (Vuetify's .text-center is !important).
+.content .quote-band p,
+.quote-band .text-center {
+  margin: 0.9rem 0 0;
+  text-align: left !important;
+  color: #c1e3d3;
+}
+
+.quote-band a {
+  color: #c1e3d3;
+}
+
+@media (max-width: 599px) {
+  .quote-band__inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .quote-band__mark {
+    font-size: 4.5rem;
+    height: 3rem;
+  }
+
+  .quote-band blockquote {
+    font-size: 1.35rem;
+  }
 }
