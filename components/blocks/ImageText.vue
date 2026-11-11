@@ -4,18 +4,20 @@
     <v-row>
       <v-col
         class="d-flex flex-column align-center"
-        :class="{ 'offset-md-4': !body.length }"
+        :class="{ [wholeImage ? 'offset-md-3' : 'offset-md-4']: !body.length }"
         cols="12"
-        md="4"
+        :md="wholeImage ? 6 : 4"
         :order-md="orientation === 'imageLeft' ? 1 : 2"
       >
+        <!-- "Show whole image" (graphics, tables) gets a wider column and no crop. -->
         <v-img
           :src="$urlFor(image.image).url()"
-          cover
+          :cover="!wholeImage"
           width="100%"
-          max-height="400"
-          aspect-ratio="1"
+          :max-height="wholeImage ? undefined : 400"
+          :aspect-ratio="wholeImage ? undefined : 1"
           rounded="xl"
+          :alt="image.alt"
         />
         <p class="text-body-1 mt-2">{{ image.caption }}</p>
       </v-col>
@@ -81,6 +83,8 @@ const props = defineProps({
     default: "",
   },
 });
+
+const wholeImage = computed(() => props.image?.fit === "contain");
 
 const { $renderLink } = useNuxtApp();
 const serializers = {
