@@ -27,10 +27,17 @@ export const useNavigationStore = defineStore("navigation", () => {
       }
     }`;
     const { data } = await useSanityQuery<SanityDocument>(SITE_QUERY);
-    if (data.value) {
-      items.value = data.value.mainNav;
-      footerItems.value = data.value.footerNav ?? [];
-    }
+    // Keep following `data`: in the Studio's Preview tab it updates live as
+    // Site Settings drafts change. On the live site it's set once.
+    watch(
+      data,
+      (value) => {
+        if (!value) return;
+        items.value = value.mainNav ?? [];
+        footerItems.value = value.footerNav ?? [];
+      },
+      { immediate: true },
+    );
   }
 
   return {
