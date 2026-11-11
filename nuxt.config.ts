@@ -40,8 +40,17 @@ async function fetchRedirectRouteRules() {
   }
 }
 
+// Preview builds (the QA site) are rendered on request instead of pre-built.
+// They let Sanity Studio's Presentation tool show unpublished drafts.
+// Visitors without the preview cookie (set via /preview/enable from Studio)
+// see published content only, as on the live site.
+const isPreview = process.env.SANITY_PREVIEW === "true";
+
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
+  routeRules: isPreview
+    ? { "/**": { headers: { "X-Robots-Tag": "noindex, nofollow" } } }
+    : {},
   devtools: { enabled: true },
   build: {
     transpile: ["vuetify"],
@@ -83,6 +92,18 @@ export default defineNuxtConfig({
   sanity: {
     projectId: process.env.SANITY_PROJECT_ID,
     dataset: "production",
+    ...(isPreview && {
+      // Visual editing needs a dated API version. The live site stays on the
+      // module default so its queries are unchanged.
+      apiVersion: "2021-03-25",
+      visualEditing: {
+        token: process.env.SANITY_PREVIEW_TOKEN,
+        studioUrl:
+          process.env.SANITY_STUDIO_URL || "https://juno-midwives.sanity.studio",
+        previewMode: true,
+        stega: false,
+      },
+    }),
   },
   hooks: {
     "vite:extendConfig": (config) => {
