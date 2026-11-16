@@ -70,7 +70,6 @@ export default defineNuxtConfig({
   modules: [
     "@nuxtjs/google-fonts",
     "@nuxtjs/sanity",
-    "@nuxt/image",
     "@pinia/nuxt",
     "nuxt-calendly",
     "nuxt-gtag",
