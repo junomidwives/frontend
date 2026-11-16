@@ -11,10 +11,11 @@
           class="d-flex align-center justify-space-between text-grey-darken-4"
         >
           <nuxt-link to="/">
-            <nuxt-img
+            <img
               src="/img/logo-text.svg"
               :height="logoHeight"
-              class="ml-n1"
+              alt="Juno Midwives"
+              class="ml-n1 d-block"
             />
           </nuxt-link>
           <v-btn

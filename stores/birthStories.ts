@@ -7,15 +7,43 @@ export const useBirthStoriesStore = defineStore("birthStories", () => {
   async function getBirthStories() {
     if (birthStories.value.length > 0) return;
     const BIRTH_STORIES_QUERY = groq`*[_type == "birthStory"]  | order(publishedAt desc)`;
-    const { data } = await useSanityQuery<SanityDocument[]>(
+    const { data } = await useSanityData<SanityDocument[]>(
       BIRTH_STORIES_QUERY
     );
     if (data) birthStories.value = data.value as SanityDocument[];
   }
 
   async function getBirthStory(slug: string) {
-    const BIRTH_STORY_QUERY = groq`*[_type == "birthStory" && slug.current == '${slug}'][0]`;
-    const { data } = await useSanityQuery<SanityDocument>(BIRTH_STORY_QUERY);
+    // Dereference internal links (as the blog query does): otherwise links in
+    // the story have no slug and render as "/undefined".
+    const BIRTH_STORY_QUERY = groq`*[_type == "birthStory" && slug.current == '${slug}'][0]{
+      ...,
+      content{
+        ...,
+        body[]{
+          ...,
+          markDefs[]{
+            ...,
+            _type == "link" => {
+              ...,
+              internalLink->
+            }
+          },
+          _type == "cta" => {
+            ...,
+            link{
+              ...,
+              internalLink->
+            }
+          },
+          _type == "pdf" => {
+            ...,
+            asset->
+          }
+        }
+      }
+    }`;
+    const { data } = await useSanityData<SanityDocument>(BIRTH_STORY_QUERY);
     if (data) birthStory.value = data.value as SanityDocument;
   }
 
