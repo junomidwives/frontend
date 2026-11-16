@@ -42,7 +42,7 @@ const SITE_QUERY = groq`*[_id == "siteSettings"][0]{
     }
   }
 }`;
-const { data } = await useSanityQuery<SanityDocument>(SITE_QUERY);
+const { data } = await useSanityData<SanityDocument>(SITE_QUERY);
 
 const nuxtApp = useNuxtApp();
 useSeoMeta({

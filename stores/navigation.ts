@@ -26,7 +26,7 @@ export const useNavigationStore = defineStore("navigation", () => {
         "slug": page->slug.current
       }
     }`;
-    const { data } = await useSanityQuery<SanityDocument>(SITE_QUERY);
+    const { data } = await useSanityData<SanityDocument>(SITE_QUERY);
     // Keep following `data`: in the Studio's Preview tab it updates live as
     // Site Settings drafts change. On the live site it's set once.
     watch(

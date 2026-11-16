@@ -7,7 +7,7 @@ export const useBlogStore = defineStore("blog", () => {
   async function getBlogs() {
     if (blogs.value?.length) return;
     const BLOGS_QUERY = groq`*[_type == "blog"]  | order(publishedAt desc)`;
-    const { data } = await useSanityQuery<SanityDocument[]>(BLOGS_QUERY);
+    const { data } = await useSanityData<SanityDocument[]>(BLOGS_QUERY);
     if (data) blogs.value = data.value as SanityDocument[];
   }
 
@@ -39,7 +39,7 @@ export const useBlogStore = defineStore("blog", () => {
         }
       }
     }`;
-    const { data } = await useSanityQuery<SanityDocument>(BLOG_QUERY);
+    const { data } = await useSanityData<SanityDocument>(BLOG_QUERY);
     if (data) blog.value = data.value as SanityDocument;
   }
 
