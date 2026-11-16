@@ -18,9 +18,12 @@ git fetch --tags --quiet
 # PREVIOUS_TAG overrides the starting point, e.g. to regenerate an older release's notes.
 LATEST="${PREVIOUS_TAG:-$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n1 || true)}"
 
+# PRs into main are limited to those merged since the last tag. A release
+# branch only ever holds one release, so all of its PRs count, including ones
+# merged before the previous tag was cut (pass "all" as the second argument).
 list_prs() {
-  local base="$1" search=""
-  if [ -n "$LATEST" ]; then
+  local base="$1" scope="${2:-since-tag}" search=""
+  if [ -n "$LATEST" ] && [ "$scope" != "all" ]; then
     search="merged:>$(git log -1 --format=%cI "refs/tags/${LATEST}")"
   fi
   gh pr list --repo "$REPO" --state merged --base "$base" --search "$search" \
@@ -29,7 +32,7 @@ list_prs() {
 
 PRS=$(list_prs main)
 if [ -n "$RELEASE_BRANCH" ]; then
-  PRS=$(jq -s 'add' <(echo "$PRS") <(list_prs "$RELEASE_BRANCH"))
+  PRS=$(jq -s 'add | unique_by(.number)' <(echo "$PRS") <(list_prs "$RELEASE_BRANCH" all))
 fi
 # Release PRs (head release/...) are left out: their contents are listed in their own release.
 PRS=$(echo "$PRS" | jq '[.[] | select(.headRefName | startswith("release/") | not)] | sort_by(.number)')
@@ -40,9 +43,11 @@ format_pr() {
   number=$(echo "$pr" | jq -r '.number')
   title=$(echo "$pr" | jq -r '.title' | sed -E 's/^[a-zA-Z]+(\([^)]*\))?!?:[[:space:]]*//')
   title="$(echo "${title:0:1}" | tr '[:lower:]' '[:upper:]')${title:1}"
-  body=$(echo "$pr" | jq -r '.body // ""')
+  # Drop fenced code blocks, so example text like "fixes #48" isn't matched.
+  body=$(echo "$pr" | jq -r '.body // ""' | awk '/^[[:space:]]*```/ { fence = !fence; next } !fence' || true)
   line="- ${title} ([#${number}](https://github.com/${REPO}/pull/${number}))"
-  for issue in $(echo "$body" | grep -oiE '(close[sd]?|fix(e[sd])?|resolve[sd]?) #[0-9]+' | grep -oE '[0-9]+' | sort -un); do
+  # Only closing keywords that start a line ("Fixes #49 ..."), not mentions mid-sentence.
+  for issue in $(echo "$body" | grep -iE '^[[:space:]*>-]*(close[sd]?|fix(e[sd])?|resolve[sd]?) #[0-9]+' | grep -oiE '(close[sd]?|fix(e[sd])?|resolve[sd]?) #[0-9]+' | grep -oE '[0-9]+' | sort -un || true); do
     issue_title=$(gh issue view "$issue" --repo "$REPO" --json title --jq '.title' 2>/dev/null || true)
     if [ -n "$issue_title" ]; then
       line+=", fixes [#${issue}](https://github.com/${REPO}/issues/${issue}): ${issue_title}"

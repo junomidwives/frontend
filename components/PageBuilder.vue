@@ -25,6 +25,8 @@ import VideoEmbed from "./blocks/VideoEmbed.vue";
 import RecentPosts from "./blocks/RecentPosts.vue";
 import TravelRadiusMap from "./blocks/TravelRadiusMap.vue";
 import NewsletterSignup from "./blocks/NewsletterSignup.vue";
+import Comparison from "./blocks/Comparison.vue";
+import Steps from "./blocks/Steps.vue";
 
 defineProps({
   blocks: {
@@ -46,5 +48,7 @@ const components: Record<string, Component> = {
   recentPosts: RecentPosts,
   travelRadiusMap: TravelRadiusMap,
   newsletterSignup: NewsletterSignup,
+  comparison: Comparison,
+  steps: Steps,
 };
 </script>
