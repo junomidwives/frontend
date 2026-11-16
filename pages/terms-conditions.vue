@@ -27,5 +27,5 @@ const PAGE_QUERY = groq`*[_type == "pdfPage" && slug.current == 'terms-condition
     asset->
   }
 }`;
-const { data } = await useSanityQuery<SanityDocument>(PAGE_QUERY);
+const { data } = await useSanityData<SanityDocument>(PAGE_QUERY);
 </script>

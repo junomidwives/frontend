@@ -7,7 +7,7 @@ export const useBirthStoriesStore = defineStore("birthStories", () => {
   async function getBirthStories() {
     if (birthStories.value.length > 0) return;
     const BIRTH_STORIES_QUERY = groq`*[_type == "birthStory"]  | order(publishedAt desc)`;
-    const { data } = await useSanityQuery<SanityDocument[]>(
+    const { data } = await useSanityData<SanityDocument[]>(
       BIRTH_STORIES_QUERY
     );
     if (data) birthStories.value = data.value as SanityDocument[];
@@ -43,7 +43,7 @@ export const useBirthStoriesStore = defineStore("birthStories", () => {
         }
       }
     }`;
-    const { data } = await useSanityQuery<SanityDocument>(BIRTH_STORY_QUERY);
+    const { data } = await useSanityData<SanityDocument>(BIRTH_STORY_QUERY);
     if (data) birthStory.value = data.value as SanityDocument;
   }
 

@@ -118,7 +118,7 @@ const { setHeroText } = useHero();
 setHeroText("Contact Us");
 
 const SEO_QUERY = groq`*[_id == "staticPageSeo"][0].contact`;
-const { data: seo } = await useSanityQuery<SanityDocument>(SEO_QUERY);
+const { data: seo } = await useSanityData<SanityDocument>(SEO_QUERY);
 
 const nuxtApp = useNuxtApp();
 useSeoMeta({
