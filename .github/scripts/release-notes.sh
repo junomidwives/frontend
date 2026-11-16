@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Writes release notes (markdown) to stdout for the next release.
+# Prints nothing when there are no client-facing changes.
 #
 # Lists PRs merged since the latest vX.Y.Z tag:
 #   - into main
@@ -27,7 +28,7 @@ list_prs() {
     search="merged:>$(git log -1 --format=%cI "refs/tags/${LATEST}")"
   fi
   gh pr list --repo "$REPO" --state merged --base "$base" --search "$search" \
-    --json number,title,body,headRefName --limit 100
+    --json number,title,body,headRefName,labels --limit 100
 }
 
 PRS=$(list_prs main)
@@ -35,7 +36,12 @@ if [ -n "$RELEASE_BRANCH" ]; then
   PRS=$(jq -s 'add | unique_by(.number)' <(echo "$PRS") <(list_prs "$RELEASE_BRANCH" all))
 fi
 # Release PRs (head release/...) are left out: their contents are listed in their own release.
-PRS=$(echo "$PRS" | jq '[.[] | select(.headRefName | startswith("release/") | not)] | sort_by(.number)')
+# PRs labelled "internal" (CI, dependencies, preview-only fixes, ...) are left
+# out too: the notes are emailed to the client.
+PRS=$(echo "$PRS" | jq '[.[]
+  | select(.headRefName | startswith("release/") | not)
+  | select([.labels[]?.name] | index("internal") | not)
+] | sort_by(.number)')
 
 # "- Title (#55), fixes #49: Issue title" with full links, so they work in email too.
 format_pr() {

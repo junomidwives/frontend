@@ -27,6 +27,7 @@ jobs:
       startsWith(github.head_ref, 'release/v')
     outputs:
       version: ${{ steps.release.outputs.version }}
+      notify: ${{ steps.release.outputs.notify }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -40,6 +41,15 @@ jobs:
 
           NOTES_FILE=$(mktemp)
           RELEASE_BRANCH="${{ github.head_ref }}" .github/scripts/release-notes.sh > "$NOTES_FILE"
+
+          # Only internal changes (PRs labelled "internal"): still tag and
+          # release, but don't email the client.
+          if [ -s "$NOTES_FILE" ]; then
+            echo "notify=true" >> $GITHUB_OUTPUT
+          else
+            echo "notify=false" >> $GITHUB_OUTPUT
+            echo "Maintenance release: no client-facing changes." > "$NOTES_FILE"
+          fi
 
           gh release create "$VERSION" \
             --title "$VERSION" \
@@ -56,6 +66,7 @@ jobs:
       !contains(github.event.head_commit.message, 'release/v')
     outputs:
       version: ${{ steps.release.outputs.version }}
+      notify: ${{ steps.release.outputs.notify }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -76,6 +87,15 @@ jobs:
           NOTES_FILE=$(mktemp)
           .github/scripts/release-notes.sh > "$NOTES_FILE"
 
+          # Only internal changes (PRs labelled "internal"): still tag and
+          # release, but don't email the client.
+          if [ -s "$NOTES_FILE" ]; then
+            echo "notify=true" >> $GITHUB_OUTPUT
+          else
+            echo "notify=false" >> $GITHUB_OUTPUT
+            echo "Maintenance release: no client-facing changes." > "$NOTES_FILE"
+          fi
+
           gh release create "$VERSION" \
             --title "$VERSION" \
             --notes-file "$NOTES_FILE"
@@ -89,7 +109,8 @@ jobs:
     needs: [release-branch, patch-release]
     if: >-
       always() &&
-      (needs.release-branch.result == 'success' || needs.patch-release.result == 'success')
+      ((needs.release-branch.result == 'success' && needs.release-branch.outputs.notify == 'true') ||
+       (needs.patch-release.result == 'success' && needs.patch-release.outputs.notify == 'true'))
     steps:
       - name: Resolve version
         id: version
