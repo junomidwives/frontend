@@ -1,0 +1,64 @@
+name: QA branch
+
+# The QA Netlify site deploys the `qa` branch. Nobody commits to it: this
+# workflow rebuilds it from scratch as `main` plus every release branch that
+# hasn't shipped yet, so QA always shows "live + everything on its way".
+# Rebuilding (rather than merging into the old `qa`) means it can't drift, and
+# a deleted or abandoned release branch drops out on the next run.
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/**'
+  delete:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# Each run rebuilds everything, so only the newest one matters.
+concurrency:
+  group: qa-branch
+  cancel-in-progress: true
+
+jobs:
+  rebuild:
+    name: Rebuild qa
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Merge main + unreleased release branches
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git fetch --prune origin '+refs/heads/release/*:refs/remotes/origin/release/*'
+          git checkout -B qa origin/main
+
+          included=""
+          for branch in $(git for-each-ref --format='%(refname:strip=3)' refs/remotes/origin/release/ | sort -V); do
+            # Already shipped (its tip is in main): nothing to add.
+            if git merge-base --is-ancestor "origin/$branch" origin/main; then
+              continue
+            fi
+            if ! git merge --no-ff --no-edit -m "qa: include $branch" "origin/$branch"; then
+              git merge --abort
+              echo "::error::$branch conflicts with main or an earlier release branch. Resolve it on the release branch, then re-run this workflow."
+              exit 1
+            fi
+            included="$included $branch"
+          done
+
+          echo "qa = main +${included:- (no unreleased release branches)}"
+          {
+            echo "### QA branch rebuilt"
+            echo "main @ \`$(git rev-parse --short origin/main)\`"
+            for b in $included; do echo "- $b @ \`$(git rev-parse --short "origin/$b")\`"; done
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Push qa
+        run: git push --force origin qa
