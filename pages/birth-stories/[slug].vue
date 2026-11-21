@@ -74,6 +74,12 @@ const { birthStory, birthStories } = storeToRefs(useBirthStoriesStore());
 await getBirthStories();
 await getBirthStory(route.params.slug as string);
 
+// Unknown slug (e.g. a renamed or deleted story): show the 404 page now, before
+// anything renders without a story.
+if (!birthStory.value?._id) {
+  throw createError({ statusCode: 404, fatal: true });
+}
+
 const nuxtApp = useNuxtApp();
 useSeoMeta({
   title: () => `${birthStory.value?.seo?.metaTitle || birthStory.value?.title} | Juno Midwives`,
@@ -102,12 +108,12 @@ const nextBirthStory = computed(() => {
   return birthStories.value[index + 1];
 });
 
-const formattedDate = computed(() => {
-  return Intl.DateTimeFormat("en-US", {
+const formattedDate = computed(() =>
+  formatPublishedDate(birthStory.value?.publishedAt, {
     month: "long",
     year: "numeric",
-  }).format(new Date(birthStory.value?.publishedAt));
-});
+  })
+);
 showHero.value = false;
 
 onBeforeRouteLeave(() => {
