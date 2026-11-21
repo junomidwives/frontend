@@ -9,7 +9,10 @@
               <PortableText :value="body" :components="components" />
             </div>
           </div>
-          <PortableText v-else :value="body" :components="components" />
+          <!-- Plain text: a comfortable reading width (about 75 characters). -->
+          <div v-else class="block-text">
+            <PortableText :value="body" :components="components" />
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -76,6 +79,10 @@ const components: Partial<PortableTextVueComponents> = {
 </script>
 
 <style>
+.block-text {
+  max-width: 760px;
+}
+
 P {
   margin-bottom: 1rem;
 }
