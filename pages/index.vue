@@ -22,12 +22,12 @@ const SITE_QUERY = groq`*[_id == "siteSettings"][0]{
       internalLink->,
       _type == "recentPosts" => {
         ...,
-        posts[]->,
-        birthStoryPosts[]->
+        posts[]->{ _id, title, slug, image },
+        birthStoryPosts[]->{ _id, title, slug, image }
       },
       "fallbackPosts": select(
-        _type == "recentPosts" && postType == "birthStory" => *[_type == "birthStory"] | order(publishedAt desc) [0..2],
-        _type == "recentPosts" => *[_type == "blog"] | order(publishedAt desc) [0..2]
+        _type == "recentPosts" && postType == "birthStory" => *[_type == "birthStory"] | order(publishedAt desc) [0..2]{ _id, title, slug, image },
+        _type == "recentPosts" => *[_type == "blog"] | order(publishedAt desc) [0..2]{ _id, title, slug, image }
       ),
       body[]{
         ...,

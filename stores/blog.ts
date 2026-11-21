@@ -6,7 +6,11 @@ export const useBlogStore = defineStore("blog", () => {
 
   async function getBlogs() {
     if (blogs.value?.length) return;
-    const BLOGS_QUERY = groq`*[_type == "blog"]  | order(publishedAt desc)`;
+    // Only the fields the list and the previous/next links use. Fetching
+    // whole posts put every post's full body into each page's payload (~1 MB).
+    const BLOGS_QUERY = groq`*[_type == "blog"] | order(publishedAt desc){
+      _id, title, slug, image, publishedAt
+    }`;
     const { data } = await useSanityData<SanityDocument[]>(BLOGS_QUERY);
     if (data) blogs.value = data.value as SanityDocument[];
   }
