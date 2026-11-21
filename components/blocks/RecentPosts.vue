@@ -8,6 +8,8 @@
         <img
           v-if="displayPosts[0].image"
           :src="imageFor(displayPosts[0], 900)"
+          :srcset="srcsetFor(displayPosts[0], [600, 900, 1400])"
+          sizes="(max-width: 1200px) 62vw, 720px"
           alt=""
           class="posts__lead-img"
           loading="lazy"
@@ -28,6 +30,8 @@
           <img
             v-if="post.image"
             :src="imageFor(post, 600)"
+            :srcset="srcsetFor(post, [360, 720])"
+            sizes="(max-width: 1200px) 30vw, 360px"
             alt=""
             class="posts__side-img"
             loading="lazy"
@@ -46,6 +50,8 @@
         <img
           v-if="post.image"
           :src="imageFor(post, 400)"
+          :srcset="srcsetFor(post, [200, 320])"
+          sizes="(max-width: 700px) 96px, (max-width: 960px) 120px, 160px"
           alt=""
           class="posts__thumb"
           loading="lazy"
@@ -109,6 +115,9 @@ const featured = computed(() => props.postType === "birthStory");
 const linkFor = (post: SanityDocument) => `${postBasePath.value}/${post.slug?.current}`;
 const imageFor = (post: SanityDocument, width: number) =>
   ($urlFor as any)(post.image).width(width).auto("format").url();
+// Let the browser pick the smallest image that's sharp at the displayed size.
+const srcsetFor = (post: SanityDocument, widths: number[]) =>
+  widths.map((w) => `${imageFor(post, w)} ${w}w`).join(", ");
 </script>
 
 <style>

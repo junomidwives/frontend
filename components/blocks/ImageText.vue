@@ -13,6 +13,8 @@
       <figure class="split__media">
         <img
           :src="imageUrl"
+          :srcset="imageSrcset"
+          :sizes="imageSizes"
           :alt="image.alt || ''"
           class="split__img"
           loading="lazy"
@@ -66,12 +68,21 @@ const wholeImage = computed(() => props.image?.fit === "contain");
 
 const { $urlFor, $renderLink } = useNuxtApp();
 
-// A web-sized image rather than the full-size upload (often 2000-4000px).
-const imageUrl = computed(() =>
-  ($urlFor as any)(props.image.image)
-    .width(wholeImage.value ? 1200 : 900)
-    .auto("format")
-    .url(),
+// Web-sized images rather than the full-size upload (often 2000-4000px):
+// the browser picks the smallest that's sharp at the displayed size (at most
+// 420px wide, or 560px for whole images; full width on phones).
+const sanityUrl = (width: number) =>
+  ($urlFor as any)(props.image.image).width(width).auto("format").url();
+const imageUrl = computed(() => sanityUrl(wholeImage.value ? 1200 : 900));
+const imageSrcset = computed(() =>
+  (wholeImage.value ? [600, 900, 1200] : [480, 640, 840])
+    .map((w) => `${sanityUrl(w)} ${w}w`)
+    .join(", "),
+);
+const imageSizes = computed(() =>
+  wholeImage.value
+    ? "(max-width: 700px) calc(100vw - 48px), 560px"
+    : "(max-width: 700px) min(calc(100vw - 48px), 420px), (max-width: 960px) 40vw, 420px",
 );
 
 const serializers = {
