@@ -81,7 +81,7 @@
           <v-btn
             block
             type="submit"
-            color="secondary"
+            color="primary"
             :loading="loading"
             rounded="pill"
             size="large"

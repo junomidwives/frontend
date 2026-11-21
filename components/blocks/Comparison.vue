@@ -49,14 +49,14 @@ withDefaults(
 </script>
 
 <style>
-/* Colours from the client's original comparison graphic. */
+/* Juno theme colours (plugins/vuetify.ts). */
 .comparison {
-  --cmp-deep: #22495a;
-  --cmp-mint: #c1e3d3;
-  --cmp-pale: #f2f6f6;
-  --cmp-pale-head: #eaf1f1;
-  --cmp-blush: #f7b9b9;
-  --cmp-muted: #4f6168;
+  --cmp-deep: rgb(var(--v-theme-deep));
+  --cmp-mint: rgb(var(--v-theme-mint));
+  --cmp-pale: rgb(var(--v-theme-tint));
+  --cmp-pale-head: rgb(var(--v-theme-tint));
+  --cmp-blush: rgb(var(--v-theme-pink));
+  --cmp-muted: rgb(var(--v-theme-body));
   max-width: 1000px;
   margin: 0 auto;
   color: var(--cmp-deep);

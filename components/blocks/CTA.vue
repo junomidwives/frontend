@@ -4,7 +4,7 @@
       <v-col cols="12" class="text-center">
         <v-btn
           v-bind="url"
-          color="secondary"
+          color="primary"
           rounded="pill"
           class="px-10 mb-4"
           size="large"

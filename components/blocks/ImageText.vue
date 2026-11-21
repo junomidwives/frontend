@@ -36,7 +36,7 @@
         <v-btn
           v-if="link.url"
           :href="url"
-          color="secondary"
+          color="primary"
           rounded="xl"
           class="px-10"
           size="large"
@@ -46,7 +46,7 @@
         <v-btn
           v-else-if="link.internalLink"
           :to="url"
-          color="secondary"
+          color="primary"
           rounded="xl"
           class="px-10"
           size="large"

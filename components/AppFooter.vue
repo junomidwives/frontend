@@ -1,5 +1,5 @@
 <template>
-  <v-footer color="cyan-lighten-5">
+  <v-footer color="tint">
     <v-container fluid>
       <v-row v-if="footerItems.length">
         <v-col

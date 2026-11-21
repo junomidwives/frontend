@@ -37,11 +37,11 @@ const iconFor = (name?: string) => ICONS[name ?? ""] ?? ICONS.heart;
 </script>
 
 <style>
-/* Colours from the client's original "How it works" graphic. */
+/* Juno theme colours (plugins/vuetify.ts). */
 .steps {
-  --steps-deep: #22495a;
-  --steps-mint: #c1e3d3;
-  --steps-blush: #f7b9b9;
+  --steps-deep: rgb(var(--v-theme-deep));
+  --steps-mint: rgb(var(--v-theme-mint));
+  --steps-blush: rgb(var(--v-theme-pink));
   --steps-circle: 5.5rem;
   list-style: none;
   margin: 0 auto;
