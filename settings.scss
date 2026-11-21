@@ -1,8 +1,21 @@
 $font: "DM Sans", sans-serif;
 
 @forward "vuetify/settings" with (
-  $body-font-family: $font
+  $body-font-family: $font,
+  // Sentence-case buttons, as in the rest of the copy (Vuetify defaults to uppercase).
+  $button-text-transform: none,
+  $button-text-letter-spacing: 0
 );
+
+// Links use the logo teal (the browser default was bright blue).
+a {
+  color: rgb(var(--v-theme-primary));
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: rgb(var(--v-theme-primary-darken-1));
+}
 
 .hero-image img {
   filter: brightness(0.85);
@@ -48,7 +61,7 @@ blockquote {
   height: 5px;
   border-radius: 3px;
   margin-top: 0.75rem;
-  background: rgb(var(--v-theme-secondary));
+  background: rgb(var(--v-theme-pink));
 }
 
 // Free Content "Dark teal band" (blockContent.background = deep), for testimonials.
@@ -57,8 +70,8 @@ blockquote {
 // (unlike 100vw widths) doesn't make the page scroll sideways. The content
 // stays in the normal container.
 .quote-band {
-  background: #22495a;
-  border-image: linear-gradient(#22495a 0 0) fill 0 / / 0 100vw;
+  background: rgb(var(--v-theme-deep));
+  border-image: linear-gradient(rgb(var(--v-theme-deep)) 0 0) fill 0 / / 0 100vw;
   color: #fff;
   padding-block: 3rem;
 }
@@ -75,7 +88,7 @@ blockquote {
   font-family: "Abril Fatface", Georgia, serif;
   font-size: 7.5rem;
   line-height: 0.75;
-  color: #f7b9b9;
+  color: rgb(var(--v-theme-pink));
 }
 
 .quote-band__body {
@@ -100,11 +113,11 @@ blockquote {
 .quote-band .text-center {
   margin: 0.9rem 0 0;
   text-align: left !important;
-  color: #c1e3d3;
+  color: rgb(var(--v-theme-mint));
 }
 
 .quote-band a {
-  color: #c1e3d3;
+  color: rgb(var(--v-theme-mint));
 }
 
 @media (max-width: 599px) {

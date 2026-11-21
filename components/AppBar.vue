@@ -2,7 +2,7 @@
   <v-app-bar
     :height="smAndDown ? 60 : 100"
     class="px-md-5"
-    color="cyan-lighten-5"
+    color="tint"
   >
     <v-container fluid>
       <v-row>

@@ -63,10 +63,11 @@ onMounted(async () => {
     map,
     center,
     radius: radiusMeters,
-    strokeColor: "#6750A4",
+    // Juno primary (logo teal). Google Maps needs a literal colour, not a CSS variable.
+    strokeColor: "#356273",
     strokeOpacity: 0.8,
     strokeWeight: 2,
-    fillColor: "#6750A4",
+    fillColor: "#356273",
     fillOpacity: 0.15,
   });
 });
