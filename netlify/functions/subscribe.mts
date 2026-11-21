@@ -67,5 +67,18 @@ export default async function subscribe(req: Request): Promise<Response> {
     return json({ error: "We couldn't sign you up just now. Please try again later." }, 502);
   }
 
+  // One line per signup in Netlify's function logs, to help explain missing
+  // confirmation emails without access to MailerLite. No name or email:
+  // they're personal data. MailerLite answers 201 for a new subscriber and
+  // 200 when the address already existed (and nothing new is sent).
+  const subscriber = (await response.json().catch(() => ({})))?.data ?? {};
+  const groups: string[] = (subscriber.groups ?? []).map((g: { name?: string; id?: string }) => g.name ?? g.id);
+  console.log(
+    `Signup: ${response.status === 201 ? "new subscriber" : "existing subscriber updated"}; ` +
+      `MailerLite status "${subscriber.status ?? "unknown"}"; ` +
+      `groups: ${groups.length ? groups.join(", ") : "none"}` +
+      (group ? "" : " (MAILERLITE_GROUP is not set, so no group was requested)"),
+  );
+
   return json({ ok: true }, 200);
 }
