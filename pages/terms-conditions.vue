@@ -1,20 +1,20 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col class="text-center">
-        <client-only>
-          <PDFViewer :pdf="data?.pdf?.asset?.url" />
-        </client-only>
-      </v-col>
-    </v-row>
-  </v-container>
+  <div>
+    <hero-image text="Terms and Conditions" />
+    <v-container>
+      <v-row>
+        <v-col class="text-center">
+          <client-only>
+            <PDFViewer :pdf="data?.pdf?.asset?.url" />
+          </client-only>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
 import type { SanityDocument } from "@sanity/client";
-
-const { setHeroText } = useHero();
-setHeroText("Terms and Conditions");
 
 useSeoMeta({
   title: "Terms and Conditions | Juno Midwives",

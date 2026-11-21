@@ -66,7 +66,6 @@ import Image from "~/components/blocks/Image.vue";
 import VideoEmbed from "~/components/blocks/VideoEmbed.vue";
 
 const route = useRoute();
-const { showHero } = useHero();
 
 const { getBirthStory, getBirthStories } = useBirthStoriesStore();
 const { birthStory, birthStories } = storeToRefs(useBirthStoriesStore());
@@ -114,11 +113,6 @@ const formattedDate = computed(() =>
     year: "numeric",
   })
 );
-showHero.value = false;
-
-onBeforeRouteLeave(() => {
-  showHero.value = true;
-});
 
 const { $renderLink } = useNuxtApp();
 

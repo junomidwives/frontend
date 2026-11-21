@@ -1,58 +1,58 @@
 <template>
-  <v-container>
-    <v-row class="mt-4">
-      <v-col
-        cols="12"
-        sm="6"
-        md="3"
-        v-for="story in birthStories"
-        :key="story._id"
-        class="d-flex"
-      >
-        <v-card flat class="d-flex">
-          <v-card-text class="d-flex flex-column justify-space-between">
-            <div>
-              <NuxtLink :to="getLink(story)">
-                <v-img
-                  :src="$urlFor(story.image).url()"
-                  cover
-                  width="100%"
-                  :max-height="smAndUp ? 400 : 200"
-                  aspect-ratio="1"
-                  rounded="lg"
-                  class="mb-2"
-                />
+  <div>
+    <hero-image text="Birth Stories" />
+    <v-container>
+      <v-row class="mt-4">
+        <v-col
+          cols="12"
+          sm="6"
+          md="3"
+          v-for="story in birthStories"
+          :key="story._id"
+          class="d-flex"
+        >
+          <v-card flat class="d-flex">
+            <v-card-text class="d-flex flex-column justify-space-between">
+              <div>
+                <NuxtLink :to="getLink(story)">
+                  <v-img
+                    :src="$urlFor(story.image).url()"
+                    cover
+                    width="100%"
+                    :max-height="smAndUp ? 400 : 200"
+                    aspect-ratio="1"
+                    rounded="lg"
+                    class="mb-2"
+                  />
+                </NuxtLink>
+
+                <NuxtLink
+                  :to="getLink(story)"
+                  class="text-h6 line-height-1 font-weight-bold text-surface-variant text-decoration-none"
+                >
+                  {{ story.title }}
+                </NuxtLink>
+
+                <p v-if="story.excerpt" class="mt-2">
+                  {{ story.excerpt }}
+                </p>
+              </div>
+
+              <NuxtLink :to="getLink(story)" class="text-body-1">
+                Read more
               </NuxtLink>
-
-              <NuxtLink
-                :to="getLink(story)"
-                class="text-h6 line-height-1 font-weight-bold text-surface-variant text-decoration-none"
-              >
-                {{ story.title }}
-              </NuxtLink>
-
-              <p v-if="story.excerpt" class="mt-2">
-                {{ story.excerpt }}
-              </p>
-            </div>
-
-            <NuxtLink :to="getLink(story)" class="text-body-1">
-              Read more
-            </NuxtLink>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { useBirthStoriesStore } from "~/stores/birthStories";
 import type { SanityDocument } from "@sanity/client";
 import { useDisplay } from "vuetify";
-
-const { setHeroText } = useHero();
-setHeroText("Birth Stories");
 
 useSeoMeta({
   title: "Birth Stories | Juno Midwives",

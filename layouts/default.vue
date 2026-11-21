@@ -2,7 +2,7 @@
   <v-app>
     <app-bar />
     <v-main>
-      <hero-image />
+      <!-- Pages render their own <hero-image>. -->
       <NuxtPage />
     </v-main>
     <app-footer />

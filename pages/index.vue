@@ -1,14 +1,14 @@
 <template>
-  <v-container class="content" fluid>
-    <page-builder v-if="data" :blocks="data.homePage?.content" />
-  </v-container>
+  <div>
+    <hero-image />
+    <v-container class="content" fluid>
+      <page-builder v-if="data" :blocks="data.homePage?.content" />
+    </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
 import type { SanityDocument } from "@sanity/client";
-
-const { setHeroText } = useHero();
-setHeroText("");
 
 const SITE_QUERY = groq`*[_id == "siteSettings"][0]{
   homePage->{
