@@ -88,6 +88,21 @@ feature/fix branch ──PR──▶ release/vX.Y.Z ──PR──▶ main ─�
 
 Urgent fixes can still go straight to `main` (the release workflow then cuts a patch version).
 
+## Newsletter signup
+
+The newsletter form posts to a Netlify Function, `netlify/functions/subscribe.mts` (served at `/.netlify/functions/subscribe`), which adds the subscriber in MailerLite. The MailerLite API key stays on the server. Before this, it was read in the browser as `VITE_MAILERLITE_TOKEN`, which built the key into the site's public JavaScript.
+
+Set these in Netlify on **both** sites (Site configuration → Environment variables):
+
+| Variable | Value |
+| --- | --- |
+| `MAILERLITE_TOKEN` | MailerLite API key (MailerLite → Integrations → API) |
+| `MAILERLITE_GROUP` | ID of the group new subscribers join (optional) |
+
+Don't give them a `VITE_` prefix: Vite would build them into the public JavaScript again.
+
+The function only runs on Netlify, so the form can't subscribe anyone under `nuxt dev`.
+
 ## Draft preview (QA site)
 
 The QA Netlify site doubles as the draft preview for Sanity Studio's **Preview** tab (Presentation tool). Setting `SANITY_PREVIEW=true` changes the build:
