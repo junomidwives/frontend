@@ -144,10 +144,11 @@ export default defineNuxtConfig({
       SENTRY_DSN_PUBLIC: process.env.SENTRY_DSN_PUBLIC || "",
       SENTRY_TRACES_SAMPLE_RATE:
         process.env.NODE_ENV === "production" ? 1 : 0.1,
-      SENTRY_REPLAY_SAMPLE_RATE:
-        process.env.NODE_ENV === "production" ? 0.1 : 0,
+      // The Sentry plan includes 50 replays a month. Random session sampling
+      // used that up in about a week, so only record sessions that hit an error.
+      SENTRY_REPLAY_SAMPLE_RATE: 0,
       SENTRY_ERROR_REPLAY_SAMPLE_RATE:
-        process.env.NODE_ENV === "production" ? 0.1 : 0,
+        process.env.NODE_ENV === "production" ? 1 : 0,
     },
   },
   gtag: {
