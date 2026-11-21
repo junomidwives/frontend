@@ -1,7 +1,9 @@
 <template>
-  <div :class="centered ? 'text-center' : ''">
-    <h2 class="text-h5 font-weight-bold mb-4">{{ title }}</h2>
-    <SanityContent :blocks="body" :serializers="serializers" />
+  <div class="faq" :class="{ 'faq--centered': centered }">
+    <div class="faq__inner">
+      <h2 class="faq__title">{{ title }}</h2>
+      <SanityContent :blocks="body" :serializers="serializers" />
+    </div>
   </div>
 </template>
 
@@ -30,3 +32,32 @@ const serializers = {
   },
 };
 </script>
+
+<style>
+.faq {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: 8px;
+}
+
+/* A comfortable reading width, like plain text blocks. */
+.faq__inner {
+  max-width: 760px;
+}
+
+.faq--centered .faq__inner {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.content .faq__title,
+.faq__title {
+  margin: 0 0 12px;
+  font-size: var(--type-title);
+  line-height: 1.3;
+}
+
+.faq__inner > :last-child {
+  margin-bottom: 0;
+}
+</style>

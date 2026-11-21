@@ -63,6 +63,8 @@ function spacingClass(index: number) {
   const prev = props.blocks?.[index - 1];
   if (!prev) return undefined;
   if (block._type === "cta") return "page-block--cta";
+  // Questions in a row read as one list.
+  if (block._type === "faq" && prev._type === "faq") return "page-block--item";
   if (FOLLOWS_HEADING.has(block._type) && isHeadingText(prev)) return "page-block--joined";
   return undefined;
 }

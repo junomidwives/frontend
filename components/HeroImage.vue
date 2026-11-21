@@ -71,7 +71,8 @@ const isHome = computed(() => !props.text);
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 1120px;
+  /* 1104px of text, like the page blocks below, so left edges line up. */
+  max-width: 1152px;
   margin: 0 auto;
   padding: 64px 24px;
   box-sizing: border-box;
