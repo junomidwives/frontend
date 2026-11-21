@@ -11,7 +11,7 @@
         sm="6"
         md="3"
         v-for="blog in pageBlogs"
-        :key="blog.id"
+        :key="blog._id"
         class="d-flex"
       >
         <v-card flat class="d-flex w-100">

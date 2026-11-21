@@ -6,7 +6,11 @@ export const useBirthStoriesStore = defineStore("birthStories", () => {
 
   async function getBirthStories() {
     if (birthStories.value.length > 0) return;
-    const BIRTH_STORIES_QUERY = groq`*[_type == "birthStory"]  | order(publishedAt desc)`;
+    // Only the fields the list and the previous/next links use. Fetching
+    // whole stories put every story's full body into each page's payload.
+    const BIRTH_STORIES_QUERY = groq`*[_type == "birthStory"] | order(publishedAt desc){
+      _id, title, slug, image, excerpt, publishedAt
+    }`;
     const { data } = await useSanityData<SanityDocument[]>(
       BIRTH_STORIES_QUERY
     );

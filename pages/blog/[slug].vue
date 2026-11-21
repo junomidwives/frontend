@@ -86,6 +86,12 @@ useSeoMeta({
 await getBlogs();
 await getBlog(route.params.slug as string);
 
+// Unknown slug (e.g. a renamed or deleted post): show the 404 page now, before
+// anything renders without a post.
+if (!blog.value?._id) {
+  throw createError({ statusCode: 404, fatal: true });
+}
+
 setHeroText(blog.value?.title);
 
 const previousBlog = computed(() => {
@@ -106,13 +112,13 @@ const nextBlog = computed(() => {
   return blogs.value[index + 1];
 });
 
-const formattedDate = computed(() => {
-  return Intl.DateTimeFormat("en-US", {
+const formattedDate = computed(() =>
+  formatPublishedDate(blog.value?.publishedAt, {
     day: "numeric",
     month: "long",
     year: "numeric",
-  }).format(new Date(blog.value?.publishedAt));
-});
+  })
+);
 
 const { $renderLink } = useNuxtApp();
 
