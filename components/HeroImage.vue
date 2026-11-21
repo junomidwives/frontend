@@ -1,13 +1,22 @@
 <template>
   <section class="hero" :class="{ 'hero--home': isHome }">
-    <img
-      src="/img/splash.jpg"
-      alt=""
-      class="hero__image"
-      width="1880"
-      height="1253"
-      fetchpriority="high"
-    />
+    <!-- WebP sized to the screen (15KB on phones, 55KB at full size; the
+         JPEG fallback is 112KB). This is the page's largest image. -->
+    <picture>
+      <source
+        type="image/webp"
+        srcset="/img/splash-800.webp 800w, /img/splash-1200.webp 1200w, /img/splash-1880.webp 1880w"
+        sizes="100vw"
+      />
+      <img
+        src="/img/splash.jpg"
+        alt=""
+        class="hero__image"
+        width="1880"
+        height="1253"
+        fetchpriority="high"
+      />
+    </picture>
     <div class="hero__inner">
       <template v-if="isHome">
         <p class="hero__title">Natasha &amp; Sophie</p>

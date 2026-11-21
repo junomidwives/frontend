@@ -1,10 +1,69 @@
-import "@mdi/font/css/materialdesignicons.css";
 import "vuetify/styles";
+import { h } from "vue";
 
-import * as components from "vuetify/components"; // get all components
-import * as directives from "vuetify/directives"; // get all directives
+// Components and directives are imported per file by vite-plugin-vuetify
+// (autoImport in nuxt.config.ts), so only the ones in use are bundled.
+import { createVuetify, type IconProps, type IconSet, type ThemeDefinition } from "vuetify";
+import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
+import {
+  mdiAlertCircle,
+  mdiArrowLeft,
+  mdiArrowRight,
+  mdiBabyFaceOutline,
+  mdiCalendarHeart,
+  mdiChevronDown,
+  mdiClose,
+  mdiEmailFast,
+  mdiEmailNewsletter,
+  mdiEmailOutline,
+  mdiFacebook,
+  mdiFileDocumentOutline,
+  mdiHeartOutline,
+  mdiHomeOutline,
+  mdiInstagram,
+  mdiMenu,
+  mdiMessageTextOutline,
+  mdiPhoneOutline,
+  mdiStarOutline,
+} from "@mdi/js";
 
-import { createVuetify, type ThemeDefinition } from "vuetify";
+/**
+ * Icons as inline SVG instead of the Material Design Icons web font (a 393KB
+ * font plus CSS for ~7,000 icons, for the ~20 the site uses). Templates keep
+ * writing `icon="mdi-arrow-right"`; add any new icon name here.
+ */
+const ICONS: Record<string, string> = {
+  "mdi-alert-circle": mdiAlertCircle,
+  "mdi-arrow-left": mdiArrowLeft,
+  "mdi-arrow-right": mdiArrowRight,
+  "mdi-baby-face-outline": mdiBabyFaceOutline,
+  "mdi-calendar-heart": mdiCalendarHeart,
+  "mdi-chevron-down": mdiChevronDown,
+  "mdi-close": mdiClose,
+  "mdi-email-fast": mdiEmailFast,
+  "mdi-email-newsletter": mdiEmailNewsletter,
+  "mdi-email-outline": mdiEmailOutline,
+  "mdi-facebook": mdiFacebook,
+  "mdi-file-document-outline": mdiFileDocumentOutline,
+  "mdi-heart-outline": mdiHeartOutline,
+  "mdi-home-outline": mdiHomeOutline,
+  "mdi-instagram": mdiInstagram,
+  "mdi-menu": mdiMenu,
+  "mdi-message-text-outline": mdiMessageTextOutline,
+  "mdi-phone-outline": mdiPhoneOutline,
+  "mdi-star-outline": mdiStarOutline,
+};
+
+const junoIcons: IconSet = {
+  component: (props: IconProps) => {
+    const name = typeof props.icon === "string" ? props.icon : "";
+    if (import.meta.dev && name.startsWith("mdi-") && !ICONS[name]) {
+      console.warn(`[icons] "${name}" isn't in ICONS (plugins/vuetify.ts)`);
+    }
+    // Vuetify's own aliases ($close, $expand…) are already SVG paths.
+    return h(mdi.component, { ...props, icon: ICONS[name] ?? props.icon });
+  },
+};
 
 /**
  * Juno palette ("A · logo-led"), built from the logo's slate teal and pink.
@@ -45,8 +104,11 @@ const juno: ThemeDefinition = {
 export default defineNuxtPlugin((app) => {
   const vuetify = createVuetify({
     ssr: true,
-    components,
-    directives,
+    icons: {
+      defaultSet: "juno",
+      aliases,
+      sets: { juno: junoIcons },
+    },
     theme: {
       defaultTheme: "juno",
       themes: { juno },

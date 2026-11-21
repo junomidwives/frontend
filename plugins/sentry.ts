@@ -21,10 +21,8 @@ export default defineNuxtPlugin({
     Sentry.init({
       app: vueApp,
       dsn: config.public.SENTRY_DSN_PUBLIC ?? null,
-      integrations: [
-        Sentry.browserTracingIntegration({ router }),
-        Sentry.replayIntegration(),
-      ],
+      // Session replay is added once the page has loaded (below).
+      integrations: [Sentry.browserTracingIntegration({ router })],
 
       tracesSampleRate: config.public.SENTRY_TRACES_SAMPLE_RATE as number,
       replaysSessionSampleRate: config.public
@@ -46,5 +44,26 @@ export default defineNuxtPlugin({
         return event;
       },
     });
+
+    // Session replay (kept only when an error happens) is ~70KB of script.
+    // Load it from Sentry's CDN once the page is idle, rather than in the
+    // main bundle every visitor downloads before the page can run.
+    const replayRate =
+      Number(config.public.SENTRY_REPLAY_SAMPLE_RATE) ||
+      Number(config.public.SENTRY_ERROR_REPLAY_SAMPLE_RATE);
+    if (import.meta.client && replayRate > 0) {
+      const loadReplay = () =>
+        Sentry.lazyLoadIntegration("replayIntegration")
+          .then((replay) => Sentry.addIntegration(replay()))
+          .catch(() => {
+            // Blocked by an ad blocker or offline: errors still report.
+          });
+      const whenIdle = () =>
+        "requestIdleCallback" in window
+          ? requestIdleCallback(loadReplay, { timeout: 5000 })
+          : setTimeout(loadReplay, 2000);
+      if (document.readyState === "complete") whenIdle();
+      else window.addEventListener("load", whenIdle, { once: true });
+    }
   },
 });
