@@ -48,15 +48,47 @@ a:hover {
   color: rgb(var(--v-theme-primary-darken-1));
 }
 
+// Testimonial quotes in plain text blocks (FAQs, care packages): the Quote
+// role, centred under a short pink rule. (The teal band has its own styles.)
 blockquote {
-  font-size: 1.5rem;
-  font-weight: 700;
-  max-width: 600px;
-  margin: 4rem auto;
-  padding: 2rem 0;
-  border-bottom: 1px solid #999;
-  border-top: 1px solid #999;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0;
+  border: none;
   text-align: center;
+  font-size: var(--type-quote);
+  line-height: 1.35;
+  font-weight: 500;
+  color: rgb(var(--v-theme-ink));
+}
+
+.block-text blockquote::before {
+  content: "";
+  display: block;
+  width: 4rem;
+  height: 5px;
+  border-radius: 3px;
+  margin: 0 auto 24px;
+  background: rgb(var(--v-theme-pink));
+}
+
+// A text block holding a quote is centred in the column, with the
+// attribution beneath it.
+.block-text:has(> blockquote) {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.content .block-text:has(> blockquote) > p {
+  margin: 16px 0 0;
+  text-align: center !important;
+  font-size: var(--type-small);
+  font-style: italic;
+  color: rgb(var(--v-theme-muted));
+}
+
+.block-text:has(> blockquote) > p:empty {
+  display: none;
 }
 
 // Page text (redesign): body copy in the body colour, headings in ink.
@@ -125,7 +157,8 @@ blockquote {
   margin-top: var(--space-joined);
 }
 
-.page-block + .page-block--cta {
+.page-block + .page-block--cta,
+.page-block + .page-block--item {
   margin-top: var(--space-cta);
 }
 
