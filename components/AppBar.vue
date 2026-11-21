@@ -174,7 +174,7 @@ const links = computed(() => {
   display: flex;
   align-items: center;
   gap: 26px;
-  font-size: 1rem;
+  font-size: var(--type-small);
   line-height: 1.4;
 }
 

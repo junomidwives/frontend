@@ -92,7 +92,9 @@ ul {
 }
 
 li {
-  line-height: 2;
+  font-size: var(--type-body);
+  line-height: 1.7;
+  margin-bottom: 0.5rem;
   margin-left: 2rem;
   padding-left: 1rem;
 }

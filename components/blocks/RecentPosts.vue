@@ -129,7 +129,7 @@ const imageFor = (post: SanityDocument, width: number) =>
 }
 
 .posts__more {
-  font-size: 1rem;
+  font-size: var(--type-small);
   font-weight: 700;
   color: rgb(var(--v-theme-primary));
   text-decoration: underline;
@@ -178,13 +178,9 @@ const imageFor = (post: SanityDocument, width: number) =>
   border-radius: 16px;
 }
 
-.posts__lead-title {
-  font-size: 1.625rem;
-  line-height: 1.25;
-}
-
+.posts__lead-title,
 .posts__side-title {
-  font-size: 1.1875rem;
+  font-size: var(--type-title);
   line-height: 1.3;
 }
 
@@ -223,7 +219,7 @@ const imageFor = (post: SanityDocument, width: number) =>
 .posts__row-title {
   flex: 1 1 auto;
   min-width: 0;
-  font-size: 1.375rem;
+  font-size: var(--type-title);
   line-height: 1.3;
 }
 
@@ -232,7 +228,7 @@ const imageFor = (post: SanityDocument, width: number) =>
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.9375rem;
+  font-size: var(--type-small);
   font-weight: 700;
   color: rgb(var(--v-theme-primary));
 }
@@ -263,10 +259,6 @@ const imageFor = (post: SanityDocument, width: number) =>
     border-radius: 12px;
   }
 
-  .posts__row-title {
-    font-size: 1.1875rem;
-  }
-
   .posts__row-more-text {
     position: absolute;
     width: 1px;
@@ -284,10 +276,6 @@ const imageFor = (post: SanityDocument, width: number) =>
 
   .posts__thumb {
     width: 96px;
-  }
-
-  .posts__row-title {
-    font-size: 1.0625rem;
   }
 }
 </style>

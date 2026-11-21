@@ -75,7 +75,7 @@ const iconFor = (name?: string) => ICONS[name ?? ""] ?? ICONS.heart;
 .content .steps__title,
 .steps__title {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: var(--type-title);
   line-height: 1.3;
   font-weight: 700;
   color: rgb(var(--v-theme-ink));
@@ -84,7 +84,7 @@ const iconFor = (name?: string) => ICONS[name ?? ""] ?? ICONS.heart;
 .content .steps__text,
 .steps__text {
   margin: 0;
-  font-size: 1rem;
+  font-size: var(--type-small);
   line-height: 1.6 !important;
   color: rgb(var(--v-theme-body));
 }
@@ -117,16 +117,6 @@ const iconFor = (name?: string) => ICONS[name ?? ""] ?? ICONS.heart;
 
   .steps__body {
     padding-top: 7px;
-  }
-
-  .content .steps__title,
-  .steps__title {
-    font-size: 1.125rem;
-  }
-
-  .content .steps__text,
-  .steps__text {
-    font-size: 0.9375rem;
   }
 }
 </style>

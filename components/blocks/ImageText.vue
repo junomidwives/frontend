@@ -152,7 +152,7 @@ const button = computed(() => {
 .split__media figcaption {
   margin-top: 12px;
   text-align: center;
-  font-size: 0.9375rem;
+  font-size: var(--type-small);
   color: rgb(var(--v-theme-muted));
 }
 
@@ -191,7 +191,7 @@ const button = computed(() => {
 }
 
 .page-block:first-child .split:not(.split--whole) .split__media {
-  max-width: 440px;
+  max-width: 380px;
 }
 
 /* Tablet and up: always side by side; the photo shrinks rather than the
@@ -234,8 +234,5 @@ const button = computed(() => {
     object-position: center 30%;
   }
 
-  .page-block:first-child {
-    margin-top: 32px;
-  }
 }
 </style>
