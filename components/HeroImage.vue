@@ -41,7 +41,7 @@ const isHome = computed(() => !props.text);
 }
 
 .hero--home {
-  min-height: 500px;
+  min-height: 400px;
 }
 
 .hero__image {
@@ -81,7 +81,7 @@ const isHome = computed(() => !props.text);
 }
 
 .hero--home .hero__inner {
-  padding-block: 80px;
+  padding-block: 64px;
 }
 
 .hero__title,
@@ -91,18 +91,14 @@ const isHome = computed(() => !props.text);
 }
 
 .hero__title {
-  font-size: clamp(36px, 4.6vw, 56px);
+  font-size: var(--type-display);
   line-height: 1.05;
   font-weight: 700;
   letter-spacing: -0.01em;
 }
 
-.hero--home .hero__title {
-  font-size: clamp(40px, 5.4vw, 68px);
-}
-
 .hero__subtitle {
-  font-size: clamp(28px, 3.6vw, 46px);
+  font-size: var(--type-display-sub);
   line-height: 1.15;
   font-weight: 300;
   color: rgb(var(--v-theme-tint));
@@ -134,15 +130,6 @@ const isHome = computed(() => !props.text);
   .hero--home .hero__inner {
     padding-block: 40px;
     gap: 4px;
-  }
-  .hero__title {
-    font-size: 30px;
-  }
-  .hero--home .hero__title {
-    font-size: 34px;
-  }
-  .hero__subtitle {
-    font-size: 24px;
   }
 }
 </style>

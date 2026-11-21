@@ -1,6 +1,11 @@
 <template>
   <template v-for="(block, index) in blocks" :key="block._id">
-    <component :is="components[block._type]" v-bind="block" class="page-block" />
+    <component
+      :is="components[block._type]"
+      v-bind="block"
+      class="page-block"
+      :class="spacingClass(index)"
+    />
     <v-divider
       v-if="false && index + 1 < (blocks?.length || 0)"
       length="200"
@@ -28,11 +33,39 @@ import NewsletterSignup from "./blocks/NewsletterSignup.vue";
 import Comparison from "./blocks/Comparison.vue";
 import Steps from "./blocks/Steps.vue";
 
-defineProps({
+const props = defineProps({
   blocks: {
     type: Array as () => any[],
   },
 });
+
+// Blocks that read as the content of a heading-led text block just before
+// them ("How it works" and its steps), so they sit close to it.
+const FOLLOWS_HEADING = new Set([
+  "steps",
+  "comparison",
+  "table",
+  "faq",
+  "calendly",
+  "videoEmbed",
+  "centeredImage",
+]);
+
+const isHeadingText = (block: any) =>
+  block?._type === "blockContent" &&
+  !["deep", "brand"].includes(block.background) &&
+  /^h[1-4]$/.test(block.body?.[0]?.style ?? "");
+
+// Spacing (settings.scss): a section gap by default, less for a button under
+// its section or a block that belongs to the heading above it.
+function spacingClass(index: number) {
+  const block = props.blocks?.[index];
+  const prev = props.blocks?.[index - 1];
+  if (!prev) return undefined;
+  if (block._type === "cta") return "page-block--cta";
+  if (FOLLOWS_HEADING.has(block._type) && isHeadingText(prev)) return "page-block--joined";
+  return undefined;
+}
 
 const components: Record<string, Component> = {
   faq: FAQ,

@@ -89,7 +89,7 @@ withDefaults(
 .comparison__table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 1.0625rem;
+  font-size: var(--type-small);
   line-height: 1.5;
 }
 
