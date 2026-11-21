@@ -74,6 +74,20 @@ bun run preview
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
 
+## Branches and environments
+
+```
+feature/fix branch ──PR──▶ release/vX.Y.Z ──PR──▶ main ──▶ live site
+                                 │
+                                 └──(automatic)──▶ qa ──▶ QA site
+```
+
+- **`main`** is the live site. Only release PRs (`release/vX.Y.Z` → `main`) are merged into it; merging one tags the version, writes the release notes and emails them to the client (`.github/workflows/release.yml`).
+- **`release/vX.Y.Z`** collects the feature and fix PRs for one release. Several can be open at once, e.g. a long-running redesign alongside small fix releases.
+- **`qa`** is what the QA Netlify site deploys. Don't commit to it or open PRs against it: `.github/workflows/qa.yml` rebuilds it whenever `main` or a `release/*` branch changes, as `main` plus every release branch that hasn't shipped yet, merged in version order. So QA always shows the live site plus everything on its way. A deleted release branch drops out on the next rebuild. If two release branches conflict, the workflow fails and says which one; fix it on that release branch and re-run the workflow.
+
+Urgent fixes can still go straight to `main` (the release workflow then cuts a patch version).
+
 ## Draft preview (QA site)
 
 The QA Netlify site doubles as the draft preview for Sanity Studio's **Preview** tab (Presentation tool). Setting `SANITY_PREVIEW=true` changes the build:
@@ -88,6 +102,7 @@ QA site settings:
 
 | Setting | Value |
 | --- | --- |
+| Production branch | `qa` (see [Branches and environments](#branches-and-environments)) |
 | Build command | `npm run build` |
 | `SANITY_PREVIEW` | `true` |
 | `SANITY_PREVIEW_TOKEN` | Sanity API token with the **Viewer** role ("Preview (QA site)" in sanity.io/manage) |
