@@ -1,54 +1,148 @@
 <template>
-  <client-only>
-    <v-img
-      v-if="showHero"
+  <section class="hero" :class="{ 'hero--home': isHome }">
+    <img
       src="/img/splash.jpg"
-      cover
-      :max-height="400"
-      class="hero-image"
-    >
-      <v-sheet width="100%" height="100%" color="transparent">
-        <v-container fluid class="h-100 ps-4 ps-md-12 pb-0">
-          <v-row class="h-100">
-            <v-col
-              v-if="heroText && heroText !== 'Home'"
-              class="d-flex flex-column justify-end pb-0 pb-md-4"
-              cols="12"
-              md="10"
-            >
-              <p
-                class="text-h5 text-sm-h3 text-md-h2 text-white font-weight-bold"
-              >
-                {{ heroText }}
-              </p>
-            </v-col>
-
-            <v-col v-else class="d-flex flex-column justify-end pb-0 pb-md-4">
-              <div class="text-h5 text-sm-h3 text-md-h2 text-white">
-                <p class="font-weight-bold">Natasha & Sophie</p>
-                <p class="font-weight-thin">
-                  Independent Midwives<br />
-                  in Kent
-                </p>
-              </div>
-            </v-col>
-          </v-row>
-        </v-container>
-        <!-- <div v-if="heroText && heroText !== 'Home'">
-          <p class="font-weight-bold">{{ heroText }}</p>
-        </div>
-        <div v-else>
-          <p class="font-weight-bold">Natasha & Sophie</p>
-          <p class="font-weight-thin">
-            Independent midwives<br />
-            in Kent
-          </p>
-        </div> -->
-      </v-sheet>
-    </v-img>
-  </client-only>
+      alt=""
+      class="hero__image"
+      width="1880"
+      height="1253"
+      fetchpriority="high"
+    />
+    <div class="hero__inner">
+      <template v-if="isHome">
+        <p class="hero__title">Natasha &amp; Sophie</p>
+        <p class="hero__subtitle">Independent Midwives in Kent</p>
+      </template>
+      <p v-else class="hero__title">{{ text }}</p>
+    </div>
+  </section>
 </template>
 
 <script setup lang="ts">
-const { heroText, showHero } = useHero();
+// Each page renders its own hero, so the text is right in the
+// server-rendered HTML even when it comes from Sanity.
+const props = defineProps<{
+  /** The page title. Leave it out on the homepage to show the names. */
+  text?: string;
+}>();
+
+const isHome = computed(() => !props.text);
 </script>
+
+<style>
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 320px;
+  overflow: hidden;
+  background: rgb(var(--v-theme-deep));
+  color: #fff;
+}
+
+.hero--home {
+  min-height: 500px;
+}
+
+.hero__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  filter: brightness(0.95);
+}
+
+/* Shade only behind the text, so the right of the photo stays bright. */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(23, 49, 61, 0.72) 0%,
+    rgba(23, 49, 61, 0.45) 38%,
+    rgba(23, 49, 61, 0) 68%
+  );
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 64px 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hero--home .hero__inner {
+  padding-block: 80px;
+}
+
+.hero__title,
+.hero__subtitle {
+  margin: 0;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.18);
+}
+
+.hero__title {
+  font-size: clamp(36px, 4.6vw, 56px);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.hero--home .hero__title {
+  font-size: clamp(40px, 5.4vw, 68px);
+}
+
+.hero__subtitle {
+  font-size: clamp(28px, 3.6vw, 46px);
+  line-height: 1.15;
+  font-weight: 300;
+  color: rgb(var(--v-theme-tint));
+}
+
+/* Tablets */
+@media (max-width: 960px) {
+  .hero {
+    min-height: 240px;
+  }
+  .hero--home {
+    min-height: 340px;
+  }
+  .hero__inner,
+  .hero--home .hero__inner {
+    padding-block: 56px;
+  }
+}
+
+/* Phones */
+@media (max-width: 700px) {
+  .hero {
+    min-height: 180px;
+  }
+  .hero--home {
+    min-height: 240px;
+  }
+  .hero__inner,
+  .hero--home .hero__inner {
+    padding-block: 40px;
+    gap: 4px;
+  }
+  .hero__title {
+    font-size: 30px;
+  }
+  .hero--home .hero__title {
+    font-size: 34px;
+  }
+  .hero__subtitle {
+    font-size: 24px;
+  }
+}
+</style>
