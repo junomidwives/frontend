@@ -60,5 +60,17 @@ jobs:
             for b in $included; do echo "- $b @ \`$(git rev-parse --short "origin/$b")\`"; done
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Push qa
-        run: git push --force origin qa
+      # Each rebuild makes fresh merge commits, so `qa` would get a new commit
+      # (and Netlify a new deploy) even when nothing changed, e.g. when a
+      # release merges: the push to main and the release branch's deletion
+      # both trigger a run. Only push when the files differ.
+      - name: Push qa (if its files changed)
+        run: |
+          git fetch --quiet origin qa:refs/remotes/origin/qa || true
+          if git rev-parse --quiet --verify refs/remotes/origin/qa >/dev/null &&
+             [ "$(git rev-parse 'HEAD^{tree}')" = "$(git rev-parse 'refs/remotes/origin/qa^{tree}')" ]; then
+            echo "qa already has exactly these files; not pushing."
+            echo "Unchanged, so not pushed (no Netlify deploy)." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git push --force origin qa
