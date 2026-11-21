@@ -1,20 +1,15 @@
 <template>
-  <v-container v-if="steps?.length">
-    <ol class="steps" :style="{ '--steps-count': Math.min(steps.length, 4) }">
-      <li v-for="(step, i) in steps" :key="step._key" class="steps__item">
-        <div class="steps__marker" aria-hidden="true">
-          <span class="steps__circle">
-            <v-icon :icon="iconFor(step.icon)" color="white" />
-          </span>
-          <span class="steps__number">{{ i + 1 }}</span>
-        </div>
-        <div class="steps__card">
-          <h3 class="steps__title">{{ step.title }}</h3>
-          <p v-if="step.text" class="steps__text">{{ step.text }}</p>
-        </div>
-      </li>
-    </ol>
-  </v-container>
+  <ol v-if="steps?.length" class="steps">
+    <li v-for="(step, i) in steps" :key="step._key" class="steps__item">
+      <span class="steps__icon" aria-hidden="true">
+        <v-icon :icon="iconFor(step.icon)" size="20" />
+      </span>
+      <div class="steps__body">
+        <h3 class="steps__title">{{ i + 1 }}. {{ step.title }}</h3>
+        <p v-if="step.text" class="steps__text">{{ step.text }}</p>
+      </div>
+    </li>
+  </ol>
 </template>
 
 <script setup lang="ts">
@@ -37,171 +32,101 @@ const iconFor = (name?: string) => ICONS[name ?? ""] ?? ICONS.heart;
 </script>
 
 <style>
-/* Juno theme colours (plugins/vuetify.ts). */
+/* Four across from 1024px, two by two on tablets, a list on phones. */
 .steps {
-  --steps-deep: rgb(var(--v-theme-deep));
-  --steps-mint: rgb(var(--v-theme-mint));
-  --steps-blush: rgb(var(--v-theme-pink));
-  --steps-circle: 5.5rem;
   list-style: none;
+  max-width: 1120px;
   margin: 0 auto;
-  padding: 0;
-  max-width: 1100px;
+  padding: 0 8px;
   display: grid;
-  grid-template-columns: repeat(var(--steps-count), minmax(0, 1fr));
-  gap: 2rem 1.5rem;
-  color: var(--steps-deep);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 32px;
 }
 
 /* Undo the global `li` styles used for rich-text lists. */
 .steps .steps__item {
   margin: 0;
-  padding: 0;
+  padding: 24px 0 0;
   line-height: inherit;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
+  gap: 16px;
+  border-top: 2px solid rgb(var(--v-theme-deep));
 }
 
-.steps__marker {
-  position: relative;
-  width: 100%;
+.steps__icon {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgb(var(--v-theme-deep));
+  color: #fff;
+  display: grid;
+  place-items: center;
+}
+
+.steps__body {
   display: flex;
-  justify-content: center;
-}
-
-/* Dotted connector to the next step, behind the circles. */
-.steps__item:not(:last-child) .steps__marker::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: calc(50% + var(--steps-circle) / 2 + 0.75rem);
-  width: calc(100% - var(--steps-circle) + 1.5rem - 1.5rem);
-  border-top: 4px dashed var(--steps-mint);
-}
-
-/* No connector at the end of a row when steps wrap onto a second row. */
-.steps__item:nth-child(4n) .steps__marker::after {
-  display: none;
-}
-
-.steps__circle {
-  width: var(--steps-circle);
-  height: var(--steps-circle);
-  border-radius: 50%;
-  background: var(--steps-deep);
-  display: grid;
-  place-items: center;
-}
-
-.steps__circle .v-icon {
-  font-size: 2.4rem;
-}
-
-.steps__number {
-  position: absolute;
-  top: -0.25rem;
-  left: calc(50% + var(--steps-circle) / 2 - 1.4rem);
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  background: var(--steps-blush);
-  color: var(--steps-deep);
-  font-weight: 700;
-  display: grid;
-  place-items: center;
-  font-size: 1rem;
-}
-
-.steps__card {
-  background: var(--steps-mint);
-  border-radius: 20px;
-  padding: 1.75rem 1.25rem;
-  text-align: center;
-  width: 100%;
-  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
 }
 
 .content .steps__title,
 .steps__title {
-  font-size: 1.3rem;
-  line-height: 1.25;
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.3;
   font-weight: 700;
-  margin: 0 0 0.6rem;
-  text-wrap: balance;
+  color: rgb(var(--v-theme-ink));
 }
 
 .content .steps__text,
 .steps__text {
   margin: 0;
   font-size: 1rem;
-  line-height: 1.5 !important;
+  line-height: 1.6 !important;
+  color: rgb(var(--v-theme-body));
 }
 
-/* Tablets: two per row. */
-@media (max-width: 1023px) {
+@media (min-width: 701px) and (max-width: 1023px) {
   .steps {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .steps__item:nth-child(2n) .steps__marker::after {
-    display: none;
+    gap: 32px 40px;
   }
 }
 
-/* Phones: a vertical list, circle on the left, card on the right. */
-@media (max-width: 599px) {
+@media (max-width: 700px) {
   .steps {
-    --steps-circle: 4rem;
     grid-template-columns: minmax(0, 1fr);
-    gap: 1.25rem;
+    gap: 0;
   }
 
   .steps .steps__item {
     flex-direction: row;
-    align-items: stretch;
-    gap: 1rem;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 0;
+    border-top-width: 1px;
   }
 
-  .steps__marker {
-    width: auto;
-    flex: none;
-    align-items: center;
+  .steps__icon {
+    width: 40px;
+    height: 40px;
   }
 
-  .steps__item:not(:last-child) .steps__marker::after {
-    display: block;
-    top: calc(50% + var(--steps-circle) / 2 + 0.35rem);
-    left: 50%;
-    width: 0;
-    height: calc(50% - var(--steps-circle) / 2 + 0.6rem);
-    border-top: 0;
-    border-left: 3px dashed var(--steps-mint);
-  }
-
-  .steps__circle .v-icon {
-    font-size: 1.8rem;
-  }
-
-  .steps__number {
-    top: calc(50% - var(--steps-circle) / 2 - 0.5rem);
-    left: auto;
-    right: -0.6rem;
-    width: 1.6rem;
-    height: 1.6rem;
-    font-size: 0.85rem;
-  }
-
-  .steps__card {
-    text-align: left;
-    padding: 1rem 1.25rem;
+  .steps__body {
+    padding-top: 7px;
   }
 
   .content .steps__title,
   .steps__title {
-    font-size: 1.15rem;
-    margin-bottom: 0.25rem;
+    font-size: 1.125rem;
+  }
+
+  .content .steps__text,
+  .steps__text {
+    font-size: 0.9375rem;
   }
 }
 </style>
