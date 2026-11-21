@@ -107,7 +107,7 @@ async function submit() {
   /* Full-bleed background without making the page scroll sideways (same
      technique as .quote-band). */
   background: rgb(var(--v-theme-deep));
-  border-image: linear-gradient(rgb(var(--v-theme-deep)) 0 0) fill 0 / / 0 100vw;
+  border-image: linear-gradient(rgb(var(--v-theme-deep)) 0 0) fill 0 / 0 / 0 100vw;
   color: #fff;
 }
 

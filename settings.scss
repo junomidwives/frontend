@@ -38,6 +38,30 @@ $font: "DM Sans", sans-serif;
   --space-cta: clamp(2rem, 1.7809rem + 0.899vw, 2.5rem); // 32 → 40
 }
 
+// "Skip to content": hidden until it receives keyboard focus.
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2000;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: rgb(var(--v-theme-deep));
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+  color: #fff;
+}
+
+#main-content:focus {
+  outline: none;
+}
+
 // Links use the logo teal (the browser default was bright blue).
 a {
   color: rgb(var(--v-theme-primary));
@@ -257,7 +281,7 @@ blockquote {
 // page scroll sideways. The content stays in the normal container.
 .quote-band {
   background: rgb(var(--v-theme-deep));
-  border-image: linear-gradient(rgb(var(--v-theme-deep)) 0 0) fill 0 / / 0 100vw;
+  border-image: linear-gradient(rgb(var(--v-theme-deep)) 0 0) fill 0 / 0 / 0 100vw;
   color: #fff;
   padding-block: 80px;
 }
