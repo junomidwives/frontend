@@ -1,11 +1,51 @@
 $font: "DM Sans", sans-serif;
 
 @forward "vuetify/settings" with (
-  $body-font-family: $font
+  $body-font-family: $font,
+  // Sentence-case buttons, as in the rest of the copy (Vuetify defaults to uppercase).
+  $button-text-transform: none,
+  $button-text-letter-spacing: 0,
+  // One content column: 1120px of content (+16px padding each side) from
+  // 1280px up, full width below. Vuetify's default capped it at 900px from
+  // 960 to 1279px, which squeezed the layout.
+  $container-max-widths: (
+    "xs": null,
+    "sm": null,
+    "md": null,
+    "lg": 1152px,
+    "xl": 1152px,
+    "xxl": 1152px,
+  )
 );
 
-.hero-image img {
-  filter: brightness(0.85);
+// Type scale: eight roles, each sliding from its phone size (390px screens)
+// to its desktop size (1280px and up). Specimen: the "Type scale" board on the
+// palette canvas. Weights: 700 headings and titles, 400 text, 300 only for the
+// hero subtitle, 500 only for the quote.
+:root {
+  --type-display: clamp(2.125rem, 1.5225rem + 2.472vw, 3.5rem); // 34 → 56
+  --type-display-sub: clamp(1.5rem, 1.0618rem + 1.798vw, 2.5rem); // 24 → 40
+  --type-h1: clamp(1.75rem, 1.5857rem + 0.674vw, 2.125rem); // 28 → 34
+  --type-h2: clamp(1.5rem, 1.3357rem + 0.674vw, 1.875rem); // 24 → 30
+  --type-title: clamp(1.125rem, 1.0702rem + 0.225vw, 1.25rem); // 18 → 20
+  --type-quote: clamp(1.375rem, 1.2107rem + 0.674vw, 1.75rem); // 22 → 28
+  --type-body: clamp(1.0625rem, 1.0351rem + 0.112vw, 1.125rem); // 17 → 18
+  --type-small: clamp(0.875rem, 0.8476rem + 0.112vw, 0.9375rem); // 14 → 15
+
+  // Space between page-builder blocks (see components/PageBuilder.vue).
+  --space-section: clamp(3.5rem, 2.4045rem + 4.494vw, 6rem); // 56 → 96
+  --space-joined: clamp(1.5rem, 1.2809rem + 0.899vw, 2rem); // 24 → 32
+  --space-cta: clamp(2rem, 1.7809rem + 0.899vw, 2.5rem); // 32 → 40
+}
+
+// Links use the logo teal (the browser default was bright blue).
+a {
+  color: rgb(var(--v-theme-primary));
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: rgb(var(--v-theme-primary-darken-1));
 }
 
 blockquote {
@@ -19,9 +59,14 @@ blockquote {
   text-align: center;
 }
 
+// Page text (redesign): body copy in the body colour, headings in ink.
+.content {
+  color: rgb(var(--v-theme-body));
+}
+
 .content p {
-  line-height: 2rem !important;
-  font-size: 1.1rem;
+  line-height: 1.7 !important;
+  font-size: var(--type-body);
 }
 
 .content h1,
@@ -31,13 +76,135 @@ blockquote {
 .content h5,
 .content h6 {
   margin-bottom: 1rem;
+  color: rgb(var(--v-theme-ink));
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.content h1 {
+  font-size: var(--type-h1);
+}
+
+.content h2 {
+  font-size: var(--type-h2);
+}
+
+.content h3 {
+  font-size: var(--type-title);
+  line-height: 1.3;
+}
+
+// Bold text inside a heading would otherwise render at 900 ("bolder" than 700).
+.content :is(h1, h2, h3, h4, .text-large) strong {
+  font-weight: inherit;
+}
+
+// Nested containers (page > block) each add 16px; trim the inner one so
+// content sits 24px from the edge on phones, like the header and footer.
+.v-container .v-container {
+  padding-inline: 8px;
+}
+
+// Space between page-builder blocks (components/PageBuilder.vue): a section
+// gap by default, less where a block belongs to the one before it (a heading
+// and its steps or table, or a button under its section).
+.page-block {
+  margin-block: 0;
+}
+
+// Below the hero (plus the page container's 16px).
+.page-block:first-child {
+  margin-top: var(--space-cta);
+}
+
+.page-block + .page-block {
+  margin-top: var(--space-section);
+}
+
+.page-block + .page-block--joined {
+  margin-top: var(--space-joined);
+}
+
+.page-block + .page-block--cta {
+  margin-top: var(--space-cta);
+}
+
+.page-block:last-child {
+  margin-bottom: var(--space-section);
+}
+
+// Vuetify-grid blocks (text, image, video): no extra vertical padding, so the
+// gaps above are the gaps you see; and the same 1120px column as the
+// redesigned blocks, so left edges line up at every width.
+.page-block > .v-container,
+.page-block.v-container {
+  max-width: 1120px;
+  padding-block: 0;
+}
+
+.page-block > .v-container > .v-row,
+.page-block.v-container > .v-row {
+  margin-block: 0;
+}
+
+.page-block > .v-container > .v-row > .v-col,
+.page-block.v-container > .v-row > .v-col {
+  padding-block: 0;
+}
+
+.block-text > :last-child {
+  margin-bottom: 0;
+}
+
+// Buttons outside Vuetify (CTA, image-text links).
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 30px;
+  border-radius: 999px;
+  font-size: var(--type-small);
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btn--primary {
+  background: rgb(var(--v-theme-primary));
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: rgb(var(--v-theme-primary-darken-1));
+  color: #fff;
+}
+
+.block-cta {
+  text-align: center;
+}
+
+// A button block straight in the page container gets the same 8px inset as
+// the other blocks (so 24px from the edge on phones).
+.page-block.block-cta {
+  padding-inline: 8px;
+}
+
+// Full-width buttons on phones.
+@media (max-width: 700px) {
+  .block-cta .btn {
+    display: flex;
+    width: 100%;
+  }
 }
 
 // "Large text" block styles: Heading 1 size without being an H1 (see utils/textStyles.ts).
 .content p.text-large {
-  font-size: 2em;
+  font-size: var(--type-h1);
   font-weight: 700;
-  line-height: 1.25 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.01em;
+  color: rgb(var(--v-theme-ink));
   margin-bottom: 1rem;
 }
 
@@ -48,34 +215,36 @@ blockquote {
   height: 5px;
   border-radius: 3px;
   margin-top: 0.75rem;
-  background: rgb(var(--v-theme-secondary));
+  background: rgb(var(--v-theme-pink));
 }
 
 // Free Content "Dark teal band" (blockContent.background = deep), for testimonials.
-// The dark teal and accents come from the client's comparison / "How it works"
-// graphics. The band paints edge to edge with a border-image outset, which
-// (unlike 100vw widths) doesn't make the page scroll sideways. The content
-// stays in the normal container.
+// Centred quote with a large pink quote mark above it. The band paints edge to
+// edge with a border-image outset, which (unlike 100vw widths) doesn't make the
+// page scroll sideways. The content stays in the normal container.
 .quote-band {
-  background: #22495a;
-  border-image: linear-gradient(#22495a 0 0) fill 0 / / 0 100vw;
+  background: rgb(var(--v-theme-deep));
+  border-image: linear-gradient(rgb(var(--v-theme-deep)) 0 0) fill 0 / / 0 100vw;
   color: #fff;
-  padding-block: 3rem;
+  padding-block: 80px;
 }
 
 .quote-band__inner {
-  display: grid;
-  grid-template-columns: 4rem minmax(0, 1fr);
-  gap: 1.25rem;
-  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 880px;
   margin: 0 auto;
+  text-align: center;
 }
 
 .quote-band__mark {
   font-family: "Abril Fatface", Georgia, serif;
-  font-size: 7.5rem;
-  line-height: 0.75;
-  color: #f7b9b9;
+  font-size: 120px;
+  line-height: 0.55;
+  height: 56px;
+  color: rgb(var(--v-theme-pink));
 }
 
 .quote-band__body {
@@ -87,38 +256,34 @@ blockquote {
   padding: 0;
   border: none;
   max-width: none;
-  text-align: left;
-  font-size: 1.6rem;
-  line-height: 1.4;
+  text-align: center;
+  font-size: var(--type-quote);
+  line-height: 1.35;
   font-weight: 500;
   color: #fff;
 }
 
-// Left-align everything in the band, including the "Centered" name line
-// (Vuetify's .text-center is !important).
+// The attribution ("Siobhan, first-time parent, 2024").
 .content .quote-band p,
 .quote-band .text-center {
-  margin: 0.9rem 0 0;
-  text-align: left !important;
-  color: #c1e3d3;
+  margin: 16px 0 0;
+  text-align: center !important;
+  font-size: var(--type-small);
+  font-style: italic;
+  color: rgb(var(--v-theme-mint));
 }
 
 .quote-band a {
-  color: #c1e3d3;
+  color: rgb(var(--v-theme-mint));
 }
 
-@media (max-width: 599px) {
-  .quote-band__inner {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
+@media (max-width: 700px) {
+  .quote-band {
+    padding-block: 56px;
   }
 
   .quote-band__mark {
-    font-size: 4.5rem;
-    height: 3rem;
-  }
-
-  .quote-band blockquote {
-    font-size: 1.35rem;
+    font-size: 88px;
+    height: 40px;
   }
 }

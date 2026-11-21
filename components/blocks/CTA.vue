@@ -1,31 +1,13 @@
 <template>
-  <v-container v-if="url">
-    <v-row>
-      <v-col cols="12" class="text-center">
-        <v-btn
-          v-bind="url"
-          color="secondary"
-          rounded="pill"
-          class="px-10 mb-4"
-          size="large"
-          :stacked="xs"
-        >
-          {{
-            props.file
-              ? props.file.description
-              : props.link.text || props.link.internalLink.title
-          }}
-        </v-btn>
-      </v-col>
-    </v-row>
-  </v-container>
+  <div v-if="target" class="block-cta">
+    <nuxt-link v-if="target.to" :to="target.to" class="btn btn--primary">
+      {{ label }}
+    </nuxt-link>
+    <a v-else :href="target.href" class="btn btn--primary">{{ label }}</a>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { useDisplay } from "vuetify";
-
-const { xs } = useDisplay();
-
 const props = defineProps({
   link: {
     type: Object,
@@ -37,11 +19,11 @@ const props = defineProps({
   },
 });
 
-const url = computed(() => {
-  if (props.link) return { nuxt: true, ...linkUrl(props.link) };
-  if (props.file) return { href: fileUrl(props.file) };
-  return {};
-});
+const label = computed(() =>
+  props.file
+    ? props.file.description
+    : props.link?.text || props.link?.internalLink?.title,
+);
 
 function getPrefix(pageType: string) {
   switch (pageType) {
@@ -54,33 +36,17 @@ function getPrefix(pageType: string) {
   }
 }
 
-function linkUrl(link: any) {
-  if (link.type === "internal") {
-    const prefix = getPrefix(link.internalLink?._type);
-    let url = `${prefix}${link.internalLink?.slug?.current}`;
-    if (link.anchor) url += `#${link.anchor}`;
-    return { to: url };
+// Internal pages use client-side navigation; external links and files don't.
+const target = computed<{ to?: string; href?: string } | null>(() => {
+  if (props.file) return { href: props.file.asset?.url };
+  if (!props.link) return null;
+  if (props.link.type === "internal") {
+    const slug = props.link.internalLink?.slug?.current;
+    if (!slug) return null;
+    let to = `${getPrefix(props.link.internalLink?._type)}${slug}`;
+    if (props.link.anchor) to += `#${props.link.anchor}`;
+    return { to };
   }
-  return { href: link.url };
-}
-
-function fileUrl(file: any) {
-  return file.asset.url;
-}
+  return props.link.url ? { href: props.link.url } : null;
+});
 </script>
-
-<style scoped>
-.materialDesignButton {
-  color: #fff;
-  border-radius: 5px;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  font-size: 1.04em;
-  letter-spacing: 0.05em;
-  width: auto;
-  transition: 0.3s;
-}
-
-.materialDesignButton:hover {
-  opacity: 0.7;
-}
-</style>

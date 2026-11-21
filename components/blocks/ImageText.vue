@@ -1,64 +1,41 @@
 <template>
-  <v-container>
-    <div :id="anchor" style="transform: translateY(-120px)"></div>
-    <v-row>
-      <v-col
-        class="d-flex flex-column align-center"
-        :class="{ [wholeImage ? 'offset-md-3' : 'offset-md-4']: !body.length }"
-        cols="12"
-        :md="wholeImage ? 6 : 4"
-        :order-md="orientation === 'imageLeft' ? 1 : 2"
-      >
-        <!-- "Show whole image" (graphics, tables) gets a wider column and no crop. -->
-        <v-img
-          :src="$urlFor(image.image).url()"
-          :cover="!wholeImage"
-          width="100%"
-          :max-height="wholeImage ? undefined : 400"
-          :aspect-ratio="wholeImage ? undefined : 1"
-          rounded="xl"
-          :alt="image.alt"
-        />
-        <p class="text-body-1 mt-2">{{ image.caption }}</p>
-      </v-col>
+  <div class="split-block">
+    <div v-if="anchor" :id="anchor" class="split-block__anchor"></div>
 
-      <v-col
-        v-if="body.length"
-        :order-md="orientation === 'imageLeft' ? 2 : 1"
-        :class="orientation === 'imageLeft' ? 'pl-md-8' : 'pr-md-8'"
-      >
+    <div
+      class="split"
+      :class="{
+        'split--image-right': orientation === 'imageRight',
+        'split--whole': wholeImage,
+        'split--image-only': !body.length,
+      }"
+    >
+      <figure class="split__media">
+        <img
+          :src="imageUrl"
+          :alt="image.alt || ''"
+          class="split__img"
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption v-if="image.caption">{{ image.caption }}</figcaption>
+      </figure>
+
+      <div v-if="body.length" class="split__body">
         <SanityContent :blocks="body" :serializers="serializers" />
-      </v-col>
-    </v-row>
+      </div>
+    </div>
 
-    <v-row v-if="link?.url || link?.internalLink">
-      <v-col cols="12" class="text-center">
-        <v-btn
-          v-if="link.url"
-          :href="url"
-          color="secondary"
-          rounded="xl"
-          class="px-10"
-          size="large"
-          :text="link.text"
-        />
-
-        <v-btn
-          v-else-if="link.internalLink"
-          :to="url"
-          color="secondary"
-          rounded="xl"
-          class="px-10"
-          size="large"
-          :text="link.internalLink.title"
-        />
-      </v-col>
-    </v-row>
-  </v-container>
+    <div v-if="button" class="block-cta split-block__cta">
+      <nuxt-link v-if="button.to" :to="button.to" class="btn btn--primary">
+        {{ button.label }}
+      </nuxt-link>
+      <a v-else :href="button.href" class="btn btn--primary">{{ button.label }}</a>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { NuxtLink } from "#components";
 import type { PortableTextBlock } from "@portabletext/types";
 
 const props = defineProps({
@@ -84,9 +61,19 @@ const props = defineProps({
   },
 });
 
+// "Show whole image" (graphics, tables): wider, never cropped.
 const wholeImage = computed(() => props.image?.fit === "contain");
 
-const { $renderLink } = useNuxtApp();
+const { $urlFor, $renderLink } = useNuxtApp();
+
+// A web-sized image rather than the full-size upload (often 2000-4000px).
+const imageUrl = computed(() =>
+  ($urlFor as any)(props.image.image)
+    .width(wholeImage.value ? 1200 : 900)
+    .auto("format")
+    .url(),
+);
+
 const serializers = {
   types: {
     link: $renderLink,
@@ -105,19 +92,147 @@ function getPrefix(pageType: string) {
   }
 }
 
-const url = computed(() => {
-  if (props.link.type === "internal") {
-    const prefix = getPrefix(props.link.internalLink?._type);
-    let url = `${prefix}${props.link.internalLink.slug.current}`;
-    if (props.link.anchor) url += `#${props.link.anchor}`;
-    return url;
+const button = computed(() => {
+  const link = props.link;
+  if (link?.url) return { href: link.url, label: link.text || link.url };
+  if (link?.type === "internal" && link.internalLink?.slug?.current) {
+    let to = `${getPrefix(link.internalLink._type)}${link.internalLink.slug.current}`;
+    if (link.anchor) to += `#${link.anchor}`;
+    return { to, label: link.text || link.internalLink.title };
   }
-  return props.link.url;
+  return null;
 });
 </script>
 
 <style>
-P {
-  margin-bottom: 1rem;
+.split-block {
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: 8px;
+}
+
+/* Anchor target, offset so the sticky header doesn't cover the section. */
+.split-block__anchor {
+  position: relative;
+  top: -100px;
+}
+
+.split {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 28px 64px;
+}
+
+.split--image-right {
+  flex-direction: row-reverse;
+  /* In a reversed row, flex-end is the left: keep the text on the content
+     edge and any spare space beside the photo. */
+  justify-content: flex-end;
+}
+
+.split--image-only {
+  justify-content: center;
+}
+
+.split__media {
+  flex: 1 1 320px;
+  max-width: 420px;
+  margin: 0;
+}
+
+.split__img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.split__media figcaption {
+  margin-top: 12px;
+  text-align: center;
+  font-size: var(--type-small);
+  color: rgb(var(--v-theme-muted));
+}
+
+.split__body {
+  flex: 1 1 440px;
+  max-width: 600px;
+  min-width: 0;
+}
+
+.split__body > :first-child {
+  margin-top: 0;
+}
+
+.split__body > :last-child {
+  margin-bottom: 0;
+}
+
+.split--whole .split__media {
+  flex-basis: 400px;
+  max-width: 560px;
+}
+
+.split--whole .split__img {
+  aspect-ratio: auto;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+.split-block__cta {
+  margin-top: 32px;
+}
+
+/* The first block on a page (the homepage intro): a square photo. */
+.page-block:first-child .split:not(.split--whole) .split__img {
+  aspect-ratio: 1;
+}
+
+.page-block:first-child .split:not(.split--whole) .split__media {
+  max-width: 380px;
+}
+
+/* Tablet and up: always side by side; the photo shrinks rather than the
+   row wrapping (which left the photo stranded with space beside it). */
+@media (min-width: 701px) {
+  .split {
+    flex-wrap: nowrap;
+  }
+  .split > * {
+    min-width: 0;
+  }
+}
+
+@media (min-width: 701px) and (max-width: 960px) {
+  .split {
+    gap: 32px;
+  }
+  .split:not(.split--whole) .split__media {
+    flex: 0 0 40%;
+    max-width: none;
+  }
+}
+
+/* Phones: photo above the text, full width (centred once it hits its max). */
+@media (max-width: 700px) {
+  .split__media,
+  .page-block:first-child .split:not(.split--whole) .split__media {
+    width: 100%;
+    max-width: 420px;
+    margin-inline: auto;
+  }
+
+  .split--whole .split__media {
+    max-width: none;
+  }
+
+  /* Intro photo: wider crop on phones, so the opening screen reaches the text. */
+  .page-block:first-child .split:not(.split--whole) .split__img {
+    aspect-ratio: 3 / 2;
+    object-position: center 30%;
+  }
+
 }
 </style>

@@ -1,14 +1,16 @@
 <template>
-  <v-container class="content">
-    <page-builder v-if="data" :blocks="data.content" />
-  </v-container>
+  <div>
+    <hero-image :text="data?.title" />
+    <v-container class="content">
+      <page-builder v-if="data" :blocks="data.content" />
+    </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
 import type { SanityDocument } from "@sanity/client";
 
 const route = useRoute();
-const { setHeroText } = useHero();
 
 const PAGE_QUERY = groq`*[_type == "page" && slug.current == '${route.params.slug}'][0]{
   ...,
@@ -59,8 +61,6 @@ const { data } = await useSanityData<SanityDocument>(PAGE_QUERY);
 if (!data.value?._id) {
   throw createError({ statusCode: 404, fatal: true });
 }
-
-setHeroText(data.value?.title);
 
 const nuxtApp = useNuxtApp();
 useSeoMeta({

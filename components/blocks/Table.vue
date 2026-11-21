@@ -1,7 +1,7 @@
 <template>
   <v-table class="text-body-2 text-sm-body-1">
     <thead>
-      <tr class="bg-grey-lighten-3">
+      <tr class="bg-tint">
         <th v-for="header in headers" :key="header">
           {{ header }}
         </th>
