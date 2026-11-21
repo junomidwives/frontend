@@ -2,7 +2,7 @@
   <header class="site-header" @keydown.esc="showMenu = false">
     <div class="site-header__bar">
       <nuxt-link to="/" class="site-header__logo" aria-label="Juno Midwives home">
-        <img src="/img/logo-text.svg" alt="Juno Midwives" width="150" height="56" />
+        <img src="/img/logo-header.svg" alt="Juno Midwives" width="187" height="52" />
       </nuxt-link>
 
       <!-- Wide screens: the nav itself. Lower-priority links drop out as the
@@ -161,11 +161,12 @@ const links = computed(() => {
   gap: 16px 32px;
 }
 
+/* logo-header.svg is logo-text.svg cropped to the artwork (the original has
+   wide empty margins, which made the logo look small at header height). */
 .site-header__logo img {
   display: block;
-  width: 150px;
-  height: 56px;
-  object-fit: contain;
+  width: auto;
+  height: 52px;
 }
 
 .site-nav {
@@ -305,6 +306,9 @@ const links = computed(() => {
   }
   .site-header__toggle {
     margin-left: auto;
+  }
+  .site-header__logo img {
+    height: 44px;
   }
 }
 
