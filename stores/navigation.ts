@@ -21,10 +21,13 @@ export const useNavigationStore = defineStore("navigation", () => {
   async function getItems() {
     const SITE_QUERY = groq`*[_id == "siteSettings"][0]{
       mainNav[]->{slug, title, category},
-      "footerNav": footerNav[defined(page->slug.current)]{
+      // Filter after projecting: the live site uses Sanity's v1 API, which
+      // can't follow a reference inside a filter (footerNav[defined(page->...)]
+      // returned [] there, so the footer links never showed).
+      "footerNav": footerNav[]{
         "title": coalesce(label, page->title),
         "slug": page->slug.current
-      }
+      }[defined(slug)]
     }`;
     const { data } = await useSanityData<SanityDocument>(SITE_QUERY);
     // Keep following `data`: in the Studio's Preview tab it updates live as
