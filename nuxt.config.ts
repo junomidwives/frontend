@@ -2,6 +2,8 @@
 import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 import { createResolver } from "@nuxt/kit";
 import { sentryVitePlugin } from "@sentry/vite-plugin";
+import { writeFile } from "node:fs/promises";
+import { join } from "node:path";
 
 const { resolve } = createResolver(import.meta.url);
 
@@ -45,6 +47,13 @@ async function fetchRedirectRouteRules() {
 // Visitors without the preview cookie (set via /preview/enable from Studio)
 // see published content only, as on the live site.
 const isPreview = process.env.SANITY_PREVIEW === "true";
+
+// The live site's address: canonical links, the sitemap and structured data
+// all point here (also from the QA site, which isn't indexed).
+const SITE_URL = "https://junomidwives.co.uk";
+
+// Pages left out of the sitemap.
+const SITEMAP_EXCLUDE = [/^\/preview/, /^\/build-info/, /^\/(200|404)(\.html)?$/];
 
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
@@ -123,6 +132,26 @@ export default defineNuxtConfig({
         }),
       );
     },
+    // After the static build, list every prerendered page in sitemap.xml
+    // (robots.txt points search engines to it).
+    "nitro:init"(nitro) {
+      nitro.hooks.hook("prerender:done", async ({ prerenderedRoutes }) => {
+        const paths = prerenderedRoutes
+          .filter((r) => !r.error && r.contentType?.startsWith("text/html"))
+          .map((r) => r.route.replace(/\/$/, "") || "/")
+          .filter((p) => !SITEMAP_EXCLUDE.some((re) => re.test(p)))
+          // Old addresses that redirect elsewhere (from Sanity) aren't pages.
+          .filter((p) => !nitro.options.routeRules[p]?.redirect)
+          .sort();
+        const urls = [...new Set(paths)]
+          .map((p) => `  <url><loc>${SITE_URL}${p === "/" ? "/" : p}</loc></url>`)
+          .join("\n");
+        await writeFile(
+          join(nitro.options.output.publicDir, "sitemap.xml"),
+          `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`,
+        );
+      });
+    },
     async "nitro:config"(nitroConfig) {
       nitroConfig.routeRules = {
         ...nitroConfig.routeRules,
@@ -133,6 +162,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      htmlAttrs: { lang: "en-GB" },
       link: [{ rel: "icon", type: "image/svg+xml", href: "/img/logo.svg" }],
     },
   },
@@ -140,6 +170,7 @@ export default defineNuxtConfig({
     // Set once when the config loads, i.e. when the build starts.
     buildTime: new Date().toISOString(),
     public: {
+      siteUrl: SITE_URL,
       GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY || "",
       SENTRY_DSN_PUBLIC: process.env.SENTRY_DSN_PUBLIC || "",
       SENTRY_TRACES_SAMPLE_RATE:

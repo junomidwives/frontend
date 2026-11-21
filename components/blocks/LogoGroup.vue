@@ -14,6 +14,8 @@
         <img
           :src="($urlFor as any)(logo.image).height(120).auto('format').url()"
           :alt="logo.alt || ''"
+          :width="sizeFor(logo).width"
+          :height="sizeFor(logo).height"
           class="logos__img"
           loading="lazy"
           decoding="async"
@@ -36,6 +38,16 @@ defineProps({
 });
 
 const { $urlFor } = useNuxtApp();
+
+// Width and height attributes (from the Sanity asset id, e.g.
+// "image-abc-683x194-png") so the browser knows each logo's shape before it
+// loads. CSS still sets the displayed size.
+function sizeFor(logo: any) {
+  const match = /-(\d+)x(\d+)-/.exec(logo?.image?.asset?._ref ?? "");
+  if (!match) return { width: undefined, height: undefined };
+  const [w, h] = [Number(match[1]), Number(match[2])];
+  return { width: Math.round((48 * w) / h), height: 48 };
+}
 </script>
 
 <style>

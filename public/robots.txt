@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://junomidwives.co.uk/sitemap.xml
