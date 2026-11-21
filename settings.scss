@@ -4,7 +4,18 @@ $font: "DM Sans", sans-serif;
   $body-font-family: $font,
   // Sentence-case buttons, as in the rest of the copy (Vuetify defaults to uppercase).
   $button-text-transform: none,
-  $button-text-letter-spacing: 0
+  $button-text-letter-spacing: 0,
+  // One content column: 1120px of content (+16px padding each side) from
+  // 1280px up, full width below. Vuetify's default capped it at 900px from
+  // 960 to 1279px, which squeezed the layout.
+  $container-max-widths: (
+    "xs": null,
+    "sm": null,
+    "md": null,
+    "lg": 1152px,
+    "xl": 1152px,
+    "xxl": 1152px,
+  )
 );
 
 // Links use the logo teal (the browser default was bright blue).
@@ -28,9 +39,14 @@ blockquote {
   text-align: center;
 }
 
+// Page text (redesign): body copy in the body colour, headings in ink.
+.content {
+  color: rgb(var(--v-theme-body));
+}
+
 .content p {
-  line-height: 2rem !important;
-  font-size: 1.1rem;
+  line-height: 1.8 !important;
+  font-size: 1.125rem;
 }
 
 .content h1,
@@ -40,13 +56,90 @@ blockquote {
 .content h5,
 .content h6 {
   margin-bottom: 1rem;
+  color: rgb(var(--v-theme-ink));
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.content h1 {
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  line-height: 1.25;
+}
+
+.content h2 {
+  font-size: clamp(1.625rem, 3.2vw, 2.5rem);
+}
+
+.content h3 {
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+}
+
+// Nested containers (page > block) each add 16px; trim the inner one so
+// content sits 24px from the edge on phones, like the header and footer.
+.v-container .v-container {
+  padding-inline: 8px;
+}
+
+// Space between page-builder blocks (components/PageBuilder.vue).
+.page-block {
+  margin-block: 40px;
+}
+
+@media (max-width: 700px) {
+  .page-block {
+    margin-block: 24px;
+  }
+}
+
+// Buttons outside Vuetify (CTA, image-text links).
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 30px;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  text-decoration: none;
+}
+
+.btn--primary {
+  background: rgb(var(--v-theme-primary));
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: rgb(var(--v-theme-primary-darken-1));
+  color: #fff;
+}
+
+.block-cta {
+  text-align: center;
+}
+
+// A button block straight in the page container gets the same 8px inset as
+// the other blocks (so 24px from the edge on phones).
+.page-block.block-cta {
+  padding-inline: 8px;
+}
+
+// Full-width buttons on phones.
+@media (max-width: 700px) {
+  .block-cta .btn {
+    display: flex;
+    width: 100%;
+  }
 }
 
 // "Large text" block styles: Heading 1 size without being an H1 (see utils/textStyles.ts).
 .content p.text-large {
-  font-size: 2em;
+  font-size: clamp(1.875rem, 3.6vw, 2.875rem);
   font-weight: 700;
-  line-height: 1.25 !important;
+  line-height: 1.1 !important;
+  letter-spacing: -0.01em;
+  color: rgb(var(--v-theme-ink));
   margin-bottom: 1rem;
 }
 
@@ -61,29 +154,31 @@ blockquote {
 }
 
 // Free Content "Dark teal band" (blockContent.background = deep), for testimonials.
-// The dark teal and accents come from the client's comparison / "How it works"
-// graphics. The band paints edge to edge with a border-image outset, which
-// (unlike 100vw widths) doesn't make the page scroll sideways. The content
-// stays in the normal container.
+// Centred quote with a large pink quote mark above it. The band paints edge to
+// edge with a border-image outset, which (unlike 100vw widths) doesn't make the
+// page scroll sideways. The content stays in the normal container.
 .quote-band {
   background: rgb(var(--v-theme-deep));
   border-image: linear-gradient(rgb(var(--v-theme-deep)) 0 0) fill 0 / / 0 100vw;
   color: #fff;
-  padding-block: 3rem;
+  padding-block: 72px;
 }
 
 .quote-band__inner {
-  display: grid;
-  grid-template-columns: 4rem minmax(0, 1fr);
-  gap: 1.25rem;
-  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 880px;
   margin: 0 auto;
+  text-align: center;
 }
 
 .quote-band__mark {
   font-family: "Abril Fatface", Georgia, serif;
-  font-size: 7.5rem;
-  line-height: 0.75;
+  font-size: 120px;
+  line-height: 0.55;
+  height: 56px;
   color: rgb(var(--v-theme-pink));
 }
 
@@ -96,19 +191,20 @@ blockquote {
   padding: 0;
   border: none;
   max-width: none;
-  text-align: left;
-  font-size: 1.6rem;
-  line-height: 1.4;
+  text-align: center;
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  line-height: 1.35;
   font-weight: 500;
   color: #fff;
 }
 
-// Left-align everything in the band, including the "Centered" name line
-// (Vuetify's .text-center is !important).
+// The attribution ("Siobhan, first-time parent, 2024").
 .content .quote-band p,
 .quote-band .text-center {
-  margin: 0.9rem 0 0;
-  text-align: left !important;
+  margin: 16px 0 0;
+  text-align: center !important;
+  font-size: 1rem;
+  font-style: italic;
   color: rgb(var(--v-theme-mint));
 }
 
@@ -116,18 +212,13 @@ blockquote {
   color: rgb(var(--v-theme-mint));
 }
 
-@media (max-width: 599px) {
-  .quote-band__inner {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
+@media (max-width: 700px) {
+  .quote-band {
+    padding-block: 52px;
   }
 
   .quote-band__mark {
-    font-size: 4.5rem;
-    height: 3rem;
-  }
-
-  .quote-band blockquote {
-    font-size: 1.35rem;
+    font-size: 88px;
+    height: 40px;
   }
 }
