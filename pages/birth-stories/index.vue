@@ -6,7 +6,7 @@
         sm="6"
         md="3"
         v-for="story in birthStories"
-        :key="story.id"
+        :key="story._id"
         class="d-flex"
       >
         <v-card flat class="d-flex">
