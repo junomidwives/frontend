@@ -1,34 +1,46 @@
 <template>
-  <v-container v-if="rows?.length">
-    <!-- One table. On phones the CSS turns each row into a card (topic header,
-         then the two answers), with a legend in place of the column headings. -->
-    <div class="comparison">
-      <div class="comparison__legend" aria-hidden="true">
-        <span><i class="swatch swatch--other" />{{ otherLabel }}</span>
-        <span><i class="swatch swatch--juno" />{{ junoLabel }}</span>
+  <div v-if="rows?.length" class="comparison">
+    <!-- Tablets and up: a table. -->
+    <table class="comparison__table">
+      <thead>
+        <tr>
+          <td></td>
+          <th scope="col" class="comparison__other">{{ otherLabel }}</th>
+          <th scope="col" class="comparison__juno">
+            <i class="comparison__dot" aria-hidden="true"></i>{{ junoLabel }}
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="row in rows" :key="row._key">
+          <th scope="row" class="comparison__topic">{{ row.topic }}</th>
+          <td class="comparison__other">{{ row.other }}</td>
+          <td class="comparison__juno">{{ row.juno }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Phones: the same rows, compact. Column headings once at the top; each
+         topic labels its row; the Juno column stays one continuous strip. -->
+    <div class="comparison__compact">
+      <div class="comparison__compact-head" aria-hidden="true">
+        <span class="comparison__other">{{ otherLabel }}</span>
+        <span class="comparison__juno">
+          <i class="comparison__dot" aria-hidden="true"></i>{{ junoLabel }}
+        </span>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <td />
-            <th scope="col" class="col-other">{{ otherLabel }}</th>
-            <th scope="col" class="col-juno">
-              <i class="dot" aria-hidden="true" />{{ junoLabel }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="row in rows" :key="row._key">
-            <th scope="row" class="topic">{{ row.topic }}</th>
-            <td class="col-other" :data-label="otherLabel">{{ row.other }}</td>
-            <td class="col-juno" :data-label="junoLabel">
-              <i class="dot dot--mobile" aria-hidden="true" />{{ row.juno }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div v-for="row in rows" :key="row._key" class="comparison__compact-row">
+        <strong class="comparison__topic">{{ row.topic }}</strong>
+        <span class="comparison__juno-strip" aria-hidden="true"></span>
+        <span class="comparison__other">
+          <span class="visually-hidden">{{ otherLabel }}: </span>{{ row.other }}
+        </span>
+        <span class="comparison__juno">
+          <span class="visually-hidden">{{ junoLabel }}: </span>{{ row.juno }}
+        </span>
+      </div>
     </div>
-  </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -49,166 +61,160 @@ withDefaults(
 </script>
 
 <style>
-/* Juno theme colours (plugins/vuetify.ts). */
 .comparison {
-  --cmp-deep: rgb(var(--v-theme-deep));
-  --cmp-mint: rgb(var(--v-theme-mint));
-  --cmp-pale: rgb(var(--v-theme-tint));
-  --cmp-pale-head: rgb(var(--v-theme-tint));
-  --cmp-blush: rgb(var(--v-theme-pink));
-  --cmp-muted: rgb(var(--v-theme-body));
-  max-width: 1000px;
-  margin: 0 auto;
-  color: var(--cmp-deep);
+  max-width: 1120px;
+  margin-inline: auto;
+  padding-inline: 8px;
 }
 
-.comparison table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  font-size: 1.05rem;
-  line-height: 1.45;
-}
-
-.comparison th,
-.comparison td {
-  padding: 1.1rem 1.4rem;
-  text-align: left;
-  vertical-align: middle;
-}
-
-.comparison thead th {
-  font-weight: 700;
-  font-size: 1.15rem;
-  padding-block: 1.3rem;
-}
-
-.comparison thead .col-other {
-  background: var(--cmp-pale-head);
-  color: var(--cmp-muted);
-}
-
-.comparison thead .col-juno {
-  background: var(--cmp-deep);
-  color: #fff;
-  border-top-right-radius: 20px;
-}
-
-.comparison .topic {
-  font-weight: 700;
-  padding-left: 0;
-  width: 22%;
-  border-bottom: 2px solid var(--cmp-pale-head);
-}
-
-.comparison tbody .col-other {
-  background: var(--cmp-pale);
-  color: var(--cmp-muted);
-  border-bottom: 2px solid #fff;
-  width: 39%;
-}
-
-.comparison tbody .col-juno {
-  background: var(--cmp-mint);
-  font-weight: 700;
-  border-bottom: 2px solid #fff;
-}
-
-.comparison tbody tr:last-child .topic,
-.comparison tbody tr:last-child td {
-  border-bottom: 0;
-}
-
-.comparison tbody tr:last-child .col-juno {
-  border-bottom-right-radius: 20px;
-}
-
-.comparison .dot {
+.comparison__dot {
   display: inline-block;
-  width: 0.65em;
-  height: 0.65em;
+  width: 10px;
+  height: 10px;
+  margin-right: 10px;
   border-radius: 50%;
-  background: var(--cmp-blush);
-  margin-right: 0.6em;
-  vertical-align: 0.05em;
+  background: rgb(var(--v-theme-pink));
 }
 
-.comparison .dot--mobile,
-.comparison__legend {
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Table (tablets and up) */
+.comparison__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+
+.comparison__table th,
+.comparison__table td {
+  padding: 20px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.comparison__table thead tr {
+  border-bottom: 2px solid rgb(var(--v-theme-ink));
+}
+
+.comparison__table thead th {
+  padding-block: 16px;
+}
+
+.comparison__table thead .comparison__other {
+  color: rgb(var(--v-theme-muted));
+  font-weight: 500;
+}
+
+.comparison__table thead .comparison__juno {
+  color: rgb(var(--v-theme-deep));
+  font-weight: 700;
+}
+
+.comparison__table tbody tr {
+  border-bottom: 1px solid rgb(var(--v-theme-line));
+}
+
+.comparison__table .comparison__topic {
+  width: 24%;
+  padding-left: 0;
+  color: rgb(var(--v-theme-ink));
+  font-weight: 700;
+}
+
+.comparison__table tbody .comparison__other {
+  color: rgb(var(--v-theme-muted));
+}
+
+.comparison__table tbody .comparison__juno {
+  background: rgb(var(--v-theme-tint));
+  color: rgb(var(--v-theme-deep));
+  font-weight: 700;
+}
+
+.comparison__compact {
   display: none;
 }
 
-/* Phones: one card per row. */
-@media (max-width: 759px) {
-  .comparison__legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.5rem;
-    margin-bottom: 1rem;
-    font-weight: 700;
-    font-size: 0.95rem;
-  }
-
-  .comparison__legend span {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .swatch {
-    width: 1.1rem;
-    height: 1.1rem;
-    border-radius: 4px;
-    border: 1px solid var(--cmp-pale-head);
-  }
-
-  .swatch--other {
-    background: var(--cmp-pale);
-  }
-
-  .swatch--juno {
-    background: var(--cmp-mint);
-  }
-
-  .comparison thead {
+/* Phones */
+@media (max-width: 700px) {
+  .comparison__table {
     display: none;
   }
 
-  .comparison table,
-  .comparison tbody,
-  .comparison tr,
-  .comparison th,
-  .comparison td {
-    display: block;
-    width: auto !important;
-  }
-
-  .comparison tbody tr {
-    margin-bottom: 1rem;
+  .comparison__compact {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgb(var(--v-theme-line));
     border-radius: 16px;
     overflow: hidden;
-    border: 1px solid var(--cmp-pale-head);
+    font-size: 0.875rem;
+    line-height: 1.45;
   }
 
-  .comparison .topic {
-    background: var(--cmp-deep);
+  .comparison__compact-head,
+  .comparison__compact-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .comparison__compact-head > span {
+    padding: 10px 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .comparison__compact-head .comparison__other {
+    color: rgb(var(--v-theme-muted));
+  }
+
+  .comparison__compact-head .comparison__juno {
+    background: rgb(var(--v-theme-deep));
     color: #fff;
-    padding: 0.9rem 1.25rem;
-    border: 0;
   }
 
-  .comparison tbody td {
-    padding: 0.85rem 1.25rem;
-    border: 0 !important;
-    border-radius: 0 !important;
+  .comparison__compact-head .comparison__dot {
+    width: 7px;
+    height: 7px;
+    margin-right: 6px;
+    vertical-align: 1px;
   }
 
-  .comparison .dot--mobile {
-    display: inline-block;
+  .comparison__compact-row .comparison__topic {
+    padding: 12px 12px 2px;
+    border-top: 1px solid rgb(var(--v-theme-line));
+    font-size: 0.8125rem;
+    color: rgb(var(--v-theme-ink));
   }
 
-  .comparison .col-juno > .dot:not(.dot--mobile) {
-    display: none;
+  /* Fills the Juno column beside the topic label, so the strip is unbroken. */
+  .comparison__juno-strip {
+    background: rgb(var(--v-theme-tint));
+    border-top: 1px solid #dce8e6;
+  }
+
+  .comparison__compact-row .comparison__other,
+  .comparison__compact-row .comparison__juno {
+    padding: 2px 12px 12px;
+  }
+
+  .comparison__compact-row .comparison__other {
+    color: rgb(var(--v-theme-muted));
+  }
+
+  .comparison__compact-row .comparison__juno {
+    background: rgb(var(--v-theme-tint));
+    color: rgb(var(--v-theme-deep));
+    font-weight: 500;
   }
 }
 </style>
