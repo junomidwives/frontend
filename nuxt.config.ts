@@ -171,6 +171,9 @@ export default defineNuxtConfig({
     buildTime: new Date().toISOString(),
     public: {
       siteUrl: SITE_URL,
+      // EXPLORATION: the hero style panel shows on QA (and the dev server),
+      // never on the live site.
+      heroExplore: isPreview,
       GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY || "",
       SENTRY_DSN_PUBLIC: process.env.SENTRY_DSN_PUBLIC || "",
       SENTRY_TRACES_SAMPLE_RATE:
