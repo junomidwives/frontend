@@ -1,121 +1,121 @@
 <template>
-  <v-container max-width="600" class="mx-auto pt-16">
-    <v-row v-if="success || error">
-      <v-col>
-        <v-alert
-          v-if="success"
-          color="success"
-          icon="mdi-email-fast"
-          variant="tonal"
-        >
-          <h3 class="text-h6 font-weight-bold">Thank you!</h3>
-          <p class="text-body-1">We will get back to you shortly.</p>
-        </v-alert>
-
-        <v-alert
-          v-if="error"
-          color="error"
-          icon="mdi-alert-circle"
-          variant="tonal"
-        >
-          <h3 class="text-h6 font-weight-bold">Something went wrong</h3>
-          <p class="text-body-1">{{ error }}</p>
-        </v-alert>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col>
-        <v-form
-          name="contact"
-          ref="form"
-          class="d-flex flex-column ga-4"
-          data-netlify="true"
-          data-netlify-honeypot="bot-field"
-          @submit.prevent="submit"
-        >
-          <input type="hidden" name="form-name" value="contact" />
-
-          <v-text-field
-            label="Name"
-            name="name"
-            type="text"
-            required
-            variant="outlined"
-            :rules="[(v: any) => !!v || 'Name is required']"
-            hide-details="auto"
-            v-model="name"
-            rounded="lg"
-          />
-
-          <v-text-field
-            label="Email"
-            name="email"
-            type="email"
-            required
-            variant="outlined"
-            :rules="[
-              (v: any) => !!v || 'Email is required', 
-              (v: any) => v.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) || 'Invalid email address'
-            ]"
-            hide-details="auto"
-            v-model="email"
-            rounded="lg"
-          />
-
-          <v-text-field
-            label="Phone number (optional)"
-            name="phone"
-            type="tel"
-            required
-            variant="outlined"
-            hide-details="auto"
-            v-model="phone"
-            rounded="lg"
-          />
-
-          <v-textarea
-            label="Message"
-            name="message"
-            type="text"
-            required
-            variant="outlined"
-            :rules="[(v: any) => !!v || 'Message is required']"
-            hide-details="auto"
-            v-model="message"
-            rounded="lg"
-          />
-
-          <v-btn
-            block
-            type="submit"
-            color="secondary"
-            :loading="loading"
-            rounded="pill"
-            size="large"
+  <div>
+    <hero-image text="Contact Us" />
+    <v-container max-width="600" class="mx-auto pt-16">
+      <v-row v-if="success || error">
+        <v-col>
+          <v-alert
+            v-if="success"
+            color="success"
+            icon="mdi-email-fast"
+            variant="tonal"
           >
-            Send
-          </v-btn>
-        </v-form>
-      </v-col>
-    </v-row>
+            <h3 class="text-h6 font-weight-bold">Thank you!</h3>
+            <p class="text-body-1">We will get back to you shortly.</p>
+          </v-alert>
 
-    <v-row>
-      <v-col>
-        <p class="text-center">
-          Alternatively, send us an email at hello@junomidwives.co.uk
-          <br />We aim to respond to messages within 72 hours
-        </p>
-      </v-col>
-    </v-row>
-  </v-container>
+          <v-alert
+            v-if="error"
+            color="error"
+            icon="mdi-alert-circle"
+            variant="tonal"
+          >
+            <h3 class="text-h6 font-weight-bold">Something went wrong</h3>
+            <p class="text-body-1">{{ error }}</p>
+          </v-alert>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col>
+          <v-form
+            name="contact"
+            ref="form"
+            class="d-flex flex-column ga-4"
+            data-netlify="true"
+            data-netlify-honeypot="bot-field"
+            @submit.prevent="submit"
+          >
+            <input type="hidden" name="form-name" value="contact" />
+
+            <v-text-field
+              label="Name"
+              name="name"
+              type="text"
+              required
+              variant="outlined"
+              :rules="[(v: any) => !!v || 'Name is required']"
+              hide-details="auto"
+              v-model="name"
+              rounded="lg"
+            />
+
+            <v-text-field
+              label="Email"
+              name="email"
+              type="email"
+              required
+              variant="outlined"
+              :rules="[
+                (v: any) => !!v || 'Email is required', 
+                (v: any) => v.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) || 'Invalid email address'
+              ]"
+              hide-details="auto"
+              v-model="email"
+              rounded="lg"
+            />
+
+            <v-text-field
+              label="Phone number (optional)"
+              name="phone"
+              type="tel"
+              required
+              variant="outlined"
+              hide-details="auto"
+              v-model="phone"
+              rounded="lg"
+            />
+
+            <v-textarea
+              label="Message"
+              name="message"
+              type="text"
+              required
+              variant="outlined"
+              :rules="[(v: any) => !!v || 'Message is required']"
+              hide-details="auto"
+              v-model="message"
+              rounded="lg"
+            />
+
+            <v-btn
+              block
+              type="submit"
+              color="primary"
+              :loading="loading"
+              rounded="pill"
+              size="large"
+            >
+              Send
+            </v-btn>
+          </v-form>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col>
+          <p class="text-center">
+            Alternatively, send us an email at hello@junomidwives.co.uk
+            <br />We aim to respond to messages within 72 hours
+          </p>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
 import type { SanityDocument } from "@sanity/client";
-
-const { setHeroText } = useHero();
-setHeroText("Contact Us");
 
 const SEO_QUERY = groq`*[_id == "staticPageSeo"][0].contact`;
 const { data: seo } = await useSanityData<SanityDocument>(SEO_QUERY);
